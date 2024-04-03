@@ -11,4 +11,5 @@ public interface MemberService {
   Member createMember(MemberFormDto memberFormDto, Role role);
 
   SimpleMailMessage sendVerificationCode(EmailDto emailDto);
+
 }

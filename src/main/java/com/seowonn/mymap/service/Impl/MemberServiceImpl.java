@@ -1,5 +1,7 @@
 package com.seowonn.mymap.service.Impl;
 
+import static com.seowonn.mymap.type.ErrorCode.INCORRECT_CODE;
+import static com.seowonn.mymap.type.ErrorCode.INCORRECT_EMAIL;
 import static com.seowonn.mymap.type.ErrorCode.USERID_EXISTS;
 
 import com.seowonn.mymap.dto.EmailDto;
@@ -10,8 +12,8 @@ import com.seowonn.mymap.repository.MemberRepository;
 import com.seowonn.mymap.service.MailService;
 import com.seowonn.mymap.service.MemberService;
 import com.seowonn.mymap.type.Role;
+import com.seowonn.mymap.util.RedisUtil;
 import java.security.SecureRandom;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
@@ -22,38 +24,21 @@ public class MemberServiceImpl implements MemberService {
 
   private final MemberRepository memberRepository;
   private final MailService mailService;
+  private final RedisUtil redisUtil;
 
-  public Member createMember(MemberFormDto memberFormDto, Role role){
-
-    // redis code & 인증 번호 비교
-
-    // 인증 번호가 다른 사용자에 대한 에러 처리
-
-    Member member = Member.buildFromDto(memberFormDto, role);
-    return memberRepository.save(member);
-  }
+  long VERIFICATION_EXPIRE_TIME = 60 * 5;
 
   @Override
   public SimpleMailMessage sendVerificationCode(EmailDto emailDto) {
-    
-    // 이미 등록된 아이디(이메일)인지 확인
-    Optional<Member> optionalMember =
-        memberRepository.findByUserId(emailDto.getEmailAddress());
-
-    if(optionalMember.isPresent()){
-      throw new MyMapSystemException(USERID_EXISTS);
-    }
     
     // 인증 번호 생성
     String verificationNum = createNumber();
 
     // redis에 인증 번호 저장
+    redisUtil.setDataExpire(
+        emailDto.getEmailAddress(), verificationNum, VERIFICATION_EXPIRE_TIME);
 
-
-    String title = "이메일 인증 번호 : 인증 번호를 확인해주세요";
-
-    return mailService.sendAuthEmail(
-        emailDto.getEmailAddress(), title, verificationNum);
+    return mailService.sendAuthEmail(emailDto.getEmailAddress(), verificationNum);
   }
 
   private String createNumber() {
@@ -62,6 +47,40 @@ public class MemberServiceImpl implements MemberService {
     int code = random.nextInt(900000) + 100000;
 
     return String.valueOf(code);
+  }
+
+  public Member createMember(MemberFormDto memberFormDto, Role role){
+
+    // 이미 등록된 아이디(이메일)인지 확인
+    if(isEmailExists(memberFormDto.getUserId())) {
+      throw new MyMapSystemException(USERID_EXISTS);
+    }
+
+    // redis code & 인증 번호 검증
+    checkVerificationCode(memberFormDto.getUserId(), memberFormDto.getVerificationNum());
+
+    Member member = Member.buildFromDto(memberFormDto, role);
+    return memberRepository.save(member);
+  }
+
+  private boolean isEmailExists(String email) {
+    return memberRepository.findByUserId(email).isPresent();
+  }
+
+  private void checkVerificationCode(String email, String verificationCode) {
+    String redisCode = redisUtil.getData(email);
+
+    // 다른 아이디(이메일) 값을 입력하여 redis code가 null일 경우 에러 처리
+    if(redisCode == null) {
+      throw new MyMapSystemException(INCORRECT_EMAIL);
+    }
+
+    // 인증 번호가 다른 사용자에 대한 에러 처리
+    if(!redisCode.equals(verificationCode)) {
+      throw new MyMapSystemException(INCORRECT_CODE);
+    }
+
+    redisUtil.deleteData(email);
   }
 
 }
