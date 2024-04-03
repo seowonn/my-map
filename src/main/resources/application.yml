@@ -33,3 +33,8 @@ spring:
           connection timeout: 5000
           timeout: 5000
           write timeout: 5000
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
