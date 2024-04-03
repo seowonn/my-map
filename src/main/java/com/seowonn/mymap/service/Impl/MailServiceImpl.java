@@ -22,10 +22,12 @@ public class MailServiceImpl implements MailService {
   private final Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
   private final JavaMailSender javaMailSender;
 
-  @Override
-  public SimpleMailMessage sendAuthEmail(String emailAddress, String title, String text) {
+  String AUTH_TITLE = "[인증 번호 발송] : 인증 번호를 확인해주세요";
 
-    SimpleMailMessage message = createEmailForm(emailAddress, title, text);
+  @Override
+  public SimpleMailMessage sendAuthEmail(String emailAddress, String text) {
+
+    SimpleMailMessage message = createAuthEmailForm(emailAddress, text);
 
     try{
       javaMailSender.send(message);
@@ -40,12 +42,12 @@ public class MailServiceImpl implements MailService {
     return message;
   }
 
-  public SimpleMailMessage createEmailForm(
-      String emailAddress, String title, String text) {
+  @Override
+  public SimpleMailMessage createAuthEmailForm(String emailAddress, String text) {
 
     SimpleMailMessage message = new SimpleMailMessage();
     message.setTo(emailAddress);
-    message.setSubject(title);
+    message.setSubject(AUTH_TITLE);
     message.setText(text);
 
     LOGGER.info("[createEmailForm] : 이메일 생성 완료");
