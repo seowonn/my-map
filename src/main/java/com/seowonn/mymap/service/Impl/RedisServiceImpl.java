@@ -24,7 +24,7 @@ public class RedisServiceImpl implements RedisService {
     ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
     Duration expireDuration = Duration.ofSeconds(duration);
     valueOperations.set(key, value, expireDuration);
-    log.info("[setDataExpire] : redis 키 값 저장. 유효시간은 5분");
+    log.info("[setDataExpire] : redis 키 값 저장. 유효시간 설정");
   }
 
   public void deleteData(String key) {
