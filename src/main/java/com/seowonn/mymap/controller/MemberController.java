@@ -29,8 +29,8 @@ public class MemberController {
     return ApiResponse.createSuccessMessage(message, SEND_EMAIL);
   }
 
-  @PostMapping("/user/signup")
-  public ApiResponse<?> signUpUser (
+  @PostMapping("/standard/signup")
+  public ApiResponse<?> signUpStandardUser(
       @RequestBody MemberFormDto memberFormDto){
     Member member = memberService.createMember(memberFormDto, Role.USER);
     return ApiResponse.createSuccessMessage(member, SIGNUP_SUCCESS);
