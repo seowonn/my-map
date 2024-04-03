@@ -28,7 +28,7 @@ public class MemberServiceImpl implements MemberService {
   private final MailService mailService;
   private final RedisServiceImpl redisServiceImpl;
 
-  private final static long VERIFICATION_EXPIRE_TIME = 10 * 3;
+  private final static long VERIFICATION_EXPIRE_TIME = 600 * 5;
 
   @Override
   public SimpleMailMessage sendVerificationCode(EmailDto emailDto) {
@@ -75,7 +75,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     // 만료된 인증 번호에 대한 에러 처리
-    long remainingTime = redisServiceImpl.getRemainingExpireTime(redisCode);
+    long remainingTime = redisServiceImpl.getRemainingExpireTime(email);
     if(remainingTime <= 0){
       throw new MyMapSystemException(EXPIRED_VERIFICATION);
     }
