@@ -1,18 +1,18 @@
-package com.seowonn.mymap.util;
+package com.seowonn.mymap.service.Impl;
 
+import com.seowonn.mymap.service.RedisService;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
-public class RedisUtil {
+public class RedisServiceImpl implements RedisService {
 
-  private final Logger LOGGER = LoggerFactory.getLogger(RedisUtil.class);
   private final RedisTemplate<String, String> redisTemplate;
 
   public String getData(String key) {
@@ -24,12 +24,12 @@ public class RedisUtil {
     ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
     Duration expireDuration = Duration.ofSeconds(duration);
     valueOperations.set(key, value, expireDuration);
-    LOGGER.info("[setDataExpire] : redis 키 값 저장. 유효시간은 5분");
+    log.info("[setDataExpire] : redis 키 값 저장. 유효시간은 5분");
   }
 
   public void deleteData(String key) {
     redisTemplate.delete(key);
-    LOGGER.info("[deleteData] : redis 키 값 삭제");
+    log.info("[deleteData] : redis 키 값 삭제");
   }
 
 }

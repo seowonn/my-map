@@ -12,7 +12,6 @@ import com.seowonn.mymap.repository.MemberRepository;
 import com.seowonn.mymap.service.MailService;
 import com.seowonn.mymap.service.MemberService;
 import com.seowonn.mymap.type.Role;
-import com.seowonn.mymap.util.RedisUtil;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -24,7 +23,7 @@ public class MemberServiceImpl implements MemberService {
 
   private final MemberRepository memberRepository;
   private final MailService mailService;
-  private final RedisUtil redisUtil;
+  private final RedisServiceImpl redisServiceImpl;
 
   long VERIFICATION_EXPIRE_TIME = 60 * 5;
 
@@ -35,7 +34,7 @@ public class MemberServiceImpl implements MemberService {
     String verificationNum = createNumber();
 
     // redis에 인증 번호 저장
-    redisUtil.setDataExpire(
+    redisServiceImpl.setDataExpire(
         emailDto.getEmailAddress(), verificationNum, VERIFICATION_EXPIRE_TIME);
 
     return mailService.sendAuthEmail(emailDto.getEmailAddress(), verificationNum);
@@ -68,7 +67,7 @@ public class MemberServiceImpl implements MemberService {
   }
 
   private void checkVerificationCode(String email, String verificationCode) {
-    String redisCode = redisUtil.getData(email);
+    String redisCode = redisServiceImpl.getData(email);
 
     // 다른 아이디(이메일) 값을 입력하여 redis code가 null일 경우 에러 처리
     if(redisCode == null) {
@@ -80,7 +79,7 @@ public class MemberServiceImpl implements MemberService {
       throw new MyMapSystemException(INCORRECT_CODE);
     }
 
-    redisUtil.deleteData(email);
+    redisServiceImpl.deleteData(email);
   }
 
 }
