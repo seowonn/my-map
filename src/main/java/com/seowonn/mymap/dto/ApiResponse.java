@@ -1,6 +1,7 @@
 package com.seowonn.mymap.dto;
 
 import com.seowonn.mymap.type.ErrorCode;
+import com.seowonn.mymap.type.SuccessMessage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,10 +18,11 @@ public class ApiResponse<T> {
   private T data;
   private String message;
 
-  public static <T> ApiResponse<?> createSuccess(T data){
+  public static <T> ApiResponse<?> createSuccessMessage(T data, SuccessMessage message){
     return ApiResponse.builder()
         .status(SUCCESS_STATUS)
         .data(data)
+        .message(message.getDescription())
         .build();
   }
 

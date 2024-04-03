@@ -1,5 +1,8 @@
 package com.seowonn.mymap.controller;
 
+import static com.seowonn.mymap.type.SuccessMessage.SEND_EMAIL;
+import static com.seowonn.mymap.type.SuccessMessage.SIGNUP_SUCCESS;
+
 import com.seowonn.mymap.dto.ApiResponse;
 import com.seowonn.mymap.dto.EmailDto;
 import com.seowonn.mymap.dto.MemberFormDto;
@@ -23,19 +26,20 @@ public class MemberController {
   @PostMapping("/verify/send-email")
   public ApiResponse<?> sendEmail(@RequestBody EmailDto emailDto){
     SimpleMailMessage message = memberService.sendVerificationCode(emailDto);
-    return ApiResponse.createSuccess(message);
+    return ApiResponse.createSuccessMessage(message, SEND_EMAIL);
   }
+
   @PostMapping("/user/signup")
   public ApiResponse<?> signUpUser (
       @RequestBody MemberFormDto memberFormDto){
     Member member = memberService.createMember(memberFormDto, Role.USER);
-    return ApiResponse.createSuccess(member);
+    return ApiResponse.createSuccessMessage(member, SIGNUP_SUCCESS);
   }
 
   @PostMapping("/admin/signup")
   public ApiResponse<?> signUpAdmin (
       @RequestBody MemberFormDto memberFormDto){
     Member member = memberService.createMember(memberFormDto, Role.ADMIN);
-    return ApiResponse.createSuccess(member);
+    return ApiResponse.createSuccessMessage(member, SIGNUP_SUCCESS);
   }
 }
