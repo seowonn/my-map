@@ -25,7 +25,7 @@ public class MemberServiceImpl implements MemberService {
   private final MailService mailService;
   private final RedisServiceImpl redisServiceImpl;
 
-  long VERIFICATION_EXPIRE_TIME = 60 * 5;
+  private final static long VERIFICATION_EXPIRE_TIME = 60 * 5;
 
   @Override
   public SimpleMailMessage sendVerificationCode(EmailDto emailDto) {
@@ -51,7 +51,7 @@ public class MemberServiceImpl implements MemberService {
   public Member createMember(MemberFormDto memberFormDto, Role role){
 
     // 이미 등록된 아이디(이메일)인지 확인
-    if(isEmailExists(memberFormDto.getUserId())) {
+    if(memberRepository.existsByUserId(memberFormDto.getUserId())){
       throw new MyMapSystemException(USERID_EXISTS);
     }
 
@@ -60,10 +60,6 @@ public class MemberServiceImpl implements MemberService {
 
     Member member = Member.buildFromDto(memberFormDto, role);
     return memberRepository.save(member);
-  }
-
-  private boolean isEmailExists(String email) {
-    return memberRepository.findByUserId(email).isPresent();
   }
 
   private void checkVerificationCode(String email, String verificationCode) {
