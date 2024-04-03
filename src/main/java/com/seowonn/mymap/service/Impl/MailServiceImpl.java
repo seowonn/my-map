@@ -7,8 +7,6 @@ import com.seowonn.mymap.service.MailService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MailServiceImpl implements MailService {
 
-  private final Logger LOGGER = LoggerFactory.getLogger(MailServiceImpl.class);
   private final JavaMailSender javaMailSender;
 
   String AUTH_TITLE = "[인증 번호 발송] : 인증 번호를 확인해주세요";
@@ -34,11 +31,11 @@ public class MailServiceImpl implements MailService {
 
     } catch (RuntimeException e) {
 
-      LOGGER.debug("[sendAuthEmail] : 이메일 전송 과정 에러 발생");
+      log.debug("[sendAuthEmail] : 이메일 전송 과정 에러 발생");
       throw new MyMapSystemException(EMAIL_SEND_ERROR);
     }
 
-    LOGGER.info("[sendAuthEmail] : 이메일 전송 성공");
+    log.info("[sendAuthEmail] : 이메일 전송 성공");
     return message;
   }
 
@@ -50,7 +47,7 @@ public class MailServiceImpl implements MailService {
     message.setSubject(AUTH_TITLE);
     message.setText(text);
 
-    LOGGER.info("[createEmailForm] : 이메일 생성 완료");
+    log.info("[createEmailForm] : 이메일 생성 완료");
 
     return message;
   }
