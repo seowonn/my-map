@@ -1,6 +1,7 @@
 package com.seowonn.mymap.entity;
 
 import com.seowonn.mymap.dto.MemberFormDto;
+import com.seowonn.mymap.type.Gender;
 import com.seowonn.mymap.type.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -49,7 +50,8 @@ public class Member {
   private String userName;
 
   @Column(nullable = false)
-  private String gender;
+  @Enumerated(EnumType.STRING)
+  private Gender gender;
 
   @CreatedDate
   @Column(updatable = false, nullable = false)
@@ -60,6 +62,8 @@ public class Member {
 
   public static Member buildFromDto(MemberFormDto memberFormDto, Role role) {
 
+    Gender gender = Gender.valueOf(memberFormDto.getGender().toUpperCase());
+
     String encPassword =
         BCrypt.hashpw(memberFormDto.getPassword(), BCrypt.gensalt());
 
@@ -69,7 +73,7 @@ public class Member {
         .password(encPassword)
         .phone(memberFormDto.getPhone())
         .userName(memberFormDto.getUsername())
-        .gender(memberFormDto.getGender())
+        .gender(gender)
         .build();
   }
 
