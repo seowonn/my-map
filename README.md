@@ -10,16 +10,17 @@
   * 새로운 장소 발굴 + 검색을 통해 알게 된 장소들을 통해 지역별로 나만의 장소 및 인사이트를 얻을 수 있다.
 # 
 ## ⚙️ 활용 기술 스택
-* java, spring (추가 예정)
+<img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white"> <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white"> 
 #
 ## 구성 ERD
-![image](https://github.com/seowonn/my-map/assets/144876148/c8bd88c5-8a99-4288-9bb7-3875aa032f83)
+![image](https://github.com/seowonn/my-map/assets/144876148/69d4513f-083b-4170-bccd-96ac9cc580ee)
+
 #
 ## 🙎‍♀ 회원
 #### ▶️ 회원 가입
-  - [ ] 회원은 사용자 - USER, 관리자 - ADMIN 의 권한(role)을 갖는다.
-  - [ ] 회원 가입 시 아이디(이메일)는 이메일 인증을 통해 인증 절차를 거친다.
-  - [ ] 아이디는 유일하며, 비밀번호는 암호화된 비밀번호를 저장한다.
+  - [x] 회원은 사용자 - USER, 관리자 - ADMIN 의 권한(role)을 갖는다.
+  - [x] 회원 가입 시 아이디(이메일)는 이메일 인증을 통해 인증 절차를 거친다.
+  - [x] 아이디는 유일하며, 비밀번호는 암호화된 비밀번호를 저장한다.
     
 #### ▶️ 회원 정보 조회
   - [ ] 로그인한 사용자의 정보를 조회할 수 있다. 
