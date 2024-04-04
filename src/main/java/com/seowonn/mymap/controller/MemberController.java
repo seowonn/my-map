@@ -2,10 +2,13 @@ package com.seowonn.mymap.controller;
 
 import static com.seowonn.mymap.type.SuccessMessage.SEND_EMAIL;
 import static com.seowonn.mymap.type.SuccessMessage.SIGNUP_SUCCESS;
+import static com.seowonn.mymap.type.SuccessMessage.SIGN_IN_SUCCESS;
 
 import com.seowonn.mymap.dto.ApiResponse;
 import com.seowonn.mymap.dto.EmailDto;
 import com.seowonn.mymap.dto.MemberFormDto;
+import com.seowonn.mymap.dto.SignInForm;
+import com.seowonn.mymap.dto.SignInResponse;
 import com.seowonn.mymap.entity.Member;
 import com.seowonn.mymap.service.MemberService;
 import com.seowonn.mymap.type.Role;
@@ -42,4 +45,11 @@ public class MemberController {
     Member member = memberService.createMember(memberFormDto, Role.ADMIN);
     return ApiResponse.createSuccessMessage(member, SIGNUP_SUCCESS);
   }
+
+  @PostMapping("/sign-in")
+  public ApiResponse<?> signIn (@RequestBody SignInForm signInForm) {
+    SignInResponse signInResponse = memberService.signInMember(signInForm);
+    return ApiResponse.createSuccessMessage(signInResponse, SIGN_IN_SUCCESS);
+  }
+
 }

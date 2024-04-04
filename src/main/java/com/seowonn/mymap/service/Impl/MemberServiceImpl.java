@@ -3,10 +3,15 @@ package com.seowonn.mymap.service.Impl;
 import static com.seowonn.mymap.type.ErrorCode.EXPIRED_VERIFICATION;
 import static com.seowonn.mymap.type.ErrorCode.INCORRECT_CODE;
 import static com.seowonn.mymap.type.ErrorCode.INCORRECT_EMAIL;
+import static com.seowonn.mymap.type.ErrorCode.INCORRECT_PASSWORD;
 import static com.seowonn.mymap.type.ErrorCode.USERID_EXISTS;
+import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
 
+import com.seowonn.mymap.config.security.jwt.JwtTokenProvider;
 import com.seowonn.mymap.dto.EmailDto;
 import com.seowonn.mymap.dto.MemberFormDto;
+import com.seowonn.mymap.dto.SignInForm;
+import com.seowonn.mymap.dto.SignInResponse;
 import com.seowonn.mymap.entity.Member;
 import com.seowonn.mymap.exception.MyMapSystemException;
 import com.seowonn.mymap.repository.MemberRepository;
@@ -14,9 +19,13 @@ import com.seowonn.mymap.service.MailService;
 import com.seowonn.mymap.service.MemberService;
 import com.seowonn.mymap.type.Role;
 import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,12 +36,13 @@ public class MemberServiceImpl implements MemberService {
   private final MemberRepository memberRepository;
   private final MailService mailService;
   private final RedisServiceImpl redisServiceImpl;
+  private final JwtTokenProvider jwtTokenProvider;
 
   private final static long VERIFICATION_EXPIRE_TIME = 600 * 5;
 
   @Override
   public SimpleMailMessage sendVerificationCode(EmailDto emailDto) {
-    
+
     // 인증 번호 생성
     String verificationNum = createNumber();
 
@@ -40,7 +50,35 @@ public class MemberServiceImpl implements MemberService {
     redisServiceImpl.setDataExpire(
         emailDto.getEmailAddress(), verificationNum, VERIFICATION_EXPIRE_TIME);
 
-    return mailService.sendAuthEmail(emailDto.getEmailAddress(), verificationNum);
+    return mailService.sendAuthEmail(emailDto.getEmailAddress(),
+        verificationNum);
+  }
+
+  @Override
+  public SignInResponse signInMember(SignInForm signInForm) {
+
+    // 아이디 조회
+    Member member = memberRepository.findByUserId(signInForm.getUserId())
+        .orElseThrow(() -> new MyMapSystemException(USER_NOT_FOUND));
+
+    // 비밀번호 조회 & 입력 pw 암호화 후 비교
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    if (!passwordEncoder.matches(signInForm.getPassword(),
+        member.getPassword())) {
+      throw new MyMapSystemException(INCORRECT_PASSWORD);
+    }
+
+    // jwt 토큰 생성
+    List<String> roleList = Arrays.stream(Role.values())
+        .map(Enum::name)
+        .collect(Collectors.toList());
+
+    String accessToken =
+        jwtTokenProvider.createAccessToken(signInForm.getUserId(), roleList);
+
+    return SignInResponse.builder()
+        .accessToken(accessToken)
+        .build();
   }
 
   private String createNumber() {
@@ -52,15 +90,16 @@ public class MemberServiceImpl implements MemberService {
     return String.valueOf(code);
   }
 
-  public Member createMember(MemberFormDto memberFormDto, Role role){
+  public Member createMember(MemberFormDto memberFormDto, Role role) {
 
     // 이미 등록된 아이디(이메일)인지 확인
-    if(memberRepository.existsByUserId(memberFormDto.getUserId())){
+    if (memberRepository.existsByUserId(memberFormDto.getUserId())) {
       throw new MyMapSystemException(USERID_EXISTS);
     }
 
     // redis code & 인증 번호 검증
-    checkVerificationCode(memberFormDto.getUserId(), memberFormDto.getVerificationNum());
+    checkVerificationCode(memberFormDto.getUserId(),
+        memberFormDto.getVerificationNum());
 
     Member member = Member.buildFromDto(memberFormDto, role);
     return memberRepository.save(member);
@@ -70,18 +109,18 @@ public class MemberServiceImpl implements MemberService {
     String redisCode = redisServiceImpl.getData(email);
 
     // 다른 아이디(이메일) 값을 입력하여 redis code가 null일 경우 에러 처리
-    if(redisCode == null) {
+    if (redisCode == null) {
       throw new MyMapSystemException(INCORRECT_EMAIL);
     }
 
     // 만료된 인증 번호에 대한 에러 처리
     long remainingTime = redisServiceImpl.getRemainingExpireTime(email);
-    if(remainingTime <= 0){
+    if (remainingTime <= 0) {
       throw new MyMapSystemException(EXPIRED_VERIFICATION);
     }
 
     // 인증 번호가 다른 사용자에 대한 에러 처리
-    if(!redisCode.equals(verificationCode)) {
+    if (!redisCode.equals(verificationCode)) {
       throw new MyMapSystemException(INCORRECT_CODE);
     }
 
