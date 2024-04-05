@@ -19,9 +19,8 @@ import com.seowonn.mymap.service.MailService;
 import com.seowonn.mymap.service.MemberService;
 import com.seowonn.mymap.type.Role;
 import java.security.SecureRandom;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -69,9 +68,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     // jwt 토큰 생성
-    List<String> roleList = Arrays.stream(Role.values())
-        .map(Enum::name)
-        .collect(Collectors.toList());
+    List<String> roleList = new ArrayList<>();
+    roleList.add(member.getRole().name());
 
     String accessToken =
         jwtTokenProvider.createAccessToken(signInForm.getUserId(), roleList);
