@@ -1,4 +1,4 @@
-package com.seowonn.mymap.dto;
+package com.seowonn.mymap.dto.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
