@@ -6,9 +6,9 @@ import static com.seowonn.mymap.type.SuccessMessage.SIGN_IN_SUCCESS;
 
 import com.seowonn.mymap.dto.ApiResponse;
 import com.seowonn.mymap.dto.EmailDto;
-import com.seowonn.mymap.dto.MemberFormDto;
-import com.seowonn.mymap.dto.SignInForm;
-import com.seowonn.mymap.dto.SignInResponse;
+import com.seowonn.mymap.dto.member.MemberFormDto;
+import com.seowonn.mymap.dto.member.SignInForm;
+import com.seowonn.mymap.dto.member.SignInResponse;
 import com.seowonn.mymap.entity.Member;
 import com.seowonn.mymap.service.MemberService;
 import com.seowonn.mymap.type.Role;

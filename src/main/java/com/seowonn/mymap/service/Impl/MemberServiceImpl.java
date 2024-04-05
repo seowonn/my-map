@@ -9,9 +9,9 @@ import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
 
 import com.seowonn.mymap.config.security.jwt.JwtTokenProvider;
 import com.seowonn.mymap.dto.EmailDto;
-import com.seowonn.mymap.dto.MemberFormDto;
-import com.seowonn.mymap.dto.SignInForm;
-import com.seowonn.mymap.dto.SignInResponse;
+import com.seowonn.mymap.dto.member.MemberFormDto;
+import com.seowonn.mymap.dto.member.SignInForm;
+import com.seowonn.mymap.dto.member.SignInResponse;
 import com.seowonn.mymap.entity.Member;
 import com.seowonn.mymap.exception.MyMapSystemException;
 import com.seowonn.mymap.repository.MemberRepository;
@@ -103,7 +103,7 @@ public class MemberServiceImpl implements MemberService {
     return memberRepository.save(member);
   }
 
-  private void checkVerificationCode(String email, String verificationCode) {
+  public void checkVerificationCode(String email, String verificationCode) {
     String redisCode = redisServiceImpl.getData(email);
 
     // 다른 아이디(이메일) 값을 입력하여 redis code가 null일 경우 에러 처리
