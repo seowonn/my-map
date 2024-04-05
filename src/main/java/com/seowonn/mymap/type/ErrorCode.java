@@ -14,6 +14,8 @@ public enum ErrorCode {
   EXPIRED_VERIFICATION("만료된 인증 번호입니다."),
   INCORRECT_CODE("올바르지 않은 인증 번호입니다."),
   INCORRECT_EMAIL("인증 번호를 전송한 이메일을 입력해주세요."),
+  TOKEN_ACCESS_DENIED("jwt 토큰 접근 권한이 거부되었습니다."),
+  UNAUTHORIZED("인증되지 않은 사용자입니다."),
   INVALID_SERVER_ERROR("내부 서버 오류가 발생하였습니다.");
 
   private final String description;

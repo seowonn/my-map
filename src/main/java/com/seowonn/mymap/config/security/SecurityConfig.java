@@ -1,6 +1,5 @@
 package com.seowonn.mymap.config.security;
 
-import com.seowonn.mymap.config.security.jwt.JwtAccessDeniedHandler;
 import com.seowonn.mymap.config.security.jwt.JwtAuthenticationEntryPoint;
 import com.seowonn.mymap.config.security.jwt.JwtAuthenticationFilter;
 import com.seowonn.mymap.config.security.jwt.JwtTokenProvider;
@@ -40,12 +39,18 @@ public class SecurityConfig {
             configurer.sessionCreationPolicy(
                 SessionCreationPolicy.STATELESS)
         )
+        .authorizeHttpRequests(authorizeRequests -> {
+          authorizeRequests
+              .requestMatchers("/member/**")
+              .permitAll();
+
+          authorizeRequests.
+              requestMatchers("/user/**").authenticated();
+        })
         .exceptionHandling(exceptionHandling ->
             exceptionHandling
                 .authenticationEntryPoint(
                     new JwtAuthenticationEntryPoint())
-                .accessDeniedHandler(
-                    new JwtAccessDeniedHandler())
         )
         .addFilterBefore(
             new JwtAuthenticationFilter(jwtTokenProvider),
