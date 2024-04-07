@@ -8,6 +8,7 @@ import com.seowonn.mymap.dto.ApiResponse;
 import com.seowonn.mymap.dto.member.MemberInfoDto;
 import com.seowonn.mymap.dto.member.UpdateUserInfoForm;
 import com.seowonn.mymap.service.Impl.UserServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ public class UserController {
   }
 
   @PatchMapping("/edit-profile")
-  public ApiResponse<?> updateUserId(@RequestBody UpdateUserInfoForm userIdForm) {
+  public ApiResponse<?> updateUserId(@Valid @RequestBody UpdateUserInfoForm userIdForm) {
     MemberInfoDto memberInfoDto = userService.updateUser(userIdForm);
     return ApiResponse.createSuccessMessage(memberInfoDto, PROFILE_UPDATE_SUCCESS);
   }

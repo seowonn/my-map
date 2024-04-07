@@ -2,6 +2,7 @@ package com.seowonn.mymap.dto;
 
 import com.seowonn.mymap.type.ErrorCode;
 import com.seowonn.mymap.type.SuccessMessage;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class ApiResponse<T> {
   private String status;
   private T data;
   private String message;
+  private List<String> messages;
 
   public static <T> ApiResponse<?> createSuccessMessage(T data, SuccessMessage message){
     return ApiResponse.builder()
@@ -30,6 +32,13 @@ public class ApiResponse<T> {
     return ApiResponse.builder()
         .status(FAIL_STATUS)
         .message(errorCode.getDescription())
+        .build();
+  }
+
+  public static ApiResponse<?> createValidationFail(List<String> errorMessage){
+    return ApiResponse.builder()
+        .status(FAIL_STATUS)
+        .messages(errorMessage)
         .build();
   }
 

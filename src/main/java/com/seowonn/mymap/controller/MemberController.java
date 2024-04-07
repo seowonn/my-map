@@ -12,6 +12,7 @@ import com.seowonn.mymap.dto.member.SignInResponse;
 import com.seowonn.mymap.entity.Member;
 import com.seowonn.mymap.service.MemberService;
 import com.seowonn.mymap.type.Role;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +28,7 @@ public class MemberController {
   private final MemberService memberService;
 
   @PostMapping("/verify/send-email")
-  public ApiResponse<?> sendEmail(@RequestBody EmailDto emailDto){
+  public ApiResponse<?> sendEmail(@Valid @RequestBody EmailDto emailDto){
     SimpleMailMessage message = memberService.sendVerificationCode(emailDto);
     return ApiResponse.createSuccessMessage(message, SEND_EMAIL);
   }
