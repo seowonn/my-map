@@ -53,4 +53,9 @@ public class MemberController {
     return ApiResponse.createSuccessMessage(signInResponse, SIGN_IN_SUCCESS);
   }
 
+  @PostMapping("/reset-password")
+  public ApiResponse<?> recreatePassword(@Valid @RequestBody EmailDto emailDto){
+    SimpleMailMessage message = memberService.sendNewPassword(emailDto);
+    return ApiResponse.createSuccessMessage(message, SEND_EMAIL);
+  }
 }

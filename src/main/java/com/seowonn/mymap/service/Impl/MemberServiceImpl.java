@@ -24,6 +24,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,7 @@ public class MemberServiceImpl implements MemberService {
   private final JwtTokenProvider jwtTokenProvider;
 
   private final static long VERIFICATION_EXPIRE_TIME = 600 * 5;
+  private final static int PASSWORD_LENGTH = 10;
 
   @Override
   public SimpleMailMessage sendVerificationCode(EmailDto emailDto) {
@@ -123,6 +125,50 @@ public class MemberServiceImpl implements MemberService {
     }
 
     redisServiceImpl.deleteData(email);
+  }
+
+  @Override
+  public SimpleMailMessage sendNewPassword(EmailDto emailDto) {
+
+    // 회원 검사
+    Member member = memberRepository.findByUserId(emailDto.getEmailAddress())
+        .orElseThrow(() -> new MyMapSystemException(USER_NOT_FOUND));
+
+    // 임시 비밀번호 생성 및 이메일 전송
+    String randomPassword = createRandomPassword();
+    SimpleMailMessage message = mailService.sendAuthEmail(
+        emailDto.getEmailAddress(), randomPassword);
+
+    // DB 저장
+    String encPassword = BCrypt.hashpw(randomPassword, BCrypt.gensalt());
+    member.setPassword(encPassword);
+    memberRepository.save(member);
+
+    return message;
+  }
+
+  private String createRandomPassword() {
+
+    StringBuilder sb = new StringBuilder();
+
+    char[] charSet =
+        new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+            'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+            'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+            'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+            'w', 'x', 'y', 'z', '!', '@', '#', '$', '%', '^', '&' };
+
+    SecureRandom random = new SecureRandom();
+    int idx = 0;
+    int len = charSet.length;
+    for(int i = 0; i < MemberServiceImpl.PASSWORD_LENGTH; i++){
+      idx = random.nextInt(len);
+      sb.append(charSet[idx]);
+    }
+    log.info("[createRandomPassword] : 임시 번호 생성 완료");
+
+    return sb.toString();
   }
 
 }

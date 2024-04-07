@@ -17,4 +17,7 @@ public interface MemberService {
   SignInResponse signInMember(SignInForm signInForm);
 
   void checkVerificationCode(String email, String verificationCode);
+
+  SimpleMailMessage sendNewPassword(EmailDto emailDto);
+
 }
