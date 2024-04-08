@@ -1,9 +1,11 @@
 package com.seowonn.mymap.service.Impl;
 
+import static com.seowonn.mymap.type.AuthenticationContents.EMAIL_AUTH_TITLE;
 import static com.seowonn.mymap.type.ErrorCode.EMAIL_SEND_ERROR;
 
 import com.seowonn.mymap.exception.MyMapSystemException;
 import com.seowonn.mymap.service.MailService;
+import com.seowonn.mymap.type.AuthenticationContents;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +21,6 @@ public class MailServiceImpl implements MailService {
 
   private final JavaMailSender javaMailSender;
 
-  String AUTH_TITLE = "[인증 번호 발송] : 인증 번호를 확인해주세요";
 
   @Override
   public SimpleMailMessage sendAuthEmail(String emailAddress, String text) {
@@ -44,7 +45,7 @@ public class MailServiceImpl implements MailService {
 
     SimpleMailMessage message = new SimpleMailMessage();
     message.setTo(emailAddress);
-    message.setSubject(AUTH_TITLE);
+    message.setSubject(EMAIL_AUTH_TITLE.getMessage());
     message.setText(text);
 
     log.info("[createEmailForm] : 이메일 생성 완료");
