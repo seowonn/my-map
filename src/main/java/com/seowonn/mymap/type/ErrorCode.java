@@ -18,6 +18,7 @@ public enum ErrorCode {
   TOKEN_ACCESS_DENIED("jwt 토큰 접근 권한이 거부되었습니다."),
   UNAUTHORIZED("인증되지 않은 사용자입니다."),
   ACCESS_DENIED("접근 권한이 없는 사용자입니다."),
+  DATA_SCRAPPING_ERROR("데이터를 가져오는데 오류가 발생하였습니다."),
   INVALID_SERVER_ERROR("내부 서버 오류가 발생하였습니다.");
 
   private final String description;

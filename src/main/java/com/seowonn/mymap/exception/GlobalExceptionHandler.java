@@ -33,12 +33,19 @@ public class GlobalExceptionHandler {
         .body(ApiResponse.createValidationFail(errorMessages));
   }
 
-
   @ExceptionHandler(MyMapSystemException.class)
   public ResponseEntity<ApiResponse<?>> handleMyMapSystemException (
       MyMapSystemException e) {
     log.error("[MyMapSystemException] : {}", e.getErrorMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(ApiResponse.createFail(e.getErrorCode()));
+  }
+
+  @ExceptionHandler(LoadingDataException.class)
+  public ResponseEntity<ApiResponse<?>> handleLoadingDataException(
+      LoadingDataException e) {
+    log.error("[LoadingDataException] : {}", e.getErrorMessage());
+    return ResponseEntity.status(INTERNAL_SERVER_ERROR)
         .body(ApiResponse.createFail(e.getErrorCode()));
   }
 
