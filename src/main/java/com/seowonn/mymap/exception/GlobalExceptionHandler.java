@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
         .map(DefaultMessageSourceResolvable::getDefaultMessage)
         .toList();
 
-    log.error("[MethodArgumentValidException]");
+    log.info("[MethodArgumentValidException] : {}", e.getMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(ApiResponse.createValidationFail(errorMessages));
   }
