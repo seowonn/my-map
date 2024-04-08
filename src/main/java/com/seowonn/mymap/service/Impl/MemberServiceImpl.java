@@ -40,6 +40,13 @@ public class MemberServiceImpl implements MemberService {
 
   private final static long VERIFICATION_EXPIRE_TIME = 600 * 5;
   private final static int PASSWORD_LENGTH = 10;
+  private static final char[] CHAR_SET =
+      new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+          'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+          'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+          'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+          'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+          'w', 'x', 'y', 'z', '!', '@', '#', '$', '%', '^', '&' };
 
   @Override
   public SimpleMailMessage sendVerificationCode(EmailDto emailDto) {
@@ -151,20 +158,12 @@ public class MemberServiceImpl implements MemberService {
 
     StringBuilder sb = new StringBuilder();
 
-    char[] charSet =
-        new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
-            'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-            'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-            'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-            'w', 'x', 'y', 'z', '!', '@', '#', '$', '%', '^', '&' };
-
     SecureRandom random = new SecureRandom();
     int idx = 0;
-    int len = charSet.length;
+    int len = CHAR_SET.length;
     for(int i = 0; i < MemberServiceImpl.PASSWORD_LENGTH; i++){
       idx = random.nextInt(len);
-      sb.append(charSet[idx]);
+      sb.append(CHAR_SET[idx]);
     }
     log.info("[createRandomPassword] : 임시 번호 생성 완료");
 
