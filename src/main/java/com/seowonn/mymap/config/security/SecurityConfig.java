@@ -43,7 +43,7 @@ public class SecurityConfig {
         )
         .authorizeHttpRequests(authorizeRequests -> {
           authorizeRequests
-              .requestMatchers("/member/**")
+              .requestMatchers("/member/**", "/open-api/**")
               .permitAll();
 
           authorizeRequests.
