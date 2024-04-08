@@ -4,15 +4,35 @@ import static com.seowonn.mymap.type.ErrorCode.INVALID_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import com.seowonn.mymap.dto.ApiResponse;
+import com.seowonn.mymap.type.ErrorCode;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ApiResponse<?>> handleMethodArgumentValidException(
+      MethodArgumentNotValidException e) {
+
+    List<String> errorMessages = e.getBindingResult().getAllErrors()
+        .stream()
+        .map(DefaultMessageSourceResolvable::getDefaultMessage)
+        .toList();
+
+    log.info("[MethodArgumentValidException] : {}", e.getMessage());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(ApiResponse.createValidationFail(errorMessages));
+  }
+
 
   @ExceptionHandler(MyMapSystemException.class)
   public ResponseEntity<ApiResponse<?>> handleMyMapSystemException (

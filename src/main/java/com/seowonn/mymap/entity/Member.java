@@ -1,6 +1,6 @@
 package com.seowonn.mymap.entity;
 
-import com.seowonn.mymap.dto.MemberFormDto;
+import com.seowonn.mymap.dto.member.MemberFormDto;
 import com.seowonn.mymap.type.Gender;
 import com.seowonn.mymap.type.Role;
 import jakarta.persistence.Column;
@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -23,6 +24,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
