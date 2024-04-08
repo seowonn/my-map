@@ -1,5 +1,6 @@
 package com.seowonn.mymap.config.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seowonn.mymap.config.security.jwt.JwtAuthenticationEntryPoint;
 import com.seowonn.mymap.config.security.jwt.JwtAuthenticationFilter;
 import com.seowonn.mymap.config.security.jwt.JwtTokenProvider;
@@ -20,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
   private final JwtTokenProvider jwtTokenProvider;
+  private final ObjectMapper objectMapper;
 
   @Bean
   public BCryptPasswordEncoder bCryptPasswordEncoder(){
@@ -50,7 +52,7 @@ public class SecurityConfig {
         .exceptionHandling(exceptionHandling ->
             exceptionHandling
                 .authenticationEntryPoint(
-                    new JwtAuthenticationEntryPoint())
+                    new JwtAuthenticationEntryPoint(objectMapper))
         )
         .addFilterBefore(
             new JwtAuthenticationFilter(jwtTokenProvider),
