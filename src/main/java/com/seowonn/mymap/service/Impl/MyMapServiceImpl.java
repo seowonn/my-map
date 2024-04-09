@@ -3,8 +3,8 @@ package com.seowonn.mymap.service.Impl;
 import static com.seowonn.mymap.type.ErrorCode.MY_MAP_NOT_FOUND;
 import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
 
-import com.seowonn.mymap.dto.MyMap.NewMyMapDto;
-import com.seowonn.mymap.dto.MyMap.UpdateMyMapDto;
+import com.seowonn.mymap.dto.myMap.NewMyMapDto;
+import com.seowonn.mymap.dto.myMap.UpdateMyMapDto;
 import com.seowonn.mymap.entity.Member;
 import com.seowonn.mymap.entity.MyMap;
 import com.seowonn.mymap.entity.SiDo;

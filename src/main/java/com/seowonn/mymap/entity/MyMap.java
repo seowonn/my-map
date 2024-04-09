@@ -1,7 +1,7 @@
 package com.seowonn.mymap.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.seowonn.mymap.dto.MyMap.NewMyMapDto;
+import com.seowonn.mymap.dto.myMap.NewMyMapDto;
 import com.seowonn.mymap.type.IsPublic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

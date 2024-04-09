@@ -1,7 +1,7 @@
 package com.seowonn.mymap.service;
 
-import com.seowonn.mymap.dto.MyMap.NewMyMapDto;
-import com.seowonn.mymap.dto.MyMap.UpdateMyMapDto;
+import com.seowonn.mymap.dto.myMap.NewMyMapDto;
+import com.seowonn.mymap.dto.myMap.UpdateMyMapDto;
 import com.seowonn.mymap.entity.MyMap;
 import com.seowonn.mymap.entity.SiDo;
 import org.springframework.data.domain.Page;

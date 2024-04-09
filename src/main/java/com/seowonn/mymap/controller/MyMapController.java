@@ -5,8 +5,8 @@ import static com.seowonn.mymap.type.SuccessMessage.MY_MAP_UPDATE_SUCCESS;
 import static com.seowonn.mymap.type.SuccessMessage.RETRIEVE_DATA_SUCCESS;
 
 import com.seowonn.mymap.dto.ApiResponse;
-import com.seowonn.mymap.dto.MyMap.NewMyMapDto;
-import com.seowonn.mymap.dto.MyMap.UpdateMyMapDto;
+import com.seowonn.mymap.dto.myMap.NewMyMapDto;
+import com.seowonn.mymap.dto.myMap.UpdateMyMapDto;
 import com.seowonn.mymap.entity.MyMap;
 import com.seowonn.mymap.entity.SiDo;
 import com.seowonn.mymap.service.Impl.MyMapServiceImpl;

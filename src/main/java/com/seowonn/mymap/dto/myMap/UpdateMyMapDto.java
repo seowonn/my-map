@@ -1,4 +1,4 @@
-package com.seowonn.mymap.dto.MyMap;
+package com.seowonn.mymap.dto.myMap;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
