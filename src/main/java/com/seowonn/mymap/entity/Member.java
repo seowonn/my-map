@@ -1,22 +1,29 @@
 package com.seowonn.mymap.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seowonn.mymap.dto.member.MemberFormDto;
 import com.seowonn.mymap.type.Gender;
 import com.seowonn.mymap.type.Role;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -61,6 +68,13 @@ public class Member {
 
   @LastModifiedDate
   private LocalDateTime updatedAt;
+
+  @OneToMany(mappedBy = "member", fetch = FetchType.EAGER,
+      cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+  @ToString.Exclude
+  @Builder.Default
+  @JsonManagedReference
+  private List<MyMap> myMapList = new ArrayList<>();
 
   public static Member buildFromDto(MemberFormDto memberFormDto, Role role) {
 
