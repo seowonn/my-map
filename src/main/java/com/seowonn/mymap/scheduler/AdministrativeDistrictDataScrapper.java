@@ -1,24 +1,19 @@
 package com.seowonn.mymap.scheduler;
 
 import com.seowonn.mymap.service.Impl.OpenApiServiceImpl;
-import jakarta.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class AdministrativeDistrictDataScrapper {
 
   private final OpenApiServiceImpl openApiService;
-
-  @PostConstruct
-  public void init() throws ParseException {
-    // 서버 시작 후 지역 데이터 바로 로딩
-    loadAdministrativeDistrictData();
-  }
 
   @Scheduled(fixedDelay = 60 * 1000L * 60 * 24 * 30) // 30일 주기
   public void loadAdministrativeDistrictData() throws ParseException {
