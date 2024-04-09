@@ -1,7 +1,8 @@
 package com.seowonn.mymap.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.seowonn.mymap.dto.OpenApiSiDoDto;
+import com.seowonn.mymap.dto.SiDoDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -44,13 +45,17 @@ public class SiDo {
   @OneToMany(mappedBy = "siDo", fetch = FetchType.EAGER)
   @ToString.Exclude
   @Builder.Default
+  /**
+   * TODO : siGunGuList가 필요한 상황이 있는지 셍각해보기
+   */
+  @JsonIgnore
   @JsonManagedReference
   private List<SiGunGu> siGunGuList = new ArrayList<>();
 
-  public static SiDo buildFromDto(OpenApiSiDoDto openApiSidoDto) {
+  public static SiDo buildFromDto(SiDoDto sidoDto) {
     return SiDo.builder()
-        .siDoName(openApiSidoDto.getCityName())
-        .siDoCode(openApiSidoDto.getDistrictCode())
+        .siDoName(sidoDto.getCityName())
+        .siDoCode(sidoDto.getDistrictCode())
         .build();
   }
 

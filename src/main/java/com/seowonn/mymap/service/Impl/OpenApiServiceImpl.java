@@ -2,8 +2,8 @@ package com.seowonn.mymap.service.Impl;
 
 import static com.seowonn.mymap.type.ErrorCode.DATA_SCRAPPING_ERROR;
 
-import com.seowonn.mymap.dto.OpenApiSiDoDto;
-import com.seowonn.mymap.dto.OpenApiSiggDto;
+import com.seowonn.mymap.dto.SiDoDto;
+import com.seowonn.mymap.dto.SiGunGuDto;
 import com.seowonn.mymap.entity.SiDo;
 import com.seowonn.mymap.entity.SiGunGu;
 import com.seowonn.mymap.exception.LoadingDataException;
@@ -66,11 +66,11 @@ public class OpenApiServiceImpl implements OpenApiService {
 
       JSONObject feature = (JSONObject) o;
       JSONObject properties = (JSONObject) feature.get("properties");
-      OpenApiSiDoDto openApiSidoDto = OpenApiSiDoDto.makeSiDoDto(properties);
+      SiDoDto sidoDto = SiDoDto.makeSiDoDto(properties);
 
       // DB에 저장 안된 것만 새로 저장
-      if(!siDoRepository.existsBySiDoCode(openApiSidoDto.getDistrictCode())){
-        siDoRepository.save(SiDo.buildFromDto(openApiSidoDto));
+      if(!siDoRepository.existsBySiDoCode(sidoDto.getDistrictCode())){
+        siDoRepository.save(SiDo.buildFromDto(sidoDto));
       }
     }
   }
@@ -85,18 +85,18 @@ public class OpenApiServiceImpl implements OpenApiService {
     for (Object o : jsonFeatures) {
       JSONObject feature = (JSONObject) o;
       JSONObject properties = (JSONObject) feature.get("properties");
-      OpenApiSiggDto openApiSiggDto = OpenApiSiggDto.makeSiggDto(properties);
+      SiGunGuDto siGunGuDto = SiGunGuDto.makeSiggDto(properties);
 
       // DB에 저장되지 않으면서
-      if(!siGunGuRepository.existsBySiGunGuCode(openApiSiggDto.getDistrictCode())){
+      if(!siGunGuRepository.existsBySiGunGuCode(siGunGuDto.getDistrictCode())){
         // 시도 정보 추출
-        String siDoName = openApiSiggDto.getCityFullName().split(" ")[0];
+        String siDoName = siGunGuDto.getCityFullName().split(" ")[0];
 
         // 광역시도 DB에서 시도가 조회되는 시군구일 경우만 시군구 DB에 저장
         SiDo siDo = siDoRepository.findBySiDoName(siDoName)
             .orElseThrow(() -> new LoadingDataException(DATA_SCRAPPING_ERROR));
 
-        SiGunGu siGunGu = SiGunGu.buildFromDto(openApiSiggDto);
+        SiGunGu siGunGu = SiGunGu.buildFromDto(siGunGuDto);
         siGunGu.setSiDo(siDo);
 
         siGunGuRepository.save(siGunGu);

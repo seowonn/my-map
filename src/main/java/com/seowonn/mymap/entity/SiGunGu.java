@@ -1,7 +1,7 @@
 package com.seowonn.mymap.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.seowonn.mymap.dto.OpenApiSiggDto;
+import com.seowonn.mymap.dto.SiGunGuDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
@@ -47,10 +47,10 @@ public class SiGunGu {
   @JsonBackReference
   private SiDo siDo;
 
-  public static SiGunGu buildFromDto(OpenApiSiggDto openApiSiggDto) {
+  public static SiGunGu buildFromDto(SiGunGuDto siGunGuDto) {
     return SiGunGu.builder()
-        .siGunGuName(openApiSiggDto.getSmallCityName())
-        .siGunGuCode(openApiSiggDto.getDistrictCode())
+        .siGunGuName(siGunGuDto.getSmallCityName())
+        .siGunGuCode(siGunGuDto.getDistrictCode())
         .build();
   }
 
