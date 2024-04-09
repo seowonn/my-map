@@ -10,8 +10,6 @@ import com.seowonn.mymap.exception.LoadingDataException;
 import com.seowonn.mymap.repository.SiDoRepository;
 import com.seowonn.mymap.repository.SiGunGuRepository;
 import com.seowonn.mymap.service.OpenApiService;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
@@ -58,13 +56,11 @@ public class OpenApiServiceImpl implements OpenApiService {
   }
 
   @Override
-  public List<OpenApiSiDoDto> fetchSiDo() throws ParseException {
+  public void fetchSiDo() throws ParseException {
 
     String jsonString = restTemplate.getForObject(makeUrl(SIDO), String.class);
 
     JSONArray jsonFeatures = parseJsonString(jsonString);
-
-    List<OpenApiSiDoDto> result = new ArrayList<>();
 
     for (Object o : jsonFeatures) {
 
@@ -75,21 +71,16 @@ public class OpenApiServiceImpl implements OpenApiService {
       // DB에 저장 안된 것만 새로 저장
       if(!siDoRepository.existsBySiDoCode(openApiSidoDto.getDistrictCode())){
         siDoRepository.save(SiDo.buildFromDto(openApiSidoDto));
-        result.add(openApiSidoDto);
       }
     }
-
-    return result;
   }
 
   @Override
-  public List<OpenApiSiggDto> fetchSiGunGu() throws ParseException {
+  public void fetchSiGunGu() throws ParseException {
 
     String jsonString = restTemplate.getForObject(makeUrl(SIGG), String.class);
 
     JSONArray jsonFeatures = parseJsonString(jsonString);
-
-    List<OpenApiSiggDto> result = new ArrayList<>();
 
     for (Object o : jsonFeatures) {
       JSONObject feature = (JSONObject) o;
@@ -109,11 +100,8 @@ public class OpenApiServiceImpl implements OpenApiService {
         siGunGu.setSiDo(siDo);
 
         siGunGuRepository.save(siGunGu);
-        result.add(openApiSiggDto);
       }
     }
-
-    return result;
   }
 
   @Override

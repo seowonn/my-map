@@ -9,10 +9,10 @@ import org.json.simple.parser.ParseException;
 public interface OpenApiService {
   String makeUrl(String place);
 
-  List<OpenApiSiDoDto> fetchSiDo() throws ParseException;
+  void fetchSiDo() throws ParseException;
 
   JSONArray parseJsonString(String jsonString) throws ParseException;
 
-  List<OpenApiSiggDto> fetchSiGunGu() throws ParseException;
+  void fetchSiGunGu() throws ParseException;
 
 }
