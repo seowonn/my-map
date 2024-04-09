@@ -12,13 +12,13 @@ import org.json.simple.JSONObject;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class OpenApiSiDoDto {
+public class SiDoDto {
 
   private String districtCode;
   private String cityName;
 
-  public static OpenApiSiDoDto makeSiDoDto(JSONObject property){
-    return OpenApiSiDoDto.builder()
+  public static SiDoDto makeSiDoDto(JSONObject property){
+    return SiDoDto.builder()
         .districtCode(property.get("ctprvn_cd").toString())
         .cityName(property.get("ctp_kor_nm").toString())
         .build();

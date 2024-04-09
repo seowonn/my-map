@@ -12,14 +12,14 @@ import org.json.simple.JSONObject;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class OpenApiSiggDto {
+public class SiGunGuDto {
 
   private String districtCode;
   private String cityFullName;
   private String smallCityName;
 
-  public static OpenApiSiggDto makeSiggDto(JSONObject property){
-    return OpenApiSiggDto.builder()
+  public static SiGunGuDto makeSiggDto(JSONObject property){
+    return SiGunGuDto.builder()
         .districtCode(property.get("sig_cd").toString())
         .cityFullName(property.get("full_nm").toString())
         .smallCityName(property.get("sig_kor_nm").toString())
