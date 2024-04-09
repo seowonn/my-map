@@ -43,11 +43,11 @@ public class SecurityConfig {
         )
         .authorizeHttpRequests(authorizeRequests -> {
           authorizeRequests
-              .requestMatchers("/member/**", "/open-api/**")
+              .requestMatchers("/member/**")
               .permitAll();
 
           authorizeRequests.
-              requestMatchers("/user/**").authenticated();
+              requestMatchers("/user/**", "/my-map/**").authenticated();
         })
         .exceptionHandling(exceptionHandling ->
             exceptionHandling

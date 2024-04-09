@@ -19,6 +19,7 @@ public enum ErrorCode {
   UNAUTHORIZED("인증되지 않은 사용자입니다."),
   ACCESS_DENIED("접근 권한이 없는 사용자입니다."),
   DATA_SCRAPPING_ERROR("데이터를 가져오는데 오류가 발생하였습니다."),
+  MY_MAP_NOT_FOUND("해당 아이디로 등록된 마이맵이 없습니다."),
   INVALID_SERVER_ERROR("내부 서버 오류가 발생하였습니다.");
 
   private final String description;
