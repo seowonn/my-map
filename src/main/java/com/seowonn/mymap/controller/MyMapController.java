@@ -32,17 +32,18 @@ public class MyMapController {
 
   private final MyMapServiceImpl myMapService;
 
-  @GetMapping("/city")
-  public ApiResponse<?> getCities(
-      @PageableDefault(page = 0, size = 10) Pageable pageable) {
-    Page<SiDo> citiesDto = myMapService.getSiDoCites(pageable);
-    return ApiResponse.createSuccessMessage(citiesDto, RETRIEVE_DATA_SUCCESS);
-  }
-
   @PostMapping("/new-map")
   public ApiResponse<?> createMyMap(@Valid @RequestBody NewMyMapDto newMyMapDto) {
     MyMap myMap = myMapService.registerNewMap(newMyMapDto);
     return ApiResponse.createSuccessMessage(myMap, MY_MAP_CREATED);
+  }
+
+  @GetMapping("/{userId}")
+  public ApiResponse<?> getMyMaps(
+      @PathVariable String userId,
+      @PageableDefault(page = 0, size = 10) Pageable pageable) {
+    Page<MyMap> myMaps = myMapService.getMyMaps(userId, pageable);
+    return ApiResponse.createSuccessMessage(myMaps, RETRIEVE_DATA_SUCCESS);
   }
 
   @PatchMapping("/edit-map/{myMapId}")

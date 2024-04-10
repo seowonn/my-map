@@ -77,7 +77,7 @@ public class MyMap {
   @ToString.Exclude
   @Builder.Default
   @JsonManagedReference
-  private List<VisitationLog> visitationLogs = new ArrayList<>();
+  private List<VisitLog> visitLogs = new ArrayList<>();
 
   public static MyMap buildFromDto(
       NewMyMapDto newMyMapDto) {

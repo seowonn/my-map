@@ -9,11 +9,12 @@ import org.springframework.data.domain.Pageable;
 
 public interface MyMapService {
 
-  Page<SiDo> getSiDoCites(Pageable pageable);
-
   MyMap registerNewMap(NewMyMapDto newMyMapDto);
+
+  Page<MyMap> getMyMaps(String userId, Pageable pageable);
 
   MyMap updateMyMap(UpdateMyMapDto updateMyMapDto, Long myMapId);
 
   void deleteMyMap(Long myMapId);
+
 }
