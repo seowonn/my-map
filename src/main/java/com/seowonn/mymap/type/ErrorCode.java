@@ -15,6 +15,8 @@ public enum ErrorCode {
   EXPIRED_VERIFICATION("만료된 인증 번호입니다."),
   INCORRECT_CODE("올바르지 않은 인증 번호입니다."),
   INCORRECT_EMAIL("인증 번호를 전송한 이메일을 입력해주세요."),
+  REGION_NOT_FOUND("해당 지역으로 조회된 결과가 없습니다."),
+  INCORRECT_REGION("지역 정보가 일치하지 않습니다."),
   TOKEN_ACCESS_DENIED("jwt 토큰 접근 권한이 거부되었습니다."),
   UNAUTHORIZED("인증되지 않은 사용자입니다."),
   ACCESS_DENIED("접근 권한이 없는 사용자입니다."),

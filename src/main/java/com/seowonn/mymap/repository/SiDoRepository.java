@@ -16,4 +16,6 @@ public interface SiDoRepository extends JpaRepository<SiDo, Long> {
 
   @NonNull
   Page<SiDo> findAll(@NonNull Pageable pageable);
+
+  Optional<SiDo> findBySiDoCode(String siDoCode);
 }
