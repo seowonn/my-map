@@ -69,8 +69,7 @@ public class Member {
   @LastModifiedDate
   private LocalDateTime updatedAt;
 
-  @OneToMany(mappedBy = "member", fetch = FetchType.EAGER,
-      cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+  @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
   @ToString.Exclude
   @Builder.Default
   @JsonManagedReference

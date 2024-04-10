@@ -1,8 +1,10 @@
 package com.seowonn.mymap.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seowonn.mymap.dto.myMap.NewMyMapDto;
 import com.seowonn.mymap.type.IsPublic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -14,12 +16,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -40,9 +46,6 @@ public class MyMap {
   @Column(nullable = false)
   private String myMapTitle;
 
-  @Column(nullable = false)
-  private String siDoName;
-
   @Column
   private long totalLikes;
 
@@ -60,22 +63,32 @@ public class MyMap {
   @LastModifiedDate
   private LocalDateTime updatedAt;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "member")
   @JsonBackReference
   private Member member;
 
-  public static MyMap buildFromDto(NewMyMapDto newMyMapDto, Member member) {
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "siDo")
+  private SiDo siDo;
+
+  @OneToMany(mappedBy = "myMap", fetch = FetchType.EAGER,
+      cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+  @ToString.Exclude
+  @Builder.Default
+  @JsonManagedReference
+  private List<VisitationLog> visitationLogs = new ArrayList<>();
+
+  public static MyMap buildFromDto(
+      NewMyMapDto newMyMapDto) {
 
     IsPublic isPublic = IsPublic.valueOf(newMyMapDto.getIsPublic().toUpperCase());
 
     return MyMap.builder()
         .myMapTitle(newMyMapDto.getMyMapTitle())
-        .siDoName(newMyMapDto.getSiDoName())
         .totalLikes(0)
         .totalViews(0)
         .isPublic(isPublic)
-        .member(member)
         .build();
   }
 

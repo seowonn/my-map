@@ -13,8 +13,11 @@ import lombok.Setter;
 @Builder
 public class NewMyMapDto {
 
-  @NotBlank(message = "작성할 지역을 선정해주세요.")
-  private String siDoName;
+  @NotBlank(message = "사용자 아이디를 입력해주세요.")
+  private String userId;
+
+  @NotBlank(message = "작성할 지역을 선택해주세요.")
+  private String siDoCode;
 
   /**
    * TODO : myMapTitle이 빈칸으로 들어왔을 때, 기본 값을 지역명(광역시도)로 설정할 수 있도록 하기

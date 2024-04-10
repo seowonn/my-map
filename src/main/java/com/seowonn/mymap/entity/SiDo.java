@@ -36,7 +36,7 @@ public class SiDo {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @Column(nullable = false, unique = true)
+  @Column
   private String siDoName;
 
   @Column(nullable = false, unique = true)
@@ -51,6 +51,13 @@ public class SiDo {
   @JsonIgnore
   @JsonManagedReference
   private List<SiGunGu> siGunGuList = new ArrayList<>();
+
+  @OneToMany(mappedBy = "siDo", fetch = FetchType.EAGER)
+  @ToString.Exclude
+  @Builder.Default
+  @JsonIgnore
+  @JsonManagedReference
+  private List<MyMap> myMapList = new ArrayList<>();
 
   public static SiDo buildFromDto(SiDoDto sidoDto) {
     return SiDo.builder()

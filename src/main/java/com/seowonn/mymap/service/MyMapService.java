@@ -13,6 +13,7 @@ public interface MyMapService {
 
   MyMap registerNewMap(NewMyMapDto newMyMapDto);
 
-  MyMap updateMyMap(UpdateMyMapDto updateMyMapDto, String userId);
+  MyMap updateMyMap(UpdateMyMapDto updateMyMapDto, Long myMapId);
 
+  void deleteMyMap(Long myMapId);
 }

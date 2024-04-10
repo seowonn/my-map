@@ -1,5 +1,7 @@
 package com.seowonn.mymap.service.Impl;
 
+import static com.seowonn.mymap.type.ErrorCode.ACCESS_DENIED;
+import static com.seowonn.mymap.type.ErrorCode.INCORRECT_SI_DO;
 import static com.seowonn.mymap.type.ErrorCode.MY_MAP_NOT_FOUND;
 import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
 
@@ -40,30 +42,60 @@ public class MyMapServiceImpl implements MyMapService {
   @Override
   public MyMap registerNewMap(NewMyMapDto newMyMapDto) {
 
-    Authentication authentication =
-        SecurityContextHolder.getContext().getAuthentication();
-    String userId = authentication.getName();
+    // 해당 아이디로 로그인한 사용자인지 확인
+    checkService.checkIsLoginUser(newMyMapDto.getUserId());
+
+    MyMap myMap = MyMap.buildFromDto(newMyMapDto);
+
+    // 선택 지역(광역시도) 정보 조회
+    SiDo siDo = siDoRepository.findBySiDoCode(newMyMapDto.getSiDoCode())
+        .orElseThrow(() -> new MyMapSystemException(INCORRECT_SI_DO));
 
     // 매핑을 위한 회원 정보 가져오기
-    Member member = memberRepository.findByUserId(userId)
+    Member member = memberRepository.findByUserId(newMyMapDto.getUserId())
         .orElseThrow(() -> new MyMapSystemException(USER_NOT_FOUND));
 
-    MyMap myMap = MyMap.buildFromDto(newMyMapDto, member);
+    myMap.setMember(member);
+    myMap.setSiDo(siDo);
+
     return myMapRepository.save(myMap);
   }
 
   @Override
-  public MyMap updateMyMap(UpdateMyMapDto updateMyMapDto, String userId) {
+  public MyMap updateMyMap(UpdateMyMapDto updateMyMapDto, Long myMapId) {
 
-    // 작성자 본인인지 확인
-    checkService.checkIsLoginUser(userId);
+    // 해당 아이디로 로그인한 사용자인지 확인
+    checkService.checkIsLoginUser(updateMyMapDto.getUserId());
 
-    MyMap myMap = myMapRepository.findByMemberUserId(userId)
+    // 해당 아이디의 마이맵 조회
+    MyMap myMap = myMapRepository.findById(myMapId)
         .orElseThrow(() -> new MyMapSystemException(MY_MAP_NOT_FOUND));
+
+    // 조회된 마이맵의 작성자 본인인지 확인
+    if(!myMap.getMember().getUserId().equals(updateMyMapDto.getUserId())){
+      throw new MyMapSystemException(ACCESS_DENIED);
+    }
 
     myMap.setMyMapTitle(updateMyMapDto.getMyMapTitle());
     myMap.setIsPublic(IsPublic.valueOf(updateMyMapDto.getIsPublic().toUpperCase()));
 
     return myMapRepository.save(myMap);
+  }
+
+  @Override
+  public void deleteMyMap(Long myMapId) {
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String currentUserId = authentication.getName();
+
+    MyMap myMap = myMapRepository.findById(myMapId)
+        .orElseThrow(() -> new MyMapSystemException(MY_MAP_NOT_FOUND));
+
+    // 작성자 본인인지 확인
+    if(!myMap.getMember().getUserId().equals(currentUserId)){
+      throw new MyMapSystemException(ACCESS_DENIED);
+    }
+
+    myMapRepository.delete(myMap);
   }
 }

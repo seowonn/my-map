@@ -42,8 +42,7 @@ public class SiGunGu {
   private String siGunGuCode;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "siDo",
-      foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
+  @JoinColumn(name = "siDo")
   @JsonBackReference
   private SiDo siDo;
 

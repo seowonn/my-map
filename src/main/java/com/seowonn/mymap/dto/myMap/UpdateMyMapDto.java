@@ -9,6 +9,9 @@ import lombok.Setter;
 @Setter
 public class UpdateMyMapDto {
 
+  @NotBlank(message = "사용자 아이디를 입력해주세요.")
+  private String userId;
+
   @Size(min = 0, max = 20)
   private String myMapTitle;
 
