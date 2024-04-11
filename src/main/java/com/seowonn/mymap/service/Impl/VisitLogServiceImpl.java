@@ -13,6 +13,7 @@ import com.seowonn.mymap.repository.MyMapRepository;
 import com.seowonn.mymap.repository.SiGunGuRepository;
 import com.seowonn.mymap.repository.VisitLogRepository;
 import com.seowonn.mymap.service.VisitLogService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +25,11 @@ public class VisitLogServiceImpl implements VisitLogService {
   private final MyMapRepository myMapRepository;
   private final SiGunGuRepository siGunGuRepository;
 
+  private final S3ServiceImpl s3Service;
+
   @Override
-  public VisitLog createVisitLog(Long myMapId,
-      NewVisitLogDto newVisitLogDto) {
+  @Transactional
+  public VisitLog createVisitLog(Long myMapId, NewVisitLogDto newVisitLogDto){
 
     // 마이맵 존재 확인
     MyMap myMap = myMapRepository.findById(myMapId)
@@ -42,10 +45,12 @@ public class VisitLogServiceImpl implements VisitLogService {
       throw new MyMapSystemException(INCORRECT_REGION);
     }
 
-    VisitLog visitLog = VisitLog.buildFromDto(newVisitLogDto);
-    visitLog.setMyMap(myMap);
-    visitLog.setSiGunGu(siGunGu);
+    VisitLog visitLog = VisitLog.buildFromDto(newVisitLogDto, myMap, siGunGu);
 
+    // 파일 S3 업로드 수행
+    s3Service.upload(newVisitLogDto.getFiles(), myMap, visitLog);
+
+    // 이미지 업로드까지 됐으면 방문일지 저장
     return visitLogRepository.save(visitLog);
   }
 }

@@ -4,9 +4,7 @@ import static com.seowonn.mymap.type.ErrorCode.INVALID_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import com.seowonn.mymap.dto.ApiResponse;
-import com.seowonn.mymap.type.ErrorCode;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -38,6 +36,14 @@ public class GlobalExceptionHandler {
       MyMapSystemException e) {
     log.error("[MyMapSystemException] : {}", e.getErrorMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(ApiResponse.createFail(e.getErrorCode()));
+  }
+
+  @ExceptionHandler(AWSS3Exception.class)
+  public ResponseEntity<ApiResponse<?>> handleAWSS3Exception (
+      AWSS3Exception e) {
+    log.error("[AWSS3Exception] : {}", e.getErrorMessage());
+    return ResponseEntity.status(INTERNAL_SERVER_ERROR)
         .body(ApiResponse.createFail(e.getErrorCode()));
   }
 

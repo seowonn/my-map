@@ -2,13 +2,13 @@ package com.seowonn.mymap.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class NewVisitLogDto {
 
   @NotBlank(message = "방문 지역을 입력해주세요.")
@@ -24,5 +24,7 @@ public class NewVisitLogDto {
   private String isPublic;
 
   private int recommendOrder;
+
+  private List<MultipartFile> files;
 
 }

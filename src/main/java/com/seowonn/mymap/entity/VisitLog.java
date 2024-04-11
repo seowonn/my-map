@@ -1,9 +1,10 @@
 package com.seowonn.mymap.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seowonn.mymap.dto.NewVisitLogDto;
-import com.seowonn.mymap.dto.myMap.NewMyMapDto;
 import com.seowonn.mymap.type.IsPublic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -15,18 +16,20 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Setter
 @Getter
 @Builder
 @AllArgsConstructor
@@ -41,7 +44,7 @@ public class VisitLog {
   @Column(nullable = false)
   private String placeName;
 
-  @Column(nullable = false, length = 1000)
+  @Column(length = 1000)
   private String content;
 
   @Column
@@ -74,7 +77,15 @@ public class VisitLog {
   @JsonBackReference
   private SiGunGu siGunGu;
 
-  public static VisitLog buildFromDto(NewVisitLogDto newVisitLogDto) {
+  @OneToMany(mappedBy = "visitLog", fetch = FetchType.EAGER,
+      cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+  @ToString.Exclude
+  @Builder.Default
+  @JsonManagedReference
+  private List<Image> images = new ArrayList<>();
+
+  public static VisitLog buildFromDto(
+      NewVisitLogDto newVisitLogDto, MyMap myMap, SiGunGu siGunGu) {
 
     IsPublic isPublic = IsPublic.valueOf(newVisitLogDto.getIsPublic().toUpperCase());
 
@@ -85,6 +96,8 @@ public class VisitLog {
         .likes(0)
         .isPublic(isPublic)
         .recommendOrder(newVisitLogDto.getRecommendOrder())
+        .myMap(myMap)
+        .siGunGu(siGunGu)
         .build();
   }
 }
