@@ -22,8 +22,10 @@ public enum ErrorCode {
   ACCESS_DENIED("접근 권한이 없는 사용자입니다."),
   DATA_SCRAPPING_ERROR("데이터를 가져오는데 오류가 발생하였습니다."),
   MY_MAP_NOT_FOUND("해당 아이디로 등록된 마이맵이 없습니다."),
+  VISIT_LOG_NOT_FOUND("해당 아이디로 등록된 방문일지가 없습니다."),
   LOADING_FILE_ERROR("파일 시스템이나 네트워크 상에 문제가 있습니다."),
   FILE_CONVERT_FAIL("파일 변환에 실패하였습니다."),
+  FILES_EXCEED("파일 업로드 개수를 초과하였습니다."),
   INVALID_SERVER_ERROR("내부 서버 오류가 발생하였습니다.");
 
   private final String description;
