@@ -17,6 +17,7 @@ import com.seowonn.mymap.repository.SiDoRepository;
 import com.seowonn.mymap.service.CheckService;
 import com.seowonn.mymap.service.MyMapService;
 import com.seowonn.mymap.type.IsPublic;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -68,6 +69,7 @@ public class MyMapServiceImpl implements MyMapService {
   }
 
   @Override
+  @Transactional
   public MyMap updateMyMap(UpdateMyMapDto updateMyMapDto, Long myMapId) {
 
     // 해당 아이디로 로그인한 사용자인지 확인
@@ -86,11 +88,19 @@ public class MyMapServiceImpl implements MyMapService {
     myMap.setIsPublic(
         IsPublic.valueOf(updateMyMapDto.getIsPublic().toUpperCase()));
 
-    return myMapRepository.save(myMap);
+    return myMap;
   }
 
   @Override
   public void deleteMyMap(Long myMapId) {
+
+    MyMap myMap = checkMyMapUser(myMapId);
+    myMapRepository.delete(myMap);
+
+  }
+
+  @Override
+  public MyMap checkMyMapUser(Long myMapId){
 
     Authentication authentication = SecurityContextHolder.getContext()
         .getAuthentication();
@@ -104,6 +114,6 @@ public class MyMapServiceImpl implements MyMapService {
       throw new MyMapSystemException(ACCESS_DENIED);
     }
 
-    myMapRepository.delete(myMap);
+    return myMap;
   }
 }

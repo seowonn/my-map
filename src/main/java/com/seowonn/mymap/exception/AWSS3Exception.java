@@ -17,4 +17,8 @@ public class AWSS3Exception extends RuntimeException{
         this.errorCode = errorCode;
         this.errorMessage = errorCode.getDescription();
     }
+
+  public AWSS3Exception(String errorMessage) {
+    this.errorMessage = errorMessage;
+  }
 }

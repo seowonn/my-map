@@ -1,14 +1,20 @@
 package com.seowonn.mymap.service.Impl;
 
+import static com.seowonn.mymap.type.ErrorCode.IMAGE_NOT_FOUND;
 import static com.seowonn.mymap.type.ErrorCode.LOADING_FILE_ERROR;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.seowonn.mymap.entity.Image;
 import com.seowonn.mymap.entity.MyMap;
 import com.seowonn.mymap.entity.VisitLog;
 import com.seowonn.mymap.exception.AWSS3Exception;
+import com.seowonn.mymap.exception.MyMapSystemException;
 import com.seowonn.mymap.repository.ImageRepository;
 import com.seowonn.mymap.service.S3Service;
 import java.io.IOException;
@@ -28,8 +34,14 @@ public class S3ServiceImpl implements S3Service {
   private final AmazonS3Client amazonS3Client;
   private final ImageRepository imageRepository;
 
+  private final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(
+      Regions.AP_NORTHEAST_2).build();
+
   @Value("${cloud.aws.s3.bucket}")
   private String bucket;
+
+  @Value("${cloud.aws.s3.baseUrl}")
+  private String BASE_URL;
 
   @Override
   public void upload(List<MultipartFile> multipartFiles,
@@ -42,7 +54,7 @@ public class S3ServiceImpl implements S3Service {
 
         String fileName =
             myMap.getMember().getUserId() + "/" + myMap.getId() + "/"
-                + multipartFile.getOriginalFilename();
+                + visitLog.getId() + "/" + multipartFile.getOriginalFilename();
 
         String uploadedImageUrl = putS3(multipartFile, fileName);
 
@@ -51,6 +63,24 @@ public class S3ServiceImpl implements S3Service {
         log.info("[upload] : 이미지 url 저장 완료");
       }
     }
+  }
+
+  @Override
+  public void deleteVisitLogFile(String fileName, VisitLog visitLog) {
+
+    Image image = imageRepository.findFirstByImageUrlAndVisitLog(fileName, visitLog)
+        .orElseThrow(() -> new MyMapSystemException(IMAGE_NOT_FOUND));
+
+    String key = fileName.replace(BASE_URL, "").replace("%40", "@");
+
+    try {
+      s3.deleteObject(bucket, key);
+    } catch (AmazonServiceException e){
+      throw new AWSS3Exception(e.getErrorMessage());
+    }
+
+    imageRepository.delete(image);
+    log.info("[deleteFile] : 삭제 요청 이미지 삭제 완료");
   }
 
   private String putS3(MultipartFile multipartFile, String fileName) {

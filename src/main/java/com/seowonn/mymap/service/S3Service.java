@@ -9,4 +9,6 @@ public interface S3Service {
 
   void upload(List<MultipartFile> multipartFiles, MyMap myMap, VisitLog visitLog);
 
+  void deleteVisitLogFile(String fileName, VisitLog visitLog);
+
 }

@@ -1,6 +1,7 @@
 package com.seowonn.mymap.service;
 
 import com.seowonn.mymap.dto.NewVisitLogDto;
+import com.seowonn.mymap.dto.UpdateVisitLogDto;
 import com.seowonn.mymap.entity.VisitLog;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,4 +14,5 @@ public interface VisitLogService {
 
   void deleteVisitLog(Long myMapId, Long visitLogId);
 
+  VisitLog updateLog(Long myMapId, Long visitLogId, UpdateVisitLogDto updateVisitLogDto);
 }

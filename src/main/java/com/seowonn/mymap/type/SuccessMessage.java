@@ -12,6 +12,7 @@ public enum SuccessMessage {
   USER_PROFILE_VIEWED("회원 정보가 정상적으로 조회되었습니다."),
   PROFILE_UPDATE_SUCCESS("회원 정보를 정상적으로 수정하였습니다."),
   MY_MAP_UPDATE_SUCCESS("마이맵을 정상적으로 수정하였습니다."),
+  VISIT_LOG_UPDATE_SUCCESS("방문일지를 정상적으로 수정하였습니다."),
   SIGN_OUT_SUCCESS("회원 탈퇴를 정상적으로 수행하였습니다."),
   DATA_LOAD_COMPLETE("데이터를 성공적으로 저장 및 로딩하였습니다."),
   RETRIEVE_DATA_SUCCESS("데이터를 성공적으로 조회하였습니다."),

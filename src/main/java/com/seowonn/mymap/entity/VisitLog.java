@@ -3,8 +3,8 @@ package com.seowonn.mymap.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seowonn.mymap.dto.NewVisitLogDto;
+import com.seowonn.mymap.dto.UpdateVisitLogDto;
 import com.seowonn.mymap.type.IsPublic;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -77,8 +77,7 @@ public class VisitLog {
   @JsonBackReference
   private SiGunGu siGunGu;
 
-  @OneToMany(mappedBy = "visitLog", fetch = FetchType.EAGER,
-      cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+  @OneToMany(mappedBy = "visitLog", fetch = FetchType.EAGER)
   @ToString.Exclude
   @Builder.Default
   @JsonManagedReference
@@ -99,5 +98,15 @@ public class VisitLog {
         .myMap(myMap)
         .siGunGu(siGunGu)
         .build();
+  }
+
+  public void updateVisitLog (UpdateVisitLogDto updateVisitLogDto){
+
+    IsPublic isPublic = IsPublic.valueOf(updateVisitLogDto.getIsPublic().toUpperCase());
+
+    this.placeName = updateVisitLogDto.getPlaceName();
+    this.content = updateVisitLogDto.getContent();
+    this.isPublic = isPublic;
+    this.recommendOrder = updateVisitLogDto.getRecommendOrder();;
   }
 }

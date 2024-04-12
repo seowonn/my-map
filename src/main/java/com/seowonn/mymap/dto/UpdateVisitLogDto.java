@@ -22,6 +22,8 @@ public class UpdateVisitLogDto {
 
   private int recommendOrder;
 
-  private List<MultipartFile> files;
+  private MultipartFile newFile;
+
+  private String deleteFileUrl;
 
 }

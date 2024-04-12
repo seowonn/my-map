@@ -8,6 +8,7 @@ import static com.seowonn.mymap.type.ErrorCode.REGION_NOT_FOUND;
 import static com.seowonn.mymap.type.ErrorCode.VISIT_LOG_NOT_FOUND;
 
 import com.seowonn.mymap.dto.NewVisitLogDto;
+import com.seowonn.mymap.dto.UpdateVisitLogDto;
 import com.seowonn.mymap.entity.MyMap;
 import com.seowonn.mymap.entity.SiGunGu;
 import com.seowonn.mymap.entity.VisitLog;
@@ -18,10 +19,13 @@ import com.seowonn.mymap.repository.VisitLogRepository;
 import com.seowonn.mymap.service.CheckService;
 import com.seowonn.mymap.service.VisitLogService;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -60,11 +64,12 @@ public class VisitLogServiceImpl implements VisitLogService {
 
     VisitLog visitLog = VisitLog.buildFromDto(newVisitLogDto, myMap, siGunGu);
 
+    visitLogRepository.save(visitLog);
+
     // 파일 S3 업로드 수행
     s3Service.upload(newVisitLogDto.getFiles(), myMap, visitLog);
 
-    // 이미지 업로드까지 됐으면 방문일지 저장
-    return visitLogRepository.save(visitLog);
+    return visitLog;
   }
 
   @Override
@@ -93,5 +98,31 @@ public class VisitLogServiceImpl implements VisitLogService {
     }
 
     visitLogRepository.delete(visitLog);
+  }
+
+  @Override
+  @Transactional
+  public VisitLog updateLog(Long myMapId, Long visitLogId,
+      UpdateVisitLogDto updateVisitLogDto) {
+
+    MyMap myMap = myMapService.checkMyMapUser(myMapId);
+
+    VisitLog visitLog = visitLogRepository.findById(visitLogId)
+        .orElseThrow(() -> new MyMapSystemException(VISIT_LOG_NOT_FOUND));
+
+    // 해당 마이맵의 방문일지인지 확인
+    if (visitLog.getMyMap() != myMap){
+      throw new MyMapSystemException(ACCESS_DENIED);
+    }
+
+    visitLog.updateVisitLog(updateVisitLogDto);
+
+    s3Service.deleteVisitLogFile(updateVisitLogDto.getDeleteFileUrl(), visitLog);
+
+    List<MultipartFile> files = new ArrayList<>();
+    files.add(updateVisitLogDto.getNewFile());
+    s3Service.upload(files, myMap, visitLog);
+
+    return visitLog;
   }
 }
