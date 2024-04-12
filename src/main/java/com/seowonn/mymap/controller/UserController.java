@@ -5,7 +5,7 @@ import static com.seowonn.mymap.type.SuccessMessage.SIGN_OUT_SUCCESS;
 import static com.seowonn.mymap.type.SuccessMessage.USER_PROFILE_VIEWED;
 
 import com.seowonn.mymap.dto.ApiResponse;
-import com.seowonn.mymap.dto.member.MemberInfoDto;
+import com.seowonn.mymap.dto.member.MemberInfoResponse;
 import com.seowonn.mymap.dto.member.UpdateUserInfoForm;
 import com.seowonn.mymap.service.Impl.UserServiceImpl;
 import jakarta.validation.Valid;
@@ -27,14 +27,14 @@ public class UserController {
 
   @GetMapping("/profile/{userId}")
   public ApiResponse<?> getUserProfile(@PathVariable String userId) {
-    MemberInfoDto memberInfoDto = userService.getUserProfile(userId);
-    return ApiResponse.createSuccessMessage(memberInfoDto, USER_PROFILE_VIEWED);
+    MemberInfoResponse memberInfoResponse = userService.getUserProfile(userId);
+    return ApiResponse.createSuccessMessage(memberInfoResponse, USER_PROFILE_VIEWED);
   }
 
   @PatchMapping("/edit-profile")
   public ApiResponse<?> updateUserId(@Valid @RequestBody UpdateUserInfoForm userIdForm) {
-    MemberInfoDto memberInfoDto = userService.updateUser(userIdForm);
-    return ApiResponse.createSuccessMessage(memberInfoDto, PROFILE_UPDATE_SUCCESS);
+    MemberInfoResponse memberInfoResponse = userService.updateUser(userIdForm);
+    return ApiResponse.createSuccessMessage(memberInfoResponse, PROFILE_UPDATE_SUCCESS);
   }
 
   @DeleteMapping("/sign-out/{userId}")

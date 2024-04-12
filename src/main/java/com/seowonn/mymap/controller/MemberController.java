@@ -35,20 +35,20 @@ public class MemberController {
 
   @PostMapping("/standard/signup")
   public ApiResponse<?> signUpStandardUser(
-      @RequestBody MemberFormDto memberFormDto){
+      @Valid @RequestBody MemberFormDto memberFormDto){
     Member member = memberService.createMember(memberFormDto, Role.USER);
     return ApiResponse.createSuccessMessage(member, SIGNUP_SUCCESS);
   }
 
   @PostMapping("/admin/signup")
   public ApiResponse<?> signUpAdmin (
-      @RequestBody MemberFormDto memberFormDto){
+      @Valid @RequestBody MemberFormDto memberFormDto){
     Member member = memberService.createMember(memberFormDto, Role.ADMIN);
     return ApiResponse.createSuccessMessage(member, SIGNUP_SUCCESS);
   }
 
   @PostMapping("/sign-in")
-  public ApiResponse<?> signIn (@RequestBody SignInForm signInForm) {
+  public ApiResponse<?> signIn (@Valid @RequestBody SignInForm signInForm) {
     SignInResponse signInResponse = memberService.signInMember(signInForm);
     return ApiResponse.createSuccessMessage(signInResponse, SIGN_IN_SUCCESS);
   }

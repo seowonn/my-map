@@ -3,7 +3,7 @@ package com.seowonn.mymap.service.Impl;
 import static com.seowonn.mymap.type.ErrorCode.INCORRECT_PASSWORD;
 import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
 
-import com.seowonn.mymap.dto.member.MemberInfoDto;
+import com.seowonn.mymap.dto.member.MemberInfoResponse;
 import com.seowonn.mymap.dto.member.UpdateUserInfoForm;
 import com.seowonn.mymap.entity.Member;
 import com.seowonn.mymap.exception.MyMapSystemException;
@@ -23,17 +23,17 @@ public class UserServiceImpl implements UserService {
   private final CheckService checkService;
 
 
-  public MemberInfoDto getUserProfile(String userId) {
+  public MemberInfoResponse getUserProfile(String userId) {
 
     checkService.checkIsLoginUser(userId);
 
     Member member = memberRepository.findByUserId(userId)
         .orElseThrow(() -> new MyMapSystemException(USER_NOT_FOUND));
 
-    return MemberInfoDto.entityToDto(member);
+    return MemberInfoResponse.entityToDto(member);
   }
 
-  public MemberInfoDto updateUser(UpdateUserInfoForm userInfoForm) {
+  public MemberInfoResponse updateUser(UpdateUserInfoForm userInfoForm) {
 
     checkService.checkIsLoginUser(userInfoForm.getCurrentId());
 
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     member.setPassword(userInfoForm.getNewPassword());
 
     Member saved = memberRepository.save(member);
-    return MemberInfoDto.entityToDto(saved);
+    return MemberInfoResponse.entityToDto(saved);
   }
 
   /**

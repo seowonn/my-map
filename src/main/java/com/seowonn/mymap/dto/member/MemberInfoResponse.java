@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @Builder
-public class MemberInfoDto {
+public class MemberInfoResponse {
 
   private String userId;
   private String phone;
@@ -22,8 +22,8 @@ public class MemberInfoDto {
   private Role role;
   private LocalDateTime createdAt;
 
-  public static MemberInfoDto entityToDto(Member member){
-    return MemberInfoDto.builder()
+  public static MemberInfoResponse entityToDto(Member member){
+    return MemberInfoResponse.builder()
         .userId(member.getUserId())
         .phone(member.getPhone())
         .userName(member.getUserName())
