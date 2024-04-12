@@ -35,8 +35,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-public class Member {
+public class Member extends BaseEntity{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,13 +60,6 @@ public class Member {
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private Gender gender;
-
-  @CreatedDate
-  @Column(updatable = false, nullable = false)
-  private LocalDateTime createdAt;
-
-  @LastModifiedDate
-  private LocalDateTime updatedAt;
 
   @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
   @ToString.Exclude

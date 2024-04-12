@@ -35,8 +35,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-public class VisitLog {
+public class VisitLog extends BaseEntity{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,13 +59,6 @@ public class VisitLog {
 
   @Column
   private int recommendOrder;
-
-  @CreatedDate
-  @Column(updatable = false, nullable = false)
-  private LocalDateTime createdAt;
-
-  @LastModifiedDate
-  private LocalDateTime updatedAt;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "myMap")

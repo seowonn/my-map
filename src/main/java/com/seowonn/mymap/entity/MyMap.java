@@ -36,8 +36,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-public class MyMap {
+public class MyMap extends BaseEntity{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,13 +54,6 @@ public class MyMap {
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private IsPublic isPublic;
-
-  @CreatedDate
-  @Column(updatable = false, nullable = false)
-  private LocalDateTime createdAt;
-
-  @LastModifiedDate
-  private LocalDateTime updatedAt;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "member")
