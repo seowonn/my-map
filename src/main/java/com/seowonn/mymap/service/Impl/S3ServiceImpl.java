@@ -71,16 +71,24 @@ public class S3ServiceImpl implements S3Service {
     Image image = imageRepository.findFirstByImageUrlAndVisitLog(fileName, visitLog)
         .orElseThrow(() -> new MyMapSystemException(IMAGE_NOT_FOUND));
 
-    String key = fileName.replace(BASE_URL, "").replace("%40", "@");
+    deleteS3File(image.getImageUrl());
+
+    imageRepository.delete(image);
+    log.info("[deleteFile] : 삭제 요청 이미지 삭제 완료");
+  }
+
+  @Override
+  public void deleteS3File(String imageUrl) {
+
+    String key = imageUrl.replace(BASE_URL, "").replace("%40", "@");
 
     try {
       s3.deleteObject(bucket, key);
     } catch (AmazonServiceException e){
       throw new AWSS3Exception(e.getErrorMessage());
     }
+    log.info("[deleteS3File] : s3에 저장된 이미지 삭제 완료");
 
-    imageRepository.delete(image);
-    log.info("[deleteFile] : 삭제 요청 이미지 삭제 완료");
   }
 
   private String putS3(MultipartFile multipartFile, String fileName) {

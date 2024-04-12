@@ -11,4 +11,5 @@ public interface S3Service {
 
   void deleteVisitLogFile(String fileName, VisitLog visitLog);
 
+  void deleteS3File(String imageUrl);
 }

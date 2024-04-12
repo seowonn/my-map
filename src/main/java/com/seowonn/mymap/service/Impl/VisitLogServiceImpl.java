@@ -9,6 +9,7 @@ import static com.seowonn.mymap.type.ErrorCode.VISIT_LOG_NOT_FOUND;
 
 import com.seowonn.mymap.dto.NewVisitLogDto;
 import com.seowonn.mymap.dto.UpdateVisitLogDto;
+import com.seowonn.mymap.entity.Image;
 import com.seowonn.mymap.entity.MyMap;
 import com.seowonn.mymap.entity.SiGunGu;
 import com.seowonn.mymap.entity.VisitLog;
@@ -87,14 +88,17 @@ public class VisitLogServiceImpl implements VisitLogService {
   @Override
   public void deleteVisitLog(Long myMapId, Long visitLogId) {
 
-    MyMap myMap = myMapService.checkMyMapUser(myMapId);
-
     VisitLog visitLog = visitLogRepository.findById(visitLogId)
         .orElseThrow(() -> new MyMapSystemException(VISIT_LOG_NOT_FOUND));
 
     // 해당 마이맵의 방문일지인지 확인
-    if (visitLog.getMyMap() != myMap){
+    if (visitLog.getMyMap().getId() != myMapId){
       throw new MyMapSystemException(ACCESS_DENIED);
+    }
+
+    List<Image> images = visitLog.getImages();
+    for(Image image : images){
+      s3Service.deleteS3File(image.getImageUrl());
     }
 
     visitLogRepository.delete(visitLog);
