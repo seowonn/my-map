@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/log/{myMapId}") // 마이맵 선택 후 작성
+@RequestMapping("/logs") // 마이맵 선택 후 작성
 public class VisitLogController {
 
   private final VisitLogServiceImpl visitLogService;
@@ -36,7 +36,7 @@ public class VisitLogController {
    * siGunGuCode는 /search/{siDoCode} api에서 SiGunGu 정보로 확인
    * @ModelAttribute form-data로 자동 NewVisitLogDto로 매핑
    */
-  @PostMapping("/new-log")
+  @PostMapping("/{myMapId}")
   public ApiResponse<?> createLog(
       @PathVariable Long myMapId,
       @Valid @ModelAttribute NewVisitLogDto newVisitLogDto){
@@ -45,7 +45,7 @@ public class VisitLogController {
     return ApiResponse.createSuccessMessage(visitLog, VISIT_LOG_CREATED);
   }
 
-  @GetMapping
+  @GetMapping("/{myMapId}")
   public ApiResponse<?> getVisitLogs(
       @PathVariable Long myMapId,
       @PageableDefault(page = 0, size = 10) Pageable pageable){
@@ -53,7 +53,7 @@ public class VisitLogController {
     return ApiResponse.createSuccessMessage(visitLogs, RETRIEVE_DATA_SUCCESS);
   }
 
-  @PatchMapping("/edit/{visitLogId}")
+  @PatchMapping("/{myMapId}/{visitLogId}")
   public ApiResponse<?> updateVisitLog(
       @PathVariable Long myMapId,
       @PathVariable Long visitLogId,
@@ -64,7 +64,7 @@ public class VisitLogController {
     return ApiResponse.createSuccessMessage(visitLog, VISIT_LOG_UPDATE_SUCCESS);
   }
 
-  @DeleteMapping("/delete/{visitLogId}")
+  @DeleteMapping("/{myMapId}/{visitLogId}")
   public ApiResponse<?> deleteVisitLog(
       @PathVariable Long myMapId,
       @PathVariable Long visitLogId){

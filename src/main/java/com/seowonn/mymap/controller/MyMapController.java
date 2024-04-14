@@ -27,12 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/my-map")
+@RequestMapping("/my-map/maps")
 public class MyMapController {
 
   private final MyMapServiceImpl myMapService;
 
-  @PostMapping("/new-map")
+  @PostMapping("/")
   public ApiResponse<?> createMyMap(@Valid @RequestBody NewMyMapDto newMyMapDto) {
     MyMap myMap = myMapService.registerNewMap(newMyMapDto);
     return ApiResponse.createSuccessMessage(myMap, MY_MAP_CREATED);
@@ -46,7 +46,7 @@ public class MyMapController {
     return ApiResponse.createSuccessMessage(myMaps, RETRIEVE_DATA_SUCCESS);
   }
 
-  @PatchMapping("/edit-map/{myMapId}")
+  @PatchMapping("/{myMapId}")
   public ApiResponse<?> updateMyMap(
       @Valid @RequestBody UpdateMyMapDto updateMyMapDto,
       @PathVariable Long myMapId
@@ -55,7 +55,7 @@ public class MyMapController {
     return ApiResponse.createSuccessMessage(myMap, MY_MAP_UPDATE_SUCCESS);
   }
 
-  @DeleteMapping("/delete/{myMapId}")
+  @DeleteMapping("/{myMapId}")
   public ApiResponse<?> deleteMyMap(@PathVariable Long myMapId){
     myMapService.deleteMyMap(myMapId);
     return ApiResponse.createSuccessMessage(true, DELETE_SUCCESS);

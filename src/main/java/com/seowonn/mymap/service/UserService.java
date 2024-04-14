@@ -7,7 +7,7 @@ public interface UserService {
 
   MemberInfoResponse getUserProfile(String userId);
 
-  MemberInfoResponse updateUser(UpdateUserInfoForm userId);
+  MemberInfoResponse updateUser(String userId, UpdateUserInfoForm userInfoForm);
 
   void signOutUser(String userId);
 

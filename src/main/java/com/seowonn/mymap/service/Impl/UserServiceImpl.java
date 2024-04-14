@@ -33,16 +33,16 @@ public class UserServiceImpl implements UserService {
     return MemberInfoResponse.from(member);
   }
 
-  public MemberInfoResponse updateUser(UpdateUserInfoForm userInfoForm) {
+  public MemberInfoResponse updateUser(String userId, UpdateUserInfoForm userInfoForm) {
 
-    checkService.checkIsLoginUser(userInfoForm.getCurrentId());
+    checkService.checkIsLoginUser(userId);
 
     // 이메일 인증 확인
     memberService.checkVerificationCode(userInfoForm.getNewId(),
         userInfoForm.getVerificationNum());
 
     // 기존 아이디로 검색
-    Member member = memberRepository.findByUserId(userInfoForm.getCurrentId())
+    Member member = memberRepository.findByUserId(userId)
         .orElseThrow(() -> new MyMapSystemException(USER_NOT_FOUND));
     member.setUserId(userInfoForm.getNewId());
 

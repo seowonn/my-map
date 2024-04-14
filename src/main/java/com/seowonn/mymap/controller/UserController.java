@@ -20,24 +20,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/user/profile")
 public class UserController {
 
   private final UserServiceImpl userService;
 
-  @GetMapping("/profile/{userId}")
+  @GetMapping("/{userId}")
   public ApiResponse<?> getUserProfile(@PathVariable String userId) {
     MemberInfoResponse memberInfoResponse = userService.getUserProfile(userId);
     return ApiResponse.createSuccessMessage(memberInfoResponse, USER_PROFILE_VIEWED);
   }
 
-  @PatchMapping("/edit-profile")
-  public ApiResponse<?> updateUserId(@Valid @RequestBody UpdateUserInfoForm userIdForm) {
-    MemberInfoResponse memberInfoResponse = userService.updateUser(userIdForm);
+  @PatchMapping("/{userId}")
+  public ApiResponse<?> updateUserId(
+      @PathVariable String userId,
+      @Valid @RequestBody UpdateUserInfoForm userIdForm) {
+    MemberInfoResponse memberInfoResponse = userService.updateUser(userId, userIdForm);
     return ApiResponse.createSuccessMessage(memberInfoResponse, PROFILE_UPDATE_SUCCESS);
   }
 
-  @DeleteMapping("/sign-out/{userId}")
+  @DeleteMapping("/{userId}")
   public ApiResponse<?> updateUserId(@PathVariable String userId) {
     userService.signOutUser(userId);
     return ApiResponse.createSuccessMessage(true, SIGN_OUT_SUCCESS);
