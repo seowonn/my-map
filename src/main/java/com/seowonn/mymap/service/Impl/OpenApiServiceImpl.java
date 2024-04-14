@@ -2,21 +2,24 @@ package com.seowonn.mymap.service.Impl;
 
 import static com.seowonn.mymap.type.ErrorCode.DATA_SCRAPPING_ERROR;
 
-import com.seowonn.mymap.dto.SiDoDto;
 import com.seowonn.mymap.dto.SiGunGuDto;
+import com.seowonn.mymap.dto.cityOpenApi.siDo.SiDoApiResponseDto;
+import com.seowonn.mymap.dto.cityOpenApi.siDo.SiDoFeature;
+import com.seowonn.mymap.dto.cityOpenApi.siGunGu.SiGunGuApiResponseDto;
+import com.seowonn.mymap.dto.cityOpenApi.siGunGu.SiGunGuFeature;
 import com.seowonn.mymap.entity.SiDo;
 import com.seowonn.mymap.entity.SiGunGu;
 import com.seowonn.mymap.exception.LoadingDataException;
+import com.seowonn.mymap.exception.MyMapSystemException;
 import com.seowonn.mymap.repository.SiDoRepository;
 import com.seowonn.mymap.repository.SiGunGuRepository;
 import com.seowonn.mymap.service.OpenApiService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -56,69 +59,77 @@ public class OpenApiServiceImpl implements OpenApiService {
   }
 
   @Override
-  public void fetchSiDo() throws ParseException {
+  public void fetchSiDo() {
 
-    String jsonString = restTemplate.getForObject(makeUrl(SIDO), String.class);
+    ResponseEntity<SiDoApiResponseDto> response =
+        restTemplate.getForEntity(makeUrl(SIDO), SiDoApiResponseDto.class);
 
-    JSONArray jsonFeatures = parseJsonString(jsonString);
+    if (response.getStatusCode() == HttpStatus.OK) {
+      SiDoApiResponseDto apiResponse = response.getBody();
 
-    for (Object o : jsonFeatures) {
-
-      JSONObject feature = (JSONObject) o;
-      JSONObject properties = (JSONObject) feature.get("properties");
-      SiDoDto sidoDto = SiDoDto.from(properties);
-
-      // DB에 저장 안된 것만 새로 저장
-      if(!siDoRepository.existsBySiDoCode(sidoDto.getDistrictCode())){
-        siDoRepository.save(SiDo.from(sidoDto));
+      if(apiResponse == null){
+        throw new MyMapSystemException(DATA_SCRAPPING_ERROR);
       }
+
+      List<SiDoFeature> siDoFeatures =
+          apiResponse.getResponse().getResult().
+              getFeatureCollection().getFeatures();
+
+      for (SiDoFeature siDoFeature : siDoFeatures) {
+
+        if(!siDoRepository.existsBySiDoCode(siDoFeature.getProperties().getCtprvn_cd())){
+          siDoRepository.save(SiDo.from(siDoFeature.getProperties()));
+        }
+
+      }
+
+    } else {
+      throw new MyMapSystemException(DATA_SCRAPPING_ERROR);
     }
+
   }
 
   @Override
-  public void fetchSiGunGu() throws ParseException {
+  public void fetchSiGunGu() {
 
-    String jsonString = restTemplate.getForObject(makeUrl(SIGG), String.class);
+    ResponseEntity<SiGunGuApiResponseDto> response =
+        restTemplate.getForEntity(makeUrl(SIGG), SiGunGuApiResponseDto.class);
 
-    JSONArray jsonFeatures = parseJsonString(jsonString);
+    if (response.getStatusCode() == HttpStatus.OK) {
+      SiGunGuApiResponseDto apiResponse = response.getBody();
 
-    for (Object o : jsonFeatures) {
-      JSONObject feature = (JSONObject) o;
-      JSONObject properties = (JSONObject) feature.get("properties");
-      SiGunGuDto siGunGuDto = SiGunGuDto.makeSiggDto(properties);
-
-      // DB에 저장되지 않으면서
-      if(!siGunGuRepository.existsBySiGunGuCode(siGunGuDto.getDistrictCode())){
-        // 시도 정보 추출
-        String siDoName = siGunGuDto.getCityFullName().split(" ")[0];
-
-        // 광역시도 DB에서 시도가 조회되는 시군구일 경우만 시군구 DB에 저장
-        SiDo siDo = siDoRepository.findBySiDoName(siDoName)
-            .orElseThrow(() -> new LoadingDataException(DATA_SCRAPPING_ERROR));
-
-        SiGunGu siGunGu = SiGunGu.from(siGunGuDto);
-        siGunGu.setSiDo(siDo);
-
-        siGunGuRepository.save(siGunGu);
+      if(apiResponse == null){
+        throw new MyMapSystemException(DATA_SCRAPPING_ERROR);
       }
+
+      List<SiGunGuFeature> siGunGuFeatures =
+          apiResponse.getResponse().getResult().
+              getFeatureCollection().getFeatures();
+
+      for (SiGunGuFeature siGunGuFeature : siGunGuFeatures) {
+
+        SiGunGuDto siGunGuDto = siGunGuFeature.getProperties();
+
+        // DB에 저장되지 않으면서
+        if(!siGunGuRepository.existsBySiGunGuCode(siGunGuDto.getSig_cd())){
+          // 시도 정보 추출
+          String siDoName = siGunGuDto.getFull_nm().split(" ")[0];
+
+          // 광역시도 DB에서 시도가 조회되는 시군구일 경우만 시군구 DB에 저장
+          SiDo siDo = siDoRepository.findBySiDoName(siDoName)
+              .orElseThrow(() -> new LoadingDataException(DATA_SCRAPPING_ERROR));
+
+          SiGunGu siGunGu = SiGunGu.from(siGunGuDto);
+          siGunGu.setSiDo(siDo);
+
+          siGunGuRepository.save(siGunGu);
+        }
+
+      }
+
+    } else {
+      throw new MyMapSystemException(DATA_SCRAPPING_ERROR);
     }
-  }
-
-  @Override
-  public JSONArray parseJsonString(String jsonString) throws ParseException {
-
-    log.info("[parseJsonString] : 가져온 open api 데이터 파싱 시작");
-    JSONParser jsonParser = new JSONParser();
-    JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonString);
-
-    JSONObject jsonResponse = (JSONObject) jsonObject.get("response");
-
-    JSONObject jsonResult = (JSONObject) jsonResponse.get("result");
-
-    JSONObject jsonFeature = (JSONObject) jsonResult.get("featureCollection");
-
-    log.info("[parseJsonString] : 파싱 완료");
-    return (JSONArray) jsonFeature.get("features");
   }
 
 }

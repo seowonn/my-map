@@ -59,8 +59,8 @@ public class SiGunGu {
 
   public static SiGunGu from(SiGunGuDto siGunGuDto) {
     return SiGunGu.builder()
-        .siGunGuName(siGunGuDto.getSmallCityName())
-        .siGunGuCode(siGunGuDto.getDistrictCode())
+        .siGunGuName(siGunGuDto.getSig_kor_nm())
+        .siGunGuCode(siGunGuDto.getSig_cd())
         .build();
   }
 

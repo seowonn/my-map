@@ -14,15 +14,15 @@ import org.json.simple.JSONObject;
 @AllArgsConstructor
 public class SiGunGuDto {
 
-  private String districtCode;
-  private String cityFullName;
-  private String smallCityName;
+  private String sig_cd; // districtCode
+  private String full_nm; // cityFullName
+  private String sig_kor_nm; // smallCityName
 
-  public static SiGunGuDto makeSiggDto(JSONObject property){
+  public static SiGunGuDto makeSiGGDto(JSONObject property){
     return SiGunGuDto.builder()
-        .districtCode(property.get("sig_cd").toString())
-        .cityFullName(property.get("full_nm").toString())
-        .smallCityName(property.get("sig_kor_nm").toString())
+        .sig_cd(property.get("sig_cd").toString())
+        .full_nm(property.get("full_nm").toString())
+        .sig_kor_nm(property.get("sig_kor_nm").toString())
         .build();
   }
 

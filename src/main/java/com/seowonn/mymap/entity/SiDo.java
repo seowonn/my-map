@@ -61,8 +61,8 @@ public class SiDo {
 
   public static SiDo from(SiDoDto sidoDto) {
     return SiDo.builder()
-        .siDoName(sidoDto.getCityName())
-        .siDoCode(sidoDto.getDistrictCode())
+        .siDoName(sidoDto.getCtp_kor_nm())
+        .siDoCode(sidoDto.getCtprvn_cd())
         .build();
   }
 
