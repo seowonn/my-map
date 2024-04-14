@@ -3,11 +3,10 @@ package com.seowonn.mymap.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seowonn.mymap.dto.myMap.NewMyMapDto;
-import com.seowonn.mymap.type.IsPublic;
+import com.seowonn.mymap.type.Access;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -17,7 +16,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -26,9 +24,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Setter
@@ -53,7 +48,7 @@ public class MyMap extends BaseEntity{
 
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
-  private IsPublic isPublic;
+  private Access access;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "member")
@@ -71,16 +66,15 @@ public class MyMap extends BaseEntity{
   @JsonManagedReference
   private List<VisitLog> visitLogs = new ArrayList<>();
 
-  public static MyMap buildFromDto(
-      NewMyMapDto newMyMapDto) {
+  public static MyMap from(NewMyMapDto newMyMapDto) {
 
-    IsPublic isPublic = IsPublic.valueOf(newMyMapDto.getIsPublic().toUpperCase());
+    Access access = Access.valueOf(newMyMapDto.getAccess().toUpperCase());
 
     return MyMap.builder()
         .myMapTitle(newMyMapDto.getMyMapTitle())
         .totalLikes(0)
         .totalViews(0)
-        .isPublic(isPublic)
+        .access(access)
         .build();
   }
 

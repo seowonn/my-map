@@ -23,7 +23,7 @@ public class NewVisitLogDto {
 
   @NotBlank(message = "방문일지 공개 여부를 선택해주세요.")
   @Pattern(regexp = "public|private", message = "공개여부는 'private' 또는 'public' 이어야 합니다.")
-  private String isPublic;
+  private String access;
 
   private int recommendOrder;
 

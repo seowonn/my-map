@@ -59,7 +59,7 @@ public class SiDo {
   @JsonManagedReference
   private List<MyMap> myMapList = new ArrayList<>();
 
-  public static SiDo buildFromDto(SiDoDto sidoDto) {
+  public static SiDo from(SiDoDto sidoDto) {
     return SiDo.builder()
         .siDoName(sidoDto.getCityName())
         .siDoCode(sidoDto.getDistrictCode())

@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seowonn.mymap.dto.NewVisitLogDto;
 import com.seowonn.mymap.dto.UpdateVisitLogDto;
-import com.seowonn.mymap.type.IsPublic;
+import com.seowonn.mymap.type.Access;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -18,7 +17,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -26,16 +24,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VisitLog extends BaseEntity{
+public class VisitLog extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +50,7 @@ public class VisitLog extends BaseEntity{
 
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
-  private IsPublic isPublic;
+  private Access access;
 
   @Column
   private int recommendOrder;
@@ -77,18 +72,18 @@ public class VisitLog extends BaseEntity{
   @JsonManagedReference
   private List<Image> images = new ArrayList<>();
 
-  public static VisitLog buildFromDto(
+  public static VisitLog ofNewVisitLogAndMyMapAndSiGunGu(
       NewVisitLogDto newVisitLogDto, MyMap myMap, SiGunGu siGunGu) {
 
-    IsPublic isPublic = IsPublic.valueOf(
-        newVisitLogDto.getIsPublic().toUpperCase());
+    Access access = Access.valueOf(
+        newVisitLogDto.getAccess().toUpperCase());
 
     return VisitLog.builder()
         .placeName(newVisitLogDto.getPlaceName())
         .content(newVisitLogDto.getContent())
         .views(0)
         .likes(0)
-        .isPublic(isPublic)
+        .access(access)
         .recommendOrder(newVisitLogDto.getRecommendOrder())
         .myMap(myMap)
         .siGunGu(siGunGu)
@@ -97,12 +92,12 @@ public class VisitLog extends BaseEntity{
 
   public void updateVisitLog(UpdateVisitLogDto updateVisitLogDto) {
 
-    IsPublic isPublic = IsPublic.valueOf(
-        updateVisitLogDto.getIsPublic().toUpperCase());
+    Access access = Access.valueOf(
+        updateVisitLogDto.getAccess().toUpperCase());
 
     this.placeName = updateVisitLogDto.getPlaceName();
     this.content = updateVisitLogDto.getContent();
-    this.isPublic = isPublic;
+    this.access = access;
     this.recommendOrder = updateVisitLogDto.getRecommendOrder();
     ;
   }

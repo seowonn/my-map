@@ -22,7 +22,7 @@ public class MemberInfoResponse {
   private Role role;
   private LocalDateTime createdAt;
 
-  public static MemberInfoResponse entityToDto(Member member){
+  public static MemberInfoResponse from(Member member){
     return MemberInfoResponse.builder()
         .userId(member.getUserId())
         .phone(member.getPhone())

@@ -108,7 +108,7 @@ public class MemberServiceImpl implements MemberService {
     checkVerificationCode(memberFormDto.getUserId(),
         memberFormDto.getVerificationNum());
 
-    Member member = Member.buildFromDto(memberFormDto, role);
+    Member member = Member.ofMemberFormAndRole(memberFormDto, role);
     return memberRepository.save(member);
   }
 

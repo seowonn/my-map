@@ -1,6 +1,6 @@
 package com.seowonn.mymap.type;
 
-public enum IsPublic {
+public enum Access {
   PUBLIC,
   PRIVATE
 }

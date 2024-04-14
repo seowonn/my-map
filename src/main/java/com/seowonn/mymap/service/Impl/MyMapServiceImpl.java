@@ -16,7 +16,7 @@ import com.seowonn.mymap.repository.MyMapRepository;
 import com.seowonn.mymap.repository.SiDoRepository;
 import com.seowonn.mymap.service.CheckService;
 import com.seowonn.mymap.service.MyMapService;
-import com.seowonn.mymap.type.IsPublic;
+import com.seowonn.mymap.type.Access;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -42,7 +42,7 @@ public class MyMapServiceImpl implements MyMapService {
     // 해당 아이디로 로그인한 사용자인지 확인
     checkService.checkIsLoginUser(newMyMapDto.getUserId());
 
-    MyMap myMap = MyMap.buildFromDto(newMyMapDto);
+    MyMap myMap = MyMap.from(newMyMapDto);
 
     // 선택 지역(광역시도) 정보 조회
     SiDo siDo = siDoRepository.findBySiDoCode(newMyMapDto.getSiDoCode())
@@ -85,8 +85,8 @@ public class MyMapServiceImpl implements MyMapService {
     }
 
     myMap.setMyMapTitle(updateMyMapDto.getMyMapTitle());
-    myMap.setIsPublic(
-        IsPublic.valueOf(updateMyMapDto.getIsPublic().toUpperCase()));
+    myMap.setAccess(
+        Access.valueOf(updateMyMapDto.getAccess().toUpperCase()));
 
     return myMap;
   }

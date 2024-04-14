@@ -63,7 +63,7 @@ public class VisitLogServiceImpl implements VisitLogService {
       throw new MyMapSystemException(INCORRECT_REGION);
     }
 
-    VisitLog visitLog = VisitLog.buildFromDto(newVisitLogDto, myMap, siGunGu);
+    VisitLog visitLog = VisitLog.ofNewVisitLogAndMyMapAndSiGunGu(newVisitLogDto, myMap, siGunGu);
 
     visitLogRepository.save(visitLog);
 

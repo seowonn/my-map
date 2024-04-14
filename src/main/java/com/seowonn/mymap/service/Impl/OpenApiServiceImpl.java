@@ -66,11 +66,11 @@ public class OpenApiServiceImpl implements OpenApiService {
 
       JSONObject feature = (JSONObject) o;
       JSONObject properties = (JSONObject) feature.get("properties");
-      SiDoDto sidoDto = SiDoDto.makeSiDoDto(properties);
+      SiDoDto sidoDto = SiDoDto.from(properties);
 
       // DB에 저장 안된 것만 새로 저장
       if(!siDoRepository.existsBySiDoCode(sidoDto.getDistrictCode())){
-        siDoRepository.save(SiDo.buildFromDto(sidoDto));
+        siDoRepository.save(SiDo.from(sidoDto));
       }
     }
   }
@@ -96,7 +96,7 @@ public class OpenApiServiceImpl implements OpenApiService {
         SiDo siDo = siDoRepository.findBySiDoName(siDoName)
             .orElseThrow(() -> new LoadingDataException(DATA_SCRAPPING_ERROR));
 
-        SiGunGu siGunGu = SiGunGu.buildFromDto(siGunGuDto);
+        SiGunGu siGunGu = SiGunGu.from(siGunGuDto);
         siGunGu.setSiDo(siDo);
 
         siGunGuRepository.save(siGunGu);

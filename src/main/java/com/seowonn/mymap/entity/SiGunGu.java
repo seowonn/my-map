@@ -57,7 +57,7 @@ public class SiGunGu {
   @JsonManagedReference
   private List<VisitLog> visitLogs = new ArrayList<>();
 
-  public static SiGunGu buildFromDto(SiGunGuDto siGunGuDto) {
+  public static SiGunGu from(SiGunGuDto siGunGuDto) {
     return SiGunGu.builder()
         .siGunGuName(siGunGuDto.getSmallCityName())
         .siGunGuCode(siGunGuDto.getDistrictCode())

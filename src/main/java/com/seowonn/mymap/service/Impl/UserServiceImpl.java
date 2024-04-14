@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     Member member = memberRepository.findByUserId(userId)
         .orElseThrow(() -> new MyMapSystemException(USER_NOT_FOUND));
 
-    return MemberInfoResponse.entityToDto(member);
+    return MemberInfoResponse.from(member);
   }
 
   public MemberInfoResponse updateUser(UpdateUserInfoForm userInfoForm) {
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     member.setPassword(userInfoForm.getNewPassword());
 
     Member saved = memberRepository.save(member);
-    return MemberInfoResponse.entityToDto(saved);
+    return MemberInfoResponse.from(saved);
   }
 
   /**
