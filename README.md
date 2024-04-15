@@ -10,10 +10,11 @@
   * 새로운 장소 발굴 + 검색을 통해 알게 된 장소들을 통해 지역별로 나만의 장소 및 인사이트를 얻을 수 있다.
 # 
 ## ⚙️ 활용 기술 스택
-<img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white"> <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white"> 
+<img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"> <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white"> <img src="https://img.shields.io/badge/amazons3-569A31?style=for-the-badge&logo=amazons3&logoColor=white"> 
 #
 ## 구성 ERD
-![image](https://github.com/seowonn/my-map/assets/144876148/69d4513f-083b-4170-bccd-96ac9cc580ee)
+![my-map-erd](https://github.com/seowonn/my-map/assets/144876148/6721cdb3-2376-4e3b-92ca-daab044ab456)
+
 
 #
 ## 🙎‍♀ 회원
@@ -46,8 +47,8 @@
 #
 ## 🗺️ 마이맵
 #### ▶️  마이맵 등록
-  - [ ] 사용자는 만들 마이맵의 지역 (시) 를 선택한다. 
-  - [ ] 사용자는 마이맵 이름, 공개 여부를 작성하여 마이맵을 생성한다.
+  - [x] 사용자는 만들 마이맵의 지역 (시) 를 선택한다. 
+  - [x] 사용자는 마이맵 이름, 공개 여부를 작성하여 마이맵을 생성한다.
         
 #### ▶️ 사용자의 마이맵 조회
   - [ ] 작성자는 등록한 최신순으로 마이맵의 항목들을 조회할 수 있다.
@@ -56,19 +57,19 @@
    - [ ] 방문일지들의 나열 순서는 작성자의 방문 순번이 존재할 경우, 해당 순서로, 아닐 경우 최신 등록순으로 나열한다.
          
 #### ▶️ 마이맵 수정
-  - [ ] 마이맵의 작성자만 공개 여부, 마이맵 제목을 수정할 수 있다.
+  - [x] 마이맵의 작성자만 공개 여부, 마이맵 제목을 수정할 수 있다.
         
 #### ▶️ 마이맵 삭제
-  - [ ] 작성자만 해당 마이맵을 삭제할 수 있고, 포함된 모든 방문일지들도 삭제 된다.  
+  - [x] 작성자만 해당 마이맵을 삭제할 수 있고, 포함된 모든 방문일지들도 삭제 된다.  
 #
 ### 🏡 지역 
-- [ ] 관리자는 지역 정보를 추가, 수정, 삭제할 수 있다.
+- [x] 지역 정보는 공공 데이터 open api에서 스크래핑 해와서 DB( 광역시도 테이블과 시군구 테이블 )에 저장한다.
+- [x] 광역시도는 마이맵과 매핑되고, 시군구는 방문일지와 매핑된다. 
 ### 📗 방문일지
 #### ▶️ 방문일지 작성
-  - [ ] 사진(이미지 파일)을  최소 1개 ~ 10개 등록할 수 있다.
-   - [ ] 이미지 저장은 s3를 사용한다. 
-  - [ ] 지역은 정해진 틀(OO시 OO동)로 저장된다.
-  - [ ] 방문일지는 마이맵의 하위 내용으로 지역의 더 구체적인 위치 구, 동을 작성하여 데이터를 추가하게 된다.
+  - [x] 사진(이미지 파일)을  최소 1개 ~ 10개 등록할 수 있다.
+   - [x] 이미지 저장은 s3를 사용한다. 
+  - [x] 방문일지는 마이맵의 하위 내용으로 지역의 더 구체적인 위치 구, 동을 작성하여 데이터를 추가하게 된다.
   - [ ] 방문일지 작성 시 사용자는 카테고리를 지정한다.
 
 #### ▶️ 방문일지 조회
@@ -77,10 +78,10 @@
    - [ ] 마이맵 비공개 설정 시, 방문일지의 공개 유무와 상관없이 조회되지 않는다.
      
 #### ▶️ 방문일지 수정
- - [ ] 방문일지 글을 수정할 수 있다.
+ - [x] 작성자는 방문일지의 모든 내용을 수정할 수 있다. (단 이미지는 삭제만 가능하다.)
 
 #### ▶️ 방문일지 삭제
- - [ ] 해당 방문일지를 작성한 사용자만 방문일지를 삭제할 수 있다.    
+ - [x] 해당 방문일지를 작성한 사용자만 방문일지를 삭제할 수 있다.    
         
 #### ▶️ 좋아요, 조회한 사람
   - [ ] 좋아요는 로그인한 사용자 아이디 1명 당 1회 적립된다.
