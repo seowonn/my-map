@@ -60,7 +60,7 @@ public class MyMap extends BaseEntity{
   private SiDo siDo;
 
   @OneToMany(mappedBy = "myMap", fetch = FetchType.EAGER,
-      cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+      cascade = CascadeType.ALL, orphanRemoval = true)
   @ToString.Exclude
   @Builder.Default
   @JsonManagedReference
