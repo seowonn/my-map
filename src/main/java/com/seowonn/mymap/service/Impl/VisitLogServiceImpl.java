@@ -121,11 +121,11 @@ public class VisitLogServiceImpl implements VisitLogService {
 
     visitLog.updateVisitLog(updateVisitLogDto);
 
-    s3Service.deleteVisitLogFile(updateVisitLogDto.getDeleteFileUrl(), visitLog);
-
-    List<MultipartFile> files = new ArrayList<>();
-    files.add(updateVisitLogDto.getNewFile());
-    s3Service.upload(files, myMap, visitLog);
+    if(updateVisitLogDto.getDeleteFileUrls() != null){
+      for(String deleteUrl : updateVisitLogDto.getDeleteFileUrls()){
+        s3Service.deleteVisitLogFile(deleteUrl, visitLog);
+      }
+    }
 
     return visitLog;
   }

@@ -48,7 +48,7 @@ public class SecurityConfig {
 
           authorizeRequests.
               requestMatchers("/user/**", "/my-map/**", "/search/**",
-                  "/log/**").authenticated();
+                  "/logs/**").authenticated();
         })
         .exceptionHandling(exceptionHandling ->
             exceptionHandling

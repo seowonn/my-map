@@ -1,6 +1,7 @@
 package com.seowonn.mymap.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.List;
@@ -27,6 +28,7 @@ public class NewVisitLogDto {
 
   private int recommendOrder;
 
+  @NotEmpty(message = "이미지를 선택해주세요.")
   private List<MultipartFile> files;
 
 }

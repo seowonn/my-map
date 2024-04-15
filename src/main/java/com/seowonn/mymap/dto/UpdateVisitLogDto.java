@@ -3,9 +3,9 @@ package com.seowonn.mymap.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -23,8 +23,6 @@ public class UpdateVisitLogDto {
 
   private int recommendOrder;
 
-  private MultipartFile newFile;
-
-  private String deleteFileUrl;
+  private List<String> deleteFileUrls;
 
 }
