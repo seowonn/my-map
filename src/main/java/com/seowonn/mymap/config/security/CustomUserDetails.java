@@ -4,6 +4,7 @@ import com.seowonn.mymap.entity.Member;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetails implements UserDetails {
@@ -17,14 +18,7 @@ public class CustomUserDetails implements UserDetails {
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     Collection<GrantedAuthority> collection = new ArrayList<>();
-
-    collection.add(new GrantedAuthority() {
-      @Override
-      public String getAuthority() {
-        return member.getRole().toString();
-      }
-    });
-
+    collection.add(new SimpleGrantedAuthority(member.getRole().toString()));
     return collection;
   }
 

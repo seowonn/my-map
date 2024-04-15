@@ -5,7 +5,7 @@ import static com.seowonn.mymap.type.SuccessMessage.SIGN_OUT_SUCCESS;
 import static com.seowonn.mymap.type.SuccessMessage.USER_PROFILE_VIEWED;
 
 import com.seowonn.mymap.dto.ApiResponse;
-import com.seowonn.mymap.dto.member.MemberInfoDto;
+import com.seowonn.mymap.dto.member.MemberInfoResponse;
 import com.seowonn.mymap.dto.member.UpdateUserInfoForm;
 import com.seowonn.mymap.service.Impl.UserServiceImpl;
 import jakarta.validation.Valid;
@@ -20,24 +20,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/user/profile")
 public class UserController {
 
   private final UserServiceImpl userService;
 
-  @GetMapping("/profile/{userId}")
+  @GetMapping("/{userId}")
   public ApiResponse<?> getUserProfile(@PathVariable String userId) {
-    MemberInfoDto memberInfoDto = userService.getUserProfile(userId);
-    return ApiResponse.createSuccessMessage(memberInfoDto, USER_PROFILE_VIEWED);
+    MemberInfoResponse memberInfoResponse = userService.getUserProfile(userId);
+    return ApiResponse.createSuccessMessage(memberInfoResponse, USER_PROFILE_VIEWED);
   }
 
-  @PatchMapping("/edit-profile")
-  public ApiResponse<?> updateUserId(@Valid @RequestBody UpdateUserInfoForm userIdForm) {
-    MemberInfoDto memberInfoDto = userService.updateUser(userIdForm);
-    return ApiResponse.createSuccessMessage(memberInfoDto, PROFILE_UPDATE_SUCCESS);
+  @PatchMapping("/{userId}")
+  public ApiResponse<?> updateUserId(
+      @PathVariable String userId,
+      @Valid @RequestBody UpdateUserInfoForm userIdForm) {
+    MemberInfoResponse memberInfoResponse = userService.updateUser(userId, userIdForm);
+    return ApiResponse.createSuccessMessage(memberInfoResponse, PROFILE_UPDATE_SUCCESS);
   }
 
-  @DeleteMapping("/sign-out/{userId}")
+  @DeleteMapping("/{userId}")
   public ApiResponse<?> updateUserId(@PathVariable String userId) {
     userService.signOutUser(userId);
     return ApiResponse.createSuccessMessage(true, SIGN_OUT_SUCCESS);

@@ -33,6 +33,9 @@ public class JwtTokenProvider {
 
   private final CustomUserDetailsService customUserDetailsService;
 
+  public static final String TOKEN_HEADER = "Authorization";
+  public static final String TOKEN_PREFIX = "Bearer ";
+
   private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
 
   @Value("${jwt.secret}")
@@ -70,13 +73,13 @@ public class JwtTokenProvider {
 
   public String resolveToken(HttpServletRequest request) {
 
-    String bearerToken = request.getHeader("Authorization");
-    if(bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+    String token = request.getHeader(TOKEN_HEADER);
+    if(token == null || !token.startsWith(TOKEN_PREFIX)) {
       return null;
     }
 
     log.info("[resolveToken] : HTTP 헤더에서 Token 값 추출 완료");
-    return bearerToken.substring(7);
+    return token.substring(TOKEN_PREFIX.length());
   }
 
   public boolean validateToken(String token) {

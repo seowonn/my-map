@@ -1,13 +1,13 @@
 package com.seowonn.mymap.service;
 
-import com.seowonn.mymap.dto.member.MemberInfoDto;
+import com.seowonn.mymap.dto.member.MemberInfoResponse;
 import com.seowonn.mymap.dto.member.UpdateUserInfoForm;
 
 public interface UserService {
 
-  MemberInfoDto getUserProfile(String userId);
+  MemberInfoResponse getUserProfile(String userId);
 
-  MemberInfoDto updateUser(UpdateUserInfoForm userId);
+  MemberInfoResponse updateUser(String userId, UpdateUserInfoForm userInfoForm);
 
   void signOutUser(String userId);
 

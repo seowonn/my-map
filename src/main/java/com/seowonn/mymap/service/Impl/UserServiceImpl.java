@@ -3,7 +3,7 @@ package com.seowonn.mymap.service.Impl;
 import static com.seowonn.mymap.type.ErrorCode.INCORRECT_PASSWORD;
 import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
 
-import com.seowonn.mymap.dto.member.MemberInfoDto;
+import com.seowonn.mymap.dto.member.MemberInfoResponse;
 import com.seowonn.mymap.dto.member.UpdateUserInfoForm;
 import com.seowonn.mymap.entity.Member;
 import com.seowonn.mymap.exception.MyMapSystemException;
@@ -23,26 +23,26 @@ public class UserServiceImpl implements UserService {
   private final CheckService checkService;
 
 
-  public MemberInfoDto getUserProfile(String userId) {
+  public MemberInfoResponse getUserProfile(String userId) {
 
     checkService.checkIsLoginUser(userId);
 
     Member member = memberRepository.findByUserId(userId)
         .orElseThrow(() -> new MyMapSystemException(USER_NOT_FOUND));
 
-    return MemberInfoDto.entityToDto(member);
+    return MemberInfoResponse.from(member);
   }
 
-  public MemberInfoDto updateUser(UpdateUserInfoForm userInfoForm) {
+  public MemberInfoResponse updateUser(String userId, UpdateUserInfoForm userInfoForm) {
 
-    checkService.checkIsLoginUser(userInfoForm.getCurrentId());
+    checkService.checkIsLoginUser(userId);
 
     // 이메일 인증 확인
     memberService.checkVerificationCode(userInfoForm.getNewId(),
         userInfoForm.getVerificationNum());
 
     // 기존 아이디로 검색
-    Member member = memberRepository.findByUserId(userInfoForm.getCurrentId())
+    Member member = memberRepository.findByUserId(userId)
         .orElseThrow(() -> new MyMapSystemException(USER_NOT_FOUND));
     member.setUserId(userInfoForm.getNewId());
 
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     member.setPassword(userInfoForm.getNewPassword());
 
     Member saved = memberRepository.save(member);
-    return MemberInfoDto.entityToDto(saved);
+    return MemberInfoResponse.from(saved);
   }
 
   /**
