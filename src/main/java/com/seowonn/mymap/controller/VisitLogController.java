@@ -53,6 +53,12 @@ public class VisitLogController {
     return ApiResponse.createSuccessMessage(visitLogs, RETRIEVE_DATA_SUCCESS);
   }
 
+  @GetMapping("/{myMapId}/{visitLogId}")
+  public ApiResponse<?> visitLogDetails(@PathVariable Long visitLogId){
+    VisitLog visitLog = visitLogService.visitLogDetails(visitLogId);
+    return ApiResponse.createSuccessMessage(visitLog, RETRIEVE_DATA_SUCCESS);
+  }
+
   @PutMapping("/{myMapId}/{visitLogId}")
   public ApiResponse<?> updateVisitLog(
       @PathVariable Long myMapId,

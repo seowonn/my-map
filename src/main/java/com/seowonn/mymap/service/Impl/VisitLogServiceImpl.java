@@ -20,13 +20,14 @@ import com.seowonn.mymap.repository.VisitLogRepository;
 import com.seowonn.mymap.service.CheckService;
 import com.seowonn.mymap.service.VisitLogService;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +40,7 @@ public class VisitLogServiceImpl implements VisitLogService {
   private final S3ServiceImpl s3Service;
   private final CheckService checkService;
   private final MyMapServiceImpl myMapService;
+  private final RedisServiceImpl redisService;
 
   @Override
   @Transactional
@@ -128,5 +130,35 @@ public class VisitLogServiceImpl implements VisitLogService {
     }
 
     return visitLog;
+  }
+
+  @Override
+  @Transactional
+  public void updateViews(Long id) {
+    visitLogRepository.updateViews(id);
+  }
+
+  @Override
+  @Transactional
+  public VisitLog visitLogDetails(Long visitLogId) {
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String userId = authentication.getName();
+
+    // redis에 해당 방문일지(id값)으로 조회되는 set이 있는지 검사
+    Set<String> viewsData = redisService.getViewsData(visitLogId);
+
+    if(viewsData.isEmpty()){ // set 존재 X, redis 데이터 생성, view +1
+      redisService.makeViewCountExpire(visitLogId, userId);
+      updateViews(visitLogId);
+    } else { // set 존재
+      if(!viewsData.contains(userId)){  // set.add가 true일 때만 view +1
+        redisService.addViewCount(visitLogId, userId);
+        updateViews(visitLogId);
+      }
+    }
+
+    return visitLogRepository.findById(visitLogId)
+        .orElseThrow(() -> new MyMapSystemException(VISIT_LOG_NOT_FOUND));
   }
 }

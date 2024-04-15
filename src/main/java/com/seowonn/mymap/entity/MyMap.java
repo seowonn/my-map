@@ -43,7 +43,7 @@ public class MyMap extends BaseEntity{
   @Column
   private long totalLikes;
 
-  @Column
+  @Column(columnDefinition = "long default 0")
   private long totalViews;
 
   @Column(nullable = false)

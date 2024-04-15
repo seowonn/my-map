@@ -42,11 +42,11 @@ public class VisitLog extends BaseEntity {
   @Column(length = 1000)
   private String content;
 
-  @Column
-  private long views;
+  @Column(columnDefinition = "int default 0", nullable = false)
+  private int views;
 
-  @Column
-  private long likes;
+  @Column(columnDefinition = "int default 0", nullable = false)
+  private int likes;
 
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)

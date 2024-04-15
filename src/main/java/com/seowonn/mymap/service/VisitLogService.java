@@ -15,4 +15,8 @@ public interface VisitLogService {
   void deleteVisitLog(Long myMapId, Long visitLogId);
 
   VisitLog updateLog(Long myMapId, Long visitLogId, UpdateVisitLogDto updateVisitLogDto);
+
+  void updateViews(Long visitLogId);
+
+  VisitLog visitLogDetails(Long visitLogId);
 }

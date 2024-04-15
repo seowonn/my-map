@@ -6,6 +6,7 @@ import static com.seowonn.mymap.type.ErrorCode.INCORRECT_EMAIL;
 import static com.seowonn.mymap.type.ErrorCode.INCORRECT_PASSWORD;
 import static com.seowonn.mymap.type.ErrorCode.USERID_EXISTS;
 import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
+import static com.seowonn.mymap.type.TimeSettings.VERIFICATION_EXPIRE_TIME;
 
 import com.seowonn.mymap.config.security.jwt.JwtTokenProvider;
 import com.seowonn.mymap.dto.EmailDto;
@@ -38,7 +39,6 @@ public class MemberServiceImpl implements MemberService {
   private final RedisServiceImpl redisServiceImpl;
   private final JwtTokenProvider jwtTokenProvider;
 
-  private final static long VERIFICATION_EXPIRE_TIME = 600 * 5;
   private final static int PASSWORD_LENGTH = 10;
   private static final char[] CHAR_SET =
       new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -55,8 +55,8 @@ public class MemberServiceImpl implements MemberService {
     String verificationNum = createNumber();
 
     // redis에 인증 번호 저장
-    redisServiceImpl.setDataExpire(
-        emailDto.getEmailAddress(), verificationNum, VERIFICATION_EXPIRE_TIME);
+    redisServiceImpl.setEmailValidationExpire(
+        emailDto.getEmailAddress(), verificationNum, VERIFICATION_EXPIRE_TIME.getTime());
 
     return mailService.sendAuthEmail(emailDto.getEmailAddress(),
         verificationNum);
@@ -113,7 +113,7 @@ public class MemberServiceImpl implements MemberService {
   }
 
   public void checkVerificationCode(String email, String verificationCode) {
-    String redisCode = redisServiceImpl.getData(email);
+    String redisCode = redisServiceImpl.getVerificationData(email);
 
     // 다른 아이디(이메일) 값을 입력하여 redis code가 null일 경우 에러 처리
     if (redisCode == null) {
@@ -131,7 +131,7 @@ public class MemberServiceImpl implements MemberService {
       throw new MyMapSystemException(INCORRECT_CODE);
     }
 
-    redisServiceImpl.deleteData(email);
+    redisServiceImpl.deleteVerificationData(email);
   }
 
   @Override
