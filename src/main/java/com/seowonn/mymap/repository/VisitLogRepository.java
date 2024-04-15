@@ -16,4 +16,12 @@ public interface VisitLogRepository extends JpaRepository<VisitLog, Long> {
   @Modifying
   @Query("update VisitLog v set v.views = v.views + 1 where v.id = :id")
   void updateViews(Long id);
+
+  @Modifying
+  @Query("update VisitLog v set v.likes = v.likes + 1 where v.id = :id")
+  void addLikes(Long id);
+
+  @Modifying
+  @Query("update VisitLog v set v.likes = v.likes - 1 where v.id = :id")
+  void deleteLikes(Long id);
 }

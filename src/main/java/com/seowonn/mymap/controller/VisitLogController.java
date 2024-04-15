@@ -45,6 +45,22 @@ public class VisitLogController {
     return ApiResponse.createSuccessMessage(visitLog, VISIT_LOG_CREATED);
   }
 
+  @PostMapping("/likes/{myMapId}/{visitLogId}")
+  public ApiResponse<?> addLikes(
+      @PathVariable Long myMapId,
+      @PathVariable Long visitLogId){
+    VisitLog visitLog = visitLogService.addVisitLogLikes(myMapId, visitLogId);
+    return ApiResponse.createSuccessMessage(visitLog, VISIT_LOG_UPDATE_SUCCESS);
+  }
+
+  @DeleteMapping("/likes/{myMapId}/{visitLogId}")
+  public ApiResponse<?> deleteLikes(
+      @PathVariable Long myMapId,
+      @PathVariable Long visitLogId){
+    VisitLog visitLog = visitLogService.deleteVisitLogLikes(myMapId, visitLogId);
+    return ApiResponse.createSuccessMessage(visitLog, VISIT_LOG_UPDATE_SUCCESS);
+  }
+
   @GetMapping("/{myMapId}")
   public ApiResponse<?> getVisitLogs(
       @PathVariable Long myMapId,

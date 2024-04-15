@@ -1,6 +1,7 @@
 package com.seowonn.mymap.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seowonn.mymap.dto.NewVisitLogDto;
 import com.seowonn.mymap.dto.UpdateVisitLogDto;
@@ -71,6 +72,13 @@ public class VisitLog extends BaseEntity {
   @Builder.Default
   @JsonManagedReference
   private List<Image> images = new ArrayList<>();
+
+  @OneToMany(mappedBy = "visitLog", fetch = FetchType.LAZY,
+      cascade = CascadeType.ALL, orphanRemoval = true)
+  @ToString.Exclude
+  @Builder.Default
+  @JsonIgnore
+  private List<Likes> likesList = new ArrayList<>();
 
   public static VisitLog ofNewVisitLogAndMyMapAndSiGunGu(
       NewVisitLogDto newVisitLogDto, MyMap myMap, SiGunGu siGunGu) {

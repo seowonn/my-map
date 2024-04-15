@@ -40,12 +40,6 @@ public class MyMap extends BaseEntity{
   @Column(nullable = false)
   private String myMapTitle;
 
-  @Column
-  private long totalLikes;
-
-  @Column(columnDefinition = "long default 0")
-  private long totalViews;
-
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private Access access;
@@ -72,8 +66,6 @@ public class MyMap extends BaseEntity{
 
     return MyMap.builder()
         .myMapTitle(newMyMapDto.getMyMapTitle())
-        .totalLikes(0)
-        .totalViews(0)
         .access(access)
         .build();
   }
