@@ -3,8 +3,8 @@ package com.seowonn.mymap.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.seowonn.mymap.dto.NewVisitLogDto;
-import com.seowonn.mymap.dto.UpdateVisitLogDto;
+import com.seowonn.mymap.dto.visitLog.NewVisitLogDto;
+import com.seowonn.mymap.dto.visitLog.UpdateVisitLogDto;
 import com.seowonn.mymap.type.Access;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -54,7 +54,7 @@ public class VisitLog extends BaseEntity {
   private Access access;
 
   @Column
-  private int recommendOrder;
+  private Integer recommendOrder;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "myMap")

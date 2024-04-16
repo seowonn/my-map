@@ -6,8 +6,8 @@ import static com.seowonn.mymap.type.SuccessMessage.VISIT_LOG_CREATED;
 import static com.seowonn.mymap.type.SuccessMessage.VISIT_LOG_UPDATE_SUCCESS;
 
 import com.seowonn.mymap.dto.ApiResponse;
-import com.seowonn.mymap.dto.NewVisitLogDto;
-import com.seowonn.mymap.dto.UpdateVisitLogDto;
+import com.seowonn.mymap.dto.visitLog.NewVisitLogDto;
+import com.seowonn.mymap.dto.visitLog.UpdateVisitLogDto;
 import com.seowonn.mymap.entity.VisitLog;
 import com.seowonn.mymap.service.Impl.VisitLogServiceImpl;
 import jakarta.validation.Valid;

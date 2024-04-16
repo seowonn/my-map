@@ -1,4 +1,4 @@
-package com.seowonn.mymap.dto;
+package com.seowonn.mymap.dto.visitLog;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -26,7 +26,7 @@ public class NewVisitLogDto {
   @Pattern(regexp = "public|private", message = "공개여부는 'private' 또는 'public' 이어야 합니다.")
   private String access;
 
-  private int recommendOrder;
+  private Integer recommendOrder;
 
   @NotEmpty(message = "이미지를 선택해주세요.")
   private List<MultipartFile> files;
