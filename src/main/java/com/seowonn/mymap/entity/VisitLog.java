@@ -80,6 +80,13 @@ public class VisitLog extends BaseEntity {
   @JsonIgnore
   private List<Likes> likesList = new ArrayList<>();
 
+  @OneToMany(mappedBy = "visitLog", fetch = FetchType.LAZY,
+      cascade = CascadeType.ALL, orphanRemoval = true)
+  @ToString.Exclude
+  @Builder.Default
+  @JsonManagedReference
+  private List<BookMarks> bookMarksList = new ArrayList<>();
+
   public static VisitLog ofNewVisitLogAndMyMapAndSiGunGu(
       NewVisitLogDto newVisitLogDto, MyMap myMap, SiGunGu siGunGu) {
 

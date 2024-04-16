@@ -61,6 +61,12 @@ public class Member extends BaseEntity{
   @JsonManagedReference
   private List<MyMap> myMapList = new ArrayList<>();
 
+  @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
+  @ToString.Exclude
+  @Builder.Default
+  @JsonManagedReference
+  private List<BookMarks> bookMarksList = new ArrayList<>();
+
   public static Member ofMemberFormAndRole(MemberFormDto memberFormDto, Role role) {
 
     Gender gender = Gender.valueOf(memberFormDto.getGender().toUpperCase());

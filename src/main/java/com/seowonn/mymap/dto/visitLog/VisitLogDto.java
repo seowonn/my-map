@@ -1,6 +1,7 @@
 package com.seowonn.mymap.dto.visitLog;
 
 import com.seowonn.mymap.entity.VisitLog;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,8 @@ public class VisitLogDto {
   private String content;
   private String imageFileUrl;
   private Integer recommendOrder;
+  private Integer likes;
+  private String isMarked;
   private LocalDateTime createdAt;
 
   public static Page<VisitLogDto> toDtoList(Page<VisitLog> visitLogPage){
@@ -29,8 +32,21 @@ public class VisitLogDto {
         .content(m.getContent())
         .imageFileUrl(m.getImages().get(0).getImageUrl())
         .recommendOrder(m.getRecommendOrder())
+        .likes(m.getLikes())
         .createdAt(m.getCreatedAt())
         .build());
+  }
+
+  public static VisitLogDto from(VisitLog visitLog, String isMarked){
+    return VisitLogDto.builder()
+        .siGunGu(visitLog.getSiGunGu().getSiGunGuName())
+        .placeName(visitLog.getPlaceName())
+        .content(visitLog.getContent())
+        .imageFileUrl(visitLog.getImages().get(0).getImageUrl())
+        .recommendOrder(visitLog.getRecommendOrder())
+        .isMarked(isMarked)
+        .createdAt(visitLog.getCreatedAt())
+        .build();
   }
 
 }
