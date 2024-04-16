@@ -59,13 +59,13 @@ public class MyMapServiceImpl implements MyMapService {
   }
 
   @Override
-  public Page<MyMap> getMyMaps(String userId, Pageable pageable) {
+  public Page<MyMap> getAllMyMaps(String userId, Pageable pageable) {
 
     // 해당 아이디로 로그인한 사용자인지 확인
     checkService.checkIsLoginUser(userId);
 
     // 해당 아이디로 작성된 모든 마이맵 조회
-    return myMapRepository.findAllByMemberUserId(userId, pageable);
+    return myMapRepository.findAllByMemberUserIdOrderByCreatedAt(userId, pageable);
   }
 
   @Override

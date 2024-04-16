@@ -14,6 +14,6 @@ public interface MyMapRepository extends JpaRepository<MyMap, Long> {
   @NonNull
   Optional<MyMap> findById(@NonNull Long id);
 
-  Page<MyMap> findAllByMemberUserId(String userId, Pageable pageable);
+  Page<MyMap> findAllByMemberUserIdOrderByCreatedAt(String userId, Pageable pageable);
 
 }

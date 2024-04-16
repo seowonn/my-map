@@ -27,7 +27,7 @@ public class MemberController {
 
   private final MemberService memberService;
 
-  @PostMapping("/verify/send-email")
+  @PostMapping("/verification/email")
   public ApiResponse<?> sendEmail(@Valid @RequestBody EmailDto emailDto){
     SimpleMailMessage message = memberService.sendVerificationCode(emailDto);
     return ApiResponse.createSuccessMessage(message, SEND_EMAIL);

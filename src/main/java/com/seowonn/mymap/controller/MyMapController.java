@@ -9,7 +9,6 @@ import com.seowonn.mymap.dto.ApiResponse;
 import com.seowonn.mymap.dto.myMap.NewMyMapDto;
 import com.seowonn.mymap.dto.myMap.UpdateMyMapDto;
 import com.seowonn.mymap.entity.MyMap;
-import com.seowonn.mymap.entity.SiDo;
 import com.seowonn.mymap.service.Impl.MyMapServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,10 +38,10 @@ public class MyMapController {
   }
 
   @GetMapping("/{userId}")
-  public ApiResponse<?> getMyMaps(
+  public ApiResponse<?> getAllMyMaps(
       @PathVariable String userId,
       @PageableDefault(page = 0, size = 10) Pageable pageable) {
-    Page<MyMap> myMaps = myMapService.getMyMaps(userId, pageable);
+    Page<MyMap> myMaps = myMapService.getAllMyMaps(userId, pageable);
     return ApiResponse.createSuccessMessage(myMaps, RETRIEVE_DATA_SUCCESS);
   }
 

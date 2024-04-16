@@ -10,7 +10,7 @@ public interface MyMapService {
 
   MyMap registerNewMap(NewMyMapDto newMyMapDto);
 
-  Page<MyMap> getMyMaps(String userId, Pageable pageable);
+  Page<MyMap> getAllMyMaps(String userId, Pageable pageable);
 
   MyMap updateMyMap(UpdateMyMapDto updateMyMapDto, Long myMapId);
 
