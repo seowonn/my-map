@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/logs") // 마이맵 선택 후 작성
-public class VisitLogController {
+public class VisitLogControllerForWriter {
 
   private final VisitLogServiceImpl visitLogService;
 
@@ -43,22 +43,6 @@ public class VisitLogController {
     VisitLog visitLog =
         visitLogService.createVisitLog(myMapId, newVisitLogDto);
     return ApiResponse.createSuccessMessage(visitLog, VISIT_LOG_CREATED);
-  }
-
-  @PostMapping("/likes/{myMapId}/{visitLogId}")
-  public ApiResponse<?> addLikes(
-      @PathVariable Long myMapId,
-      @PathVariable Long visitLogId){
-    VisitLog visitLog = visitLogService.addVisitLogLikes(myMapId, visitLogId);
-    return ApiResponse.createSuccessMessage(visitLog, VISIT_LOG_UPDATE_SUCCESS);
-  }
-
-  @DeleteMapping("/likes/{myMapId}/{visitLogId}")
-  public ApiResponse<?> deleteLikes(
-      @PathVariable Long myMapId,
-      @PathVariable Long visitLogId){
-    VisitLog visitLog = visitLogService.deleteVisitLogLikes(myMapId, visitLogId);
-    return ApiResponse.createSuccessMessage(visitLog, VISIT_LOG_UPDATE_SUCCESS);
   }
 
   @GetMapping("/{myMapId}")

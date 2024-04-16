@@ -20,7 +20,4 @@ public interface VisitLogService {
 
   VisitLog visitLogDetails(Long visitLogId);
 
-  VisitLog addVisitLogLikes(Long myMapId, Long visitLogId);
-
-  VisitLog deleteVisitLogLikes(Long myMapId, Long visitLogId);
 }
