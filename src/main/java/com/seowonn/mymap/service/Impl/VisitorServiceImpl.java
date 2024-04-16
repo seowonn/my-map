@@ -1,22 +1,28 @@
 package com.seowonn.mymap.service.Impl;
 
+import static com.seowonn.mymap.type.ErrorCode.ACCESS_DENIED;
 import static com.seowonn.mymap.type.ErrorCode.NO_LIKES_CLICKED;
 import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
 import static com.seowonn.mymap.type.ErrorCode.VISIT_LOG_NOT_FOUND;
 
+import com.seowonn.mymap.dto.visitLog.VisitLogDto;
 import com.seowonn.mymap.entity.Likes;
 import com.seowonn.mymap.entity.Member;
 import com.seowonn.mymap.entity.VisitLog;
 import com.seowonn.mymap.exception.MyMapSystemException;
 import com.seowonn.mymap.repository.LikesRepository;
 import com.seowonn.mymap.repository.MemberRepository;
+import com.seowonn.mymap.repository.MyMapRepository;
 import com.seowonn.mymap.repository.VisitLogRepository;
 import com.seowonn.mymap.service.VisitorService;
+import com.seowonn.mymap.type.Access;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -28,6 +34,7 @@ public class VisitorServiceImpl implements VisitorService {
   private final VisitLogRepository visitLogRepository;
   private final MemberRepository memberRepository;
   private final LikesRepository likesRepository;
+  private final MyMapRepository myMapRepository;
 
   @PersistenceContext
   private EntityManager entityManager;
@@ -49,7 +56,7 @@ public class VisitorServiceImpl implements VisitorService {
     Optional<Likes> likesOptional =
         likesRepository.findByVisitLogAndVisitId(visitLog, member.getId());
 
-    if(likesOptional.isEmpty()){
+    if (likesOptional.isEmpty()) {
       Likes likes = Likes.of(member.getId(), visitLog);
       likesRepository.save(likes);
       visitLogRepository.addLikes(visitLogId);
@@ -63,7 +70,8 @@ public class VisitorServiceImpl implements VisitorService {
   @Transactional
   public VisitLog deleteVisitLogLikes(Long myMapId, Long visitLogId) {
 
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    Authentication authentication = SecurityContextHolder.getContext()
+        .getAuthentication();
     String userId = authentication.getName();
 
     Member member = memberRepository.findByUserId(userId)
@@ -77,10 +85,26 @@ public class VisitorServiceImpl implements VisitorService {
         .orElseThrow(() -> new MyMapSystemException(NO_LIKES_CLICKED));
 
     likesRepository.delete(likes);
-    if(visitLog.getLikes() > 0){
+    if (visitLog.getLikes() > 0) {
       visitLogRepository.deleteLikes(visitLogId);
       entityManager.refresh(visitLog);  // VisitLog 엔티티 새로고침
     }
     return visitLog;
+  }
+
+  @Override
+  public Page<VisitLogDto> getAllVisitLogsFromMyMap(Long myMapId,
+      Pageable pageable) {
+
+    // 해당 마이맵의 공개 설정 유무로 1차 필터
+    boolean exists = myMapRepository.existsByIdAndAccess(myMapId, Access.PUBLIC);
+    if (!exists) {
+      throw new MyMapSystemException(ACCESS_DENIED);
+    }
+
+    Page<VisitLog> allPublicVisitLogs = visitLogRepository.findVisitLogs(
+        myMapId, Access.PUBLIC, pageable);
+
+    return VisitLogDto.toDtoList(allPublicVisitLogs);
   }
 }
