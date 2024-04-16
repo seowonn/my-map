@@ -36,7 +36,7 @@ public class RedisServiceImpl implements RedisService {
 
   @Override
   public long getRemainingExpireTime(String key) {
-    Long expireTime = redisTemplate.getExpire(VERIFICATION_PREFIX + key,
+    Long expireTime = redisTemplate.getExpire(VERIFICATION_PREFIX.getPrefix() + key,
         TimeUnit.SECONDS);
     log.info("[getRemainingExpireTime] : redis 남은 유효시간 확인");
     return expireTime != null ? expireTime : -1;
