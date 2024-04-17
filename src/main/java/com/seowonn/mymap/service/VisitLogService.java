@@ -3,6 +3,7 @@ package com.seowonn.mymap.service;
 import com.seowonn.mymap.dto.visitLog.NewVisitLogDto;
 import com.seowonn.mymap.dto.visitLog.UpdateVisitLogDto;
 import com.seowonn.mymap.entity.VisitLog;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,7 +13,7 @@ public interface VisitLogService {
 
   Page<VisitLog> getUsersVisitLogs(Long myMapId, Pageable pageable);
 
-  void deleteVisitLog(Long myMapId, Long visitLogId);
+  List<String> deleteVisitLogGetDeleteUrls(Long myMapId, Long visitLogId);
 
   VisitLog updateLog(Long myMapId, Long visitLogId, UpdateVisitLogDto updateVisitLogDto);
 

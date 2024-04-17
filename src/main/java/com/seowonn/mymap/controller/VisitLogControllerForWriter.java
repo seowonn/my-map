@@ -10,7 +10,9 @@ import com.seowonn.mymap.dto.visitLog.NewVisitLogDto;
 import com.seowonn.mymap.dto.visitLog.UpdateVisitLogDto;
 import com.seowonn.mymap.entity.VisitLog;
 import com.seowonn.mymap.service.Impl.VisitLogServiceImpl;
+import com.seowonn.mymap.service.S3Service;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class VisitLogControllerForWriter {
 
   private final VisitLogServiceImpl visitLogService;
+  private final S3Service s3Service;
 
   /**
    * 작성할 마이맵 창에 들어가서 방문일지를 작성하는 api
@@ -71,7 +74,10 @@ public class VisitLogControllerForWriter {
   public ApiResponse<?> deleteVisitLog(
       @PathVariable Long myMapId,
       @PathVariable Long visitLogId){
-    visitLogService.deleteVisitLog(myMapId, visitLogId);
+    List<String> imageUrlsToDelete = visitLogService.deleteVisitLogGetDeleteUrls(myMapId, visitLogId);
+    for (String url : imageUrlsToDelete){
+      s3Service.deleteS3File(url);
+    }
     return ApiResponse.createSuccessMessage(true, DELETE_SUCCESS);
   }
 

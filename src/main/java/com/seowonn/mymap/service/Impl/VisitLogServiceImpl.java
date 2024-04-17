@@ -20,6 +20,7 @@ import com.seowonn.mymap.repository.VisitLogRepository;
 import com.seowonn.mymap.service.CheckService;
 import com.seowonn.mymap.service.VisitLogService;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -85,8 +86,7 @@ public class VisitLogServiceImpl implements VisitLogService {
   }
 
   @Override
-  @Transactional
-  public void deleteVisitLog(Long myMapId, Long visitLogId) {
+  public List<String> deleteVisitLogGetDeleteUrls(Long myMapId, Long visitLogId) {
 
     VisitLog visitLog = visitLogRepository.findById(visitLogId)
         .orElseThrow(() -> new MyMapSystemException(VISIT_LOG_NOT_FOUND));
@@ -96,12 +96,14 @@ public class VisitLogServiceImpl implements VisitLogService {
       throw new MyMapSystemException(ACCESS_DENIED);
     }
 
+    List<String> imageUrlsToDelete = new ArrayList<>();
     List<Image> images = visitLog.getImages();
     for(Image image : images){
-      s3Service.deleteS3File(image.getImageUrl());
+      imageUrlsToDelete.add(image.getImageUrl());
     }
 
     visitLogRepository.delete(visitLog);
+    return imageUrlsToDelete;
   }
 
   @Override
