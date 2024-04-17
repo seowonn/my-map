@@ -50,13 +50,6 @@ public class SiGunGu {
   @JsonBackReference
   private SiDo siDo;
 
-  @OneToMany(mappedBy = "siGunGu", fetch = FetchType.EAGER,
-      cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-  @ToString.Exclude
-  @Builder.Default
-  @JsonManagedReference
-  private List<VisitLog> visitLogs = new ArrayList<>();
-
   public static SiGunGu from(SiGunGuDto siGunGuDto) {
     return SiGunGu.builder()
         .siGunGuName(siGunGuDto.getSig_kor_nm())

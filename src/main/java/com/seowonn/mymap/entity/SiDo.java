@@ -42,7 +42,7 @@ public class SiDo {
   @Column(nullable = false, unique = true)
   private String siDoCode;
 
-  @OneToMany(mappedBy = "siDo", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "siDo", fetch = FetchType.LAZY)
   @ToString.Exclude
   @Builder.Default
   /**
@@ -51,13 +51,6 @@ public class SiDo {
   @JsonIgnore
   @JsonManagedReference
   private List<SiGunGu> siGunGuList = new ArrayList<>();
-
-  @OneToMany(mappedBy = "siDo", fetch = FetchType.EAGER)
-  @ToString.Exclude
-  @Builder.Default
-  @JsonIgnore
-  @JsonManagedReference
-  private List<MyMap> myMapList = new ArrayList<>();
 
   public static SiDo from(SiDoDto sidoDto) {
     return SiDo.builder()

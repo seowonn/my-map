@@ -1,6 +1,7 @@
 package com.seowonn.mymap.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seowonn.mymap.dto.myMap.NewMyMapDto;
 import com.seowonn.mymap.type.Access;
@@ -44,16 +45,17 @@ public class MyMap extends BaseEntity{
   @Enumerated(EnumType.STRING)
   private Access access;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member")
+  @JsonIgnore
   @JsonBackReference
   private Member member;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "siDo")
   private SiDo siDo;
 
-  @OneToMany(mappedBy = "myMap", fetch = FetchType.EAGER,
+  @OneToMany(mappedBy = "myMap", fetch = FetchType.LAZY,
       cascade = CascadeType.ALL, orphanRemoval = true)
   @ToString.Exclude
   @Builder.Default

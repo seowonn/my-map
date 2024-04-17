@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 public interface VisitLogRepository extends JpaRepository<VisitLog, Long> {
 
   @Query("SELECT v FROM VisitLog v WHERE v.myMap.id = :id ORDER BY CASE WHEN v.recommendOrder IS NULL THEN 1 ELSE 0 END, v.recommendOrder ASC, v.createdAt DESC")
-  Page<VisitLog> findAllByMyMapId(Long myMapId, Pageable pageable);
+  Page<VisitLog> findAllByMyMapId(Long id, Pageable pageable);
 
   Optional<VisitLog> findByMyMapIdAndId(Long myMapId, Long visitLogId);
 
