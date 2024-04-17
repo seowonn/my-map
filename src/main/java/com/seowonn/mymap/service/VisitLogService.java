@@ -10,7 +10,7 @@ public interface VisitLogService {
 
   VisitLog createVisitLog(Long myMapId, NewVisitLogDto newVisitLogDto);
 
-  Page<VisitLog> getVisitLogs(Long myMapId, Pageable pageable);
+  Page<VisitLog> getUsersVisitLogs(Long myMapId, Pageable pageable);
 
   void deleteVisitLog(Long myMapId, Long visitLogId);
 

@@ -45,11 +45,14 @@ public class VisitLogControllerForWriter {
     return ApiResponse.createSuccessMessage(visitLog, VISIT_LOG_CREATED);
   }
 
+  /**
+   * 해당 마이맵에 작성된 방문일지들을 보여준다. (작성자 전용)
+   */
   @GetMapping("/{myMapId}")
-  public ApiResponse<?> getVisitLogs(
+  public ApiResponse<?> getUsersVisitLogs(
       @PathVariable Long myMapId,
       @PageableDefault(page = 0, size = 10) Pageable pageable){
-    Page<VisitLog> visitLogs = visitLogService.getVisitLogs(myMapId, pageable);
+    Page<VisitLog> visitLogs = visitLogService.getUsersVisitLogs(myMapId, pageable);
     return ApiResponse.createSuccessMessage(visitLogs, RETRIEVE_DATA_SUCCESS);
   }
 

@@ -21,12 +21,9 @@ import com.seowonn.mymap.service.CheckService;
 import com.seowonn.mymap.service.VisitLogService;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -75,7 +72,7 @@ public class VisitLogServiceImpl implements VisitLogService {
   }
 
   @Override
-  public Page<VisitLog> getVisitLogs(Long myMapId, Pageable pageable) {
+  public Page<VisitLog> getUsersVisitLogs(Long myMapId, Pageable pageable) {
 
     MyMap myMap = myMapRepository.findById(myMapId)
         .orElseThrow(() -> new MyMapSystemException(MY_MAP_NOT_FOUND));
@@ -83,10 +80,12 @@ public class VisitLogServiceImpl implements VisitLogService {
     // 로그인한 사용자가 조회된 마이맵 작성자인지 확인
     checkService.checkIsLoginUser(myMap.getMember().getUserId());
 
+    // 방문자 보기란과 다른점 : Access.PRIVATE도 볼 수 있음
     return visitLogRepository.findAllByMyMapId(myMapId, pageable);
   }
 
   @Override
+  @Transactional
   public void deleteVisitLog(Long myMapId, Long visitLogId) {
 
     VisitLog visitLog = visitLogRepository.findById(visitLogId)

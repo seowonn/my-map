@@ -114,7 +114,7 @@ public class VisitorServiceImpl implements VisitorService {
       throw new MyMapSystemException(ACCESS_DENIED);
     }
 
-    Page<VisitLog> allPublicVisitLogs = visitLogRepository.findVisitLogs(
+    Page<VisitLog> allPublicVisitLogs = visitLogRepository.findAllPublicVisitLogs(
         myMapId, Access.PUBLIC, pageable);
 
     return VisitLogDto.toDtoList(allPublicVisitLogs);
@@ -123,7 +123,7 @@ public class VisitorServiceImpl implements VisitorService {
   public void addUserBookMark(Member member, VisitLog visitLog, String userId) {
 
     Optional<BookMarks> byMemberUserId =
-        bookMarksRepository.findALlByMemberUserId(userId);
+        bookMarksRepository.findByMemberUserIdAndVisitLog(userId, visitLog);
 
     if (byMemberUserId.isEmpty()) {
       BookMarks from = BookMarks.from(member, visitLog);
@@ -134,7 +134,7 @@ public class VisitorServiceImpl implements VisitorService {
   public void deleteUserBookMark(Member member, VisitLog visitLog, String userId) {
 
     Optional<BookMarks> byMemberUserId =
-        bookMarksRepository.findALlByMemberUserId(userId);
+        bookMarksRepository.findByMemberUserIdAndVisitLog(userId, visitLog);
 
     if(byMemberUserId.isPresent()){
       BookMarks from = BookMarks.from(member, visitLog);
