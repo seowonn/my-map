@@ -9,6 +9,6 @@ public interface UserService {
 
   MemberInfoResponse updateUser(String userId, UpdateUserInfoForm userInfoForm);
 
-  void signOutUser(String userId);
+  void signOutUser();
 
 }

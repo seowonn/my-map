@@ -2,7 +2,7 @@ package com.seowonn.mymap.service.Impl;
 
 import static com.seowonn.mymap.type.ErrorCode.DATA_SCRAPPING_ERROR;
 
-import com.seowonn.mymap.dto.SiGunGuDto;
+import com.seowonn.mymap.dto.cityOpenApi.siGunGu.SiGunGuResponse;
 import com.seowonn.mymap.dto.cityOpenApi.siDo.SiDoApiResponseDto;
 import com.seowonn.mymap.dto.cityOpenApi.siDo.SiDoFeature;
 import com.seowonn.mymap.dto.cityOpenApi.siGunGu.SiGunGuApiResponseDto;
@@ -108,18 +108,18 @@ public class OpenApiServiceImpl implements OpenApiService {
 
       for (SiGunGuFeature siGunGuFeature : siGunGuFeatures) {
 
-        SiGunGuDto siGunGuDto = siGunGuFeature.getProperties();
+        SiGunGuResponse siGunGuResponse = siGunGuFeature.getProperties();
 
         // DB에 저장되지 않으면서
-        if(!siGunGuRepository.existsBySiGunGuCode(siGunGuDto.getSig_cd())){
+        if(!siGunGuRepository.existsBySiGunGuCode(siGunGuResponse.getSig_cd())){
           // 시도 정보 추출
-          String siDoName = siGunGuDto.getFull_nm().split(" ")[0];
+          String siDoName = siGunGuResponse.getFull_nm().split(" ")[0];
 
           // 광역시도 DB에서 시도가 조회되는 시군구일 경우만 시군구 DB에 저장
           SiDo siDo = siDoRepository.findBySiDoName(siDoName)
               .orElseThrow(() -> new LoadingDataException(DATA_SCRAPPING_ERROR));
 
-          SiGunGu siGunGu = SiGunGu.from(siGunGuDto);
+          SiGunGu siGunGu = SiGunGu.from(siGunGuResponse);
           siGunGu.setSiDo(siDo);
 
           siGunGuRepository.save(siGunGu);

@@ -10,7 +10,10 @@ import com.seowonn.mymap.exception.MyMapSystemException;
 import com.seowonn.mymap.repository.MemberRepository;
 import com.seowonn.mymap.service.UserService;
 import com.seowonn.mymap.service.CheckService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -61,11 +64,14 @@ public class UserServiceImpl implements UserService {
   /**
    * TODO 추후 마이맵, 방문 일지 삭제와도 연관성 고려 필요
    */
-  public void signOutUser(String userId) {
+  @Transactional
+  public void signOutUser() {
 
-    checkService.checkIsLoginUser(userId);
+    Authentication authentication =
+        SecurityContextHolder.getContext().getAuthentication();
+    String currentUserId = authentication.getName();
 
-    Member member = memberRepository.findByUserId(userId)
+    Member member = memberRepository.findByUserId(currentUserId)
         .orElseThrow(() -> new MyMapSystemException(USER_NOT_FOUND));
 
     memberRepository.delete(member);

@@ -3,8 +3,8 @@ package com.seowonn.mymap.controller;
 import static com.seowonn.mymap.type.SuccessMessage.RETRIEVE_DATA_SUCCESS;
 
 import com.seowonn.mymap.dto.ApiResponse;
-import com.seowonn.mymap.entity.SiDo;
-import com.seowonn.mymap.entity.SiGunGu;
+import com.seowonn.mymap.dto.cityOpenApi.siDo.SiDoResponse;
+import com.seowonn.mymap.dto.cityOpenApi.siGunGu.SiGunGuResponse;
 import com.seowonn.mymap.service.Impl.SearchServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,15 +25,15 @@ public class SearchController {
   @GetMapping("/city")
   public ApiResponse<?> getCities(
       @PageableDefault(page = 0, size = 10) Pageable pageable) {
-    Page<SiDo> citiesDto = searchService.getSiDoCites(pageable);
-    return ApiResponse.createSuccessMessage(citiesDto, RETRIEVE_DATA_SUCCESS);
+    Page<SiDoResponse> siDoDtoPage = searchService.getSiDoCites(pageable);
+    return ApiResponse.createSuccessMessage(siDoDtoPage, RETRIEVE_DATA_SUCCESS);
   }
 
   @GetMapping("/{siDoCode}/small-city")
   public ApiResponse<?> getCities(
       @PathVariable String siDoCode,
       @PageableDefault(page = 0, size = 10) Pageable pageable) {
-    Page<SiGunGu> citiesDto = searchService.getSiGunGuCites(siDoCode, pageable);
-    return ApiResponse.createSuccessMessage(citiesDto, RETRIEVE_DATA_SUCCESS);
+    Page<SiGunGuResponse> siGunGuDtoPage = searchService.getSiGunGuCites(siDoCode, pageable);
+    return ApiResponse.createSuccessMessage(siGunGuDtoPage, RETRIEVE_DATA_SUCCESS);
   }
 }

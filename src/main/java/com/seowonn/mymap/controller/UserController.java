@@ -39,9 +39,9 @@ public class UserController {
     return ApiResponse.createSuccessMessage(memberInfoResponse, PROFILE_UPDATE_SUCCESS);
   }
 
-  @DeleteMapping("/{userId}")
-  public ApiResponse<?> updateUserId(@PathVariable String userId) {
-    userService.signOutUser(userId);
+  @DeleteMapping
+  public ApiResponse<?> updateUserId() {
+    userService.signOutUser();
     return ApiResponse.createSuccessMessage(true, SIGN_OUT_SUCCESS);
   }
 

@@ -11,6 +11,7 @@ import static com.seowonn.mymap.type.TimeSettings.VERIFICATION_EXPIRE_TIME;
 import com.seowonn.mymap.config.security.jwt.JwtTokenProvider;
 import com.seowonn.mymap.dto.EmailDto;
 import com.seowonn.mymap.dto.member.MemberFormDto;
+import com.seowonn.mymap.dto.member.MemberResponse;
 import com.seowonn.mymap.dto.member.SignInForm;
 import com.seowonn.mymap.dto.member.SignInResponse;
 import com.seowonn.mymap.entity.Member;
@@ -97,7 +98,7 @@ public class MemberServiceImpl implements MemberService {
     return String.valueOf(code);
   }
 
-  public Member createMember(MemberFormDto memberFormDto, Role role) {
+  public MemberResponse createMember(MemberFormDto memberFormDto, Role role) {
 
     // 이미 등록된 아이디(이메일)인지 확인
     if (memberRepository.existsByUserId(memberFormDto.getUserId())) {
@@ -109,7 +110,8 @@ public class MemberServiceImpl implements MemberService {
         memberFormDto.getVerificationNum());
 
     Member member = Member.ofMemberFormAndRole(memberFormDto, role);
-    return memberRepository.save(member);
+    memberRepository.save(member);
+    return MemberResponse.from(member);
   }
 
   public void checkVerificationCode(String email, String verificationCode) {

@@ -5,7 +5,7 @@ import static com.seowonn.mymap.type.SuccessMessage.VISIT_LOG_UPDATE_SUCCESS;
 
 import com.seowonn.mymap.dto.ApiResponse;
 import com.seowonn.mymap.dto.BookMarkDto;
-import com.seowonn.mymap.dto.visitLog.VisitLogDto;
+import com.seowonn.mymap.dto.visitLog.VisitLogResponse;
 import com.seowonn.mymap.dto.visitLog.VisitLogUserInputForm;
 import com.seowonn.mymap.entity.VisitLog;
 import com.seowonn.mymap.service.Impl.VisitorServiceImpl;
@@ -31,8 +31,9 @@ public class VisitLogControllerForVisitor {
    */
   @GetMapping("/logs/{myMapId}/{visitLogId}")
   public ApiResponse<?> getVisitLogDetails(@PathVariable Long visitLogId){
-    VisitLog visitLog = visitorService.getVisitLogDetails(visitLogId);
-    return ApiResponse.createSuccessMessage(visitLog, RETRIEVE_DATA_SUCCESS);
+    VisitLogResponse visitLogResponse =
+        visitorService.getVisitLogDetails(visitLogId);
+    return ApiResponse.createSuccessMessage(visitLogResponse, RETRIEVE_DATA_SUCCESS);
   }
 
   /**
@@ -42,8 +43,9 @@ public class VisitLogControllerForVisitor {
   public ApiResponse<?> applyUserInput(
       @PathVariable Long myMapId, @PathVariable Long visitLogId,
       @Valid @RequestBody VisitLogUserInputForm form) {
-    VisitLogDto visitLogDto = visitorService.applyUserInput(myMapId, visitLogId, form);
-    return ApiResponse.createSuccessMessage(visitLogDto, VISIT_LOG_UPDATE_SUCCESS);
+    VisitLogResponse visitLogResponse =
+        visitorService.applyUserInput(myMapId, visitLogId, form);
+    return ApiResponse.createSuccessMessage(visitLogResponse, VISIT_LOG_UPDATE_SUCCESS);
   }
 
   /**
@@ -62,9 +64,8 @@ public class VisitLogControllerForVisitor {
   @GetMapping("/maps/{mayMapId}")
   public ApiResponse<?> getAllVisitLogsFromMyMap(
       @PathVariable Long mayMapId,
-      @PageableDefault(page = 0, size = 20)
-Pageable pageable) {
-    Page<VisitLogDto> visitLogDtoPage =
+      @PageableDefault(page = 0, size = 20) Pageable pageable) {
+    Page<VisitLogResponse> visitLogDtoPage =
         visitorService.getAllVisitLogsFromMyMap(mayMapId, pageable);
 
     return ApiResponse.createSuccessMessage(visitLogDtoPage,

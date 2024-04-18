@@ -1,9 +1,7 @@
 package com.seowonn.mymap.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.seowonn.mymap.dto.SiGunGuDto;
-import jakarta.persistence.CascadeType;
+import com.seowonn.mymap.dto.cityOpenApi.siGunGu.SiGunGuResponse;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -13,16 +11,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -47,13 +41,12 @@ public class SiGunGu {
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "siDo")
-  @JsonBackReference
   private SiDo siDo;
 
-  public static SiGunGu from(SiGunGuDto siGunGuDto) {
+  public static SiGunGu from(SiGunGuResponse siGunGuResponse) {
     return SiGunGu.builder()
-        .siGunGuName(siGunGuDto.getSig_kor_nm())
-        .siGunGuCode(siGunGuDto.getSig_cd())
+        .siGunGuName(siGunGuResponse.getSig_kor_nm())
+        .siGunGuCode(siGunGuResponse.getSig_cd())
         .build();
   }
 

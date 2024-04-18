@@ -26,12 +26,10 @@ public class BookMarks extends BaseEntity{
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "member")
-  @JsonBackReference
   private Member member;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "visitLog")
-  @JsonBackReference
   private VisitLog visitLog;
 
   public static BookMarks from (Member member, VisitLog visitLog){

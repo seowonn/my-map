@@ -20,7 +20,7 @@ public class BookMarkDto {
   private String placeName;
   private LocalDateTime createdAt;
 
-  public static Page<BookMarkDto> toDtoList(Page<BookMarks> bookMarksPage){
+  public static Page<BookMarkDto> fromPage(Page<BookMarks> bookMarksPage){
     return bookMarksPage.map(m -> BookMarkDto.builder()
         .siGunGu(m.getVisitLog().getSiGunGu().getSiGunGuName())
         .placeName(m.getVisitLog().getPlaceName())

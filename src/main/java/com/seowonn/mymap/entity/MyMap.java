@@ -48,7 +48,6 @@ public class MyMap extends BaseEntity{
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member")
   @JsonIgnore
-  @JsonBackReference
   private Member member;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -59,7 +58,6 @@ public class MyMap extends BaseEntity{
       cascade = CascadeType.ALL, orphanRemoval = true)
   @ToString.Exclude
   @Builder.Default
-  @JsonManagedReference
   private List<VisitLog> visitLogs = new ArrayList<>();
 
   public static MyMap from(NewMyMapDto newMyMapDto) {

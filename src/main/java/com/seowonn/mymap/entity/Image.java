@@ -30,7 +30,6 @@ public class Image {
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "visitLog")
-  @JsonBackReference
   private VisitLog visitLog;
 
   public static Image of(String imageUrl, VisitLog visitLog){

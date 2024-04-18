@@ -6,7 +6,7 @@ import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
 import static com.seowonn.mymap.type.ErrorCode.VISIT_LOG_NOT_FOUND;
 
 import com.seowonn.mymap.dto.BookMarkDto;
-import com.seowonn.mymap.dto.visitLog.VisitLogDto;
+import com.seowonn.mymap.dto.visitLog.VisitLogResponse;
 import com.seowonn.mymap.dto.visitLog.VisitLogUserInputForm;
 import com.seowonn.mymap.entity.BookMarks;
 import com.seowonn.mymap.entity.Likes;
@@ -50,7 +50,7 @@ public class VisitorServiceImpl implements VisitorService {
 
   @Override
   @Transactional
-  public VisitLog getVisitLogDetails(Long visitLogId) {
+  public VisitLogResponse getVisitLogDetails(Long visitLogId) {
 
     Authentication authentication = SecurityContextHolder.getContext()
         .getAuthentication();
@@ -69,8 +69,13 @@ public class VisitorServiceImpl implements VisitorService {
       }
     }
 
-    return visitLogRepository.findById(visitLogId)
+    VisitLog visitLog = visitLogRepository.findById(visitLogId)
         .orElseThrow(() -> new MyMapSystemException(VISIT_LOG_NOT_FOUND));
+
+    if(bookMarksRepository.existsByVisitLogId(visitLogId)){
+      return VisitLogResponse.from(visitLog, Boolean.TRUE.getFlag());
+    }
+    return VisitLogResponse.from(visitLog, Boolean.FALSE.getFlag());
   }
 
   @Transactional
@@ -82,9 +87,8 @@ public class VisitorServiceImpl implements VisitorService {
 
     if (likesOptional.isEmpty()) {
       Likes likes = Likes.of(member.getId(), visitLog);
-      likesRepository.save(likes);
       visitLogRepository.addLikes(visitLog.getId());
-      entityManager.refresh(visitLog);  // VisitLog 엔티티 새로고침
+      likesRepository.save(likes);
     }
 
   }
@@ -104,7 +108,7 @@ public class VisitorServiceImpl implements VisitorService {
   }
 
   @Override
-  public Page<VisitLogDto> getAllVisitLogsFromMyMap(Long myMapId,
+  public Page<VisitLogResponse> getAllVisitLogsFromMyMap(Long myMapId,
       Pageable pageable) {
 
     // 해당 마이맵의 공개 설정 유무로 1차 필터
@@ -117,7 +121,7 @@ public class VisitorServiceImpl implements VisitorService {
     Page<VisitLog> allPublicVisitLogs = visitLogRepository.findAllPublicVisitLogs(
         myMapId, Access.PUBLIC, pageable);
 
-    return VisitLogDto.toDtoList(allPublicVisitLogs);
+    return VisitLogResponse.fromPage(allPublicVisitLogs);
   }
 
   public void addUserBookMark(Member member, VisitLog visitLog, String userId) {
@@ -144,7 +148,7 @@ public class VisitorServiceImpl implements VisitorService {
 
   @Override
   @Transactional
-  public VisitLogDto applyUserInput(Long myMapId, Long visitLogId,
+  public VisitLogResponse applyUserInput(Long myMapId, Long visitLogId,
       VisitLogUserInputForm form) {
 
     Authentication authentication = SecurityContextHolder.getContext()
@@ -170,7 +174,7 @@ public class VisitorServiceImpl implements VisitorService {
     }
 
     entityManager.refresh(visitLog);
-    return VisitLogDto.from(visitLog, form.getMarked());
+    return VisitLogResponse.from(visitLog, form.getMarked());
   }
 
   @Override
@@ -186,6 +190,6 @@ public class VisitorServiceImpl implements VisitorService {
     Page<BookMarks> allByMember = bookMarksRepository.findAllByMember(member,
         pageable);
 
-    return BookMarkDto.toDtoList(allByMember);
+    return BookMarkDto.fromPage(allByMember);
   }
 }

@@ -1,5 +1,7 @@
 package com.seowonn.mymap.service.Impl;
 
+import com.seowonn.mymap.dto.cityOpenApi.siDo.SiDoResponse;
+import com.seowonn.mymap.dto.cityOpenApi.siGunGu.SiGunGuResponse;
 import com.seowonn.mymap.entity.SiDo;
 import com.seowonn.mymap.entity.SiGunGu;
 import com.seowonn.mymap.repository.SiDoRepository;
@@ -18,13 +20,16 @@ public class SearchServiceImpl implements SearchService {
   private final SiGunGuRepository siGunGuRepository;
 
   @Override
-  public Page<SiDo> getSiDoCites(Pageable pageable) {
-    return siDoRepository.findAll(pageable);
+  public Page<SiDoResponse> getSiDoCites(Pageable pageable) {
+    Page<SiDo> siDos = siDoRepository.findAll(pageable);
+    return SiDoResponse.fromPage(siDos);
   }
 
   @Override
-  public Page<SiGunGu> getSiGunGuCites(String siDoCode, Pageable pageable) {
-    return siGunGuRepository.findBySiDoSiDoCode(siDoCode, pageable);
+  public Page<SiGunGuResponse> getSiGunGuCites(String siDoCode, Pageable pageable) {
+    Page<SiGunGu> siGunGus =
+        siGunGuRepository.findBySiDoSiDoCode(siDoCode, pageable);
+    return SiGunGuResponse.fromPage(siGunGus);
   }
 
 }

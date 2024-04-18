@@ -9,6 +9,7 @@ import static com.seowonn.mymap.type.ErrorCode.VISIT_LOG_NOT_FOUND;
 
 import com.seowonn.mymap.dto.visitLog.NewVisitLogDto;
 import com.seowonn.mymap.dto.visitLog.UpdateVisitLogDto;
+import com.seowonn.mymap.dto.visitLog.VisitLogResponse;
 import com.seowonn.mymap.entity.Image;
 import com.seowonn.mymap.entity.MyMap;
 import com.seowonn.mymap.entity.SiGunGu;
@@ -19,6 +20,7 @@ import com.seowonn.mymap.repository.SiGunGuRepository;
 import com.seowonn.mymap.repository.VisitLogRepository;
 import com.seowonn.mymap.service.CheckService;
 import com.seowonn.mymap.service.VisitLogService;
+import com.seowonn.mymap.type.Boolean;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +43,7 @@ public class VisitLogServiceImpl implements VisitLogService {
 
   @Override
   @Transactional
-  public VisitLog createVisitLog(Long myMapId, NewVisitLogDto newVisitLogDto){
+  public VisitLogResponse createVisitLog(Long myMapId, NewVisitLogDto newVisitLogDto){
 
     // 파일 개수 확인
     if(newVisitLogDto.getFiles().size() > 10){
@@ -69,11 +71,11 @@ public class VisitLogServiceImpl implements VisitLogService {
     // 파일 S3 업로드 수행
     s3Service.upload(newVisitLogDto.getFiles(), myMap, visitLog);
 
-    return visitLog;
+    return VisitLogResponse.from(visitLog, Boolean.FALSE.getFlag());
   }
 
   @Override
-  public Page<VisitLog> getUsersVisitLogs(Long myMapId, Pageable pageable) {
+  public Page<VisitLogResponse> getUsersVisitLogs(Long myMapId, Pageable pageable) {
 
     MyMap myMap = myMapRepository.findById(myMapId)
         .orElseThrow(() -> new MyMapSystemException(MY_MAP_NOT_FOUND));
@@ -82,7 +84,10 @@ public class VisitLogServiceImpl implements VisitLogService {
     checkService.checkIsLoginUser(myMap.getMember().getUserId());
 
     // 방문자 보기란과 다른점 : Access.PRIVATE도 볼 수 있음
-    return visitLogRepository.findAllByMyMapId(myMapId, pageable);
+    Page<VisitLog> allByMyMapId =
+        visitLogRepository.findAllByMyMapId(myMapId, pageable);
+
+    return VisitLogResponse.fromPage(allByMyMapId);
   }
 
   @Override
@@ -108,7 +113,7 @@ public class VisitLogServiceImpl implements VisitLogService {
 
   @Override
   @Transactional
-  public VisitLog updateLog(Long myMapId, Long visitLogId,
+  public VisitLogResponse updateLog(Long myMapId, Long visitLogId,
       UpdateVisitLogDto updateVisitLogDto) {
 
     MyMap myMap = myMapService.checkMyMapUser(myMapId);
@@ -129,7 +134,7 @@ public class VisitLogServiceImpl implements VisitLogService {
       }
     }
 
-    return visitLog;
+    return VisitLogResponse.from(visitLog, null);
   }
 
 }

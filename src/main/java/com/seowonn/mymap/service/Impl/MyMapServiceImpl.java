@@ -5,6 +5,7 @@ import static com.seowonn.mymap.type.ErrorCode.REGION_NOT_FOUND;
 import static com.seowonn.mymap.type.ErrorCode.MY_MAP_NOT_FOUND;
 import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
 
+import com.seowonn.mymap.dto.myMap.MyMapResponse;
 import com.seowonn.mymap.dto.myMap.NewMyMapDto;
 import com.seowonn.mymap.dto.myMap.UpdateMyMapDto;
 import com.seowonn.mymap.entity.Member;
@@ -37,7 +38,7 @@ public class MyMapServiceImpl implements MyMapService {
 
 
   @Override
-  public MyMap registerNewMap(NewMyMapDto newMyMapDto) {
+  public MyMapResponse registerNewMap(NewMyMapDto newMyMapDto) {
 
     // 해당 아이디로 로그인한 사용자인지 확인
     checkService.checkIsLoginUser(newMyMapDto.getUserId());
@@ -55,22 +56,26 @@ public class MyMapServiceImpl implements MyMapService {
     myMap.setMember(member);
     myMap.setSiDo(siDo);
 
-    return myMapRepository.save(myMap);
+    myMapRepository.save(myMap);
+    return MyMapResponse.from(myMap);
   }
 
   @Override
-  public Page<MyMap> getAllMyMaps(String userId, Pageable pageable) {
+  public Page<MyMapResponse> getAllMyMaps(String userId, Pageable pageable) {
 
     // 해당 아이디로 로그인한 사용자인지 확인
     checkService.checkIsLoginUser(userId);
 
     // 해당 아이디로 작성된 모든 마이맵 조회
-    return myMapRepository.findAllByMemberUserIdOrderByCreatedAt(userId, pageable);
+    Page<MyMap> myMapPages =
+        myMapRepository.findAllByMemberUserIdOrderByCreatedAt(userId, pageable);
+
+    return MyMapResponse.fromPage(myMapPages);
   }
 
   @Override
   @Transactional
-  public MyMap updateMyMap(UpdateMyMapDto updateMyMapDto, Long myMapId) {
+  public MyMapResponse updateMyMap(UpdateMyMapDto updateMyMapDto, Long myMapId) {
 
     // 해당 아이디로 로그인한 사용자인지 확인
     checkService.checkIsLoginUser(updateMyMapDto.getUserId());
@@ -88,7 +93,7 @@ public class MyMapServiceImpl implements MyMapService {
     myMap.setAccess(
         Access.valueOf(updateMyMapDto.getAccess().toUpperCase()));
 
-    return myMap;
+    return MyMapResponse.from(myMap);
   }
 
   @Override

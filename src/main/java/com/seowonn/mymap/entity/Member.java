@@ -58,13 +58,11 @@ public class Member extends BaseEntity{
   @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
   @ToString.Exclude
   @Builder.Default
-  @JsonManagedReference
   private List<MyMap> myMapList = new ArrayList<>();
 
   @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
   @ToString.Exclude
   @Builder.Default
-  @JsonManagedReference
   private List<BookMarks> bookMarksList = new ArrayList<>();
 
   public static Member ofMemberFormAndRole(MemberFormDto memberFormDto, Role role) {

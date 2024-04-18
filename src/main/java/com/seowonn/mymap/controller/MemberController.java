@@ -7,6 +7,7 @@ import static com.seowonn.mymap.type.SuccessMessage.SIGN_IN_SUCCESS;
 import com.seowonn.mymap.dto.ApiResponse;
 import com.seowonn.mymap.dto.EmailDto;
 import com.seowonn.mymap.dto.member.MemberFormDto;
+import com.seowonn.mymap.dto.member.MemberResponse;
 import com.seowonn.mymap.dto.member.SignInForm;
 import com.seowonn.mymap.dto.member.SignInResponse;
 import com.seowonn.mymap.entity.Member;
@@ -15,6 +16,7 @@ import com.seowonn.mymap.type.Role;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,15 +38,17 @@ public class MemberController {
   @PostMapping("/standard/signup")
   public ApiResponse<?> signUpStandardUser(
       @Valid @RequestBody MemberFormDto memberFormDto){
-    Member member = memberService.createMember(memberFormDto, Role.USER);
-    return ApiResponse.createSuccessMessage(member, SIGNUP_SUCCESS);
+    MemberResponse memberResponse =
+        memberService.createMember(memberFormDto, Role.USER);
+    return ApiResponse.createSuccessMessage(memberResponse, SIGNUP_SUCCESS);
   }
 
   @PostMapping("/admin/signup")
   public ApiResponse<?> signUpAdmin (
       @Valid @RequestBody MemberFormDto memberFormDto){
-    Member member = memberService.createMember(memberFormDto, Role.ADMIN);
-    return ApiResponse.createSuccessMessage(member, SIGNUP_SUCCESS);
+    MemberResponse memberResponse =
+        memberService.createMember(memberFormDto, Role.ADMIN);
+    return ApiResponse.createSuccessMessage(memberResponse, SIGNUP_SUCCESS);
   }
 
   @PostMapping("/sign-in")

@@ -58,19 +58,16 @@ public class VisitLog extends BaseEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "myMap")
-  @JsonBackReference
   private MyMap myMap;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "siGunGu")
-  @JsonBackReference
   private SiGunGu siGunGu;
 
   @OneToMany(mappedBy = "visitLog", fetch = FetchType.LAZY,
       cascade = CascadeType.ALL, orphanRemoval = true)
   @ToString.Exclude
   @Builder.Default
-  @JsonManagedReference
   private List<Image> images = new ArrayList<>();
 
   @OneToMany(mappedBy = "visitLog", fetch = FetchType.LAZY,

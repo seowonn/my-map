@@ -30,7 +30,6 @@ public class Likes {
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "visitLog")
-  @JsonBackReference
   private VisitLog visitLog;
 
   public static Likes of(long visitId, VisitLog visitLog){

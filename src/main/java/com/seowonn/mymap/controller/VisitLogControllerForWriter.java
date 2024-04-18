@@ -8,6 +8,7 @@ import static com.seowonn.mymap.type.SuccessMessage.VISIT_LOG_UPDATE_SUCCESS;
 import com.seowonn.mymap.dto.ApiResponse;
 import com.seowonn.mymap.dto.visitLog.NewVisitLogDto;
 import com.seowonn.mymap.dto.visitLog.UpdateVisitLogDto;
+import com.seowonn.mymap.dto.visitLog.VisitLogResponse;
 import com.seowonn.mymap.entity.VisitLog;
 import com.seowonn.mymap.service.Impl.VisitLogServiceImpl;
 import com.seowonn.mymap.service.S3Service;
@@ -43,9 +44,9 @@ public class VisitLogControllerForWriter {
   public ApiResponse<?> createLog(
       @PathVariable Long myMapId,
       @Valid @ModelAttribute NewVisitLogDto newVisitLogDto){
-    VisitLog visitLog =
+    VisitLogResponse visitLogResponse =
         visitLogService.createVisitLog(myMapId, newVisitLogDto);
-    return ApiResponse.createSuccessMessage(visitLog, VISIT_LOG_CREATED);
+    return ApiResponse.createSuccessMessage(visitLogResponse, VISIT_LOG_CREATED);
   }
 
   /**
@@ -55,8 +56,8 @@ public class VisitLogControllerForWriter {
   public ApiResponse<?> getUsersVisitLogs(
       @PathVariable Long myMapId,
       @PageableDefault(page = 0, size = 10) Pageable pageable){
-    Page<VisitLog> visitLogs = visitLogService.getUsersVisitLogs(myMapId, pageable);
-    return ApiResponse.createSuccessMessage(visitLogs, RETRIEVE_DATA_SUCCESS);
+    Page<VisitLogResponse> visitLogPage = visitLogService.getUsersVisitLogs(myMapId, pageable);
+    return ApiResponse.createSuccessMessage(visitLogPage, RETRIEVE_DATA_SUCCESS);
   }
 
   @PutMapping("/{myMapId}/{visitLogId}")
@@ -65,9 +66,9 @@ public class VisitLogControllerForWriter {
       @PathVariable Long visitLogId,
       @Valid @ModelAttribute UpdateVisitLogDto updateVisitLogDto
   ){
-    VisitLog visitLog =
+    VisitLogResponse visitLogResponse =
         visitLogService.updateLog(myMapId, visitLogId, updateVisitLogDto);
-    return ApiResponse.createSuccessMessage(visitLog, VISIT_LOG_UPDATE_SUCCESS);
+    return ApiResponse.createSuccessMessage(visitLogResponse, VISIT_LOG_UPDATE_SUCCESS);
   }
 
   @DeleteMapping("/{myMapId}/{visitLogId}")

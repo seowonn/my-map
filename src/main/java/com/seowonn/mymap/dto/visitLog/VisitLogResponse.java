@@ -1,7 +1,6 @@
 package com.seowonn.mymap.dto.visitLog;
 
 import com.seowonn.mymap.entity.VisitLog;
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +12,7 @@ import org.springframework.data.domain.Page;
 @Setter
 @AllArgsConstructor
 @Builder
-public class VisitLogDto {
+public class VisitLogResponse {
 
   private String siGunGu;
   private String placeName;
@@ -24,8 +23,8 @@ public class VisitLogDto {
   private String isMarked;
   private LocalDateTime createdAt;
 
-  public static Page<VisitLogDto> toDtoList(Page<VisitLog> visitLogPage){
-    return visitLogPage.map(m -> VisitLogDto.builder()
+  public static Page<VisitLogResponse> fromPage(Page<VisitLog> visitLogPage){
+    return visitLogPage.map(m -> VisitLogResponse.builder()
         .siGunGu(m.getSiGunGu().getSiGunGuName())
         .placeName(m.getPlaceName())
         .content(m.getContent())
@@ -37,8 +36,8 @@ public class VisitLogDto {
         .build());
   }
 
-  public static VisitLogDto from(VisitLog visitLog, String isMarked){
-    return VisitLogDto.builder()
+  public static VisitLogResponse from(VisitLog visitLog, String isMarked){
+    return VisitLogResponse.builder()
         .siGunGu(visitLog.getSiGunGu().getSiGunGuName())
         .placeName(visitLog.getPlaceName())
         .content(visitLog.getContent())
