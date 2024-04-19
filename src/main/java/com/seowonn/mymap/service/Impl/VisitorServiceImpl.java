@@ -82,14 +82,14 @@ public class VisitorServiceImpl implements VisitorService {
   public void addVisitLogLikes(Member member, VisitLog visitLog) {
 
     // 이미 좋아요를 누른 사람인지 확인
-    Optional<Likes> likesOptional =
-        likesRepository.findByVisitLogAndVisitId(visitLog, member.getId());
-
-    if (likesOptional.isEmpty()) {
-      Likes likes = Likes.of(member.getId(), visitLog);
-      visitLogRepository.addLikes(visitLog.getId());
-      likesRepository.save(likes);
+    if (likesRepository.findByVisitLogAndVisitId(visitLog, member.getId())
+        .isPresent()) {
+      return;
     }
+
+    Likes likes = Likes.of(member.getId(), visitLog);
+    visitLogRepository.addLikes(visitLog.getId());
+    likesRepository.save(likes);
 
   }
 
@@ -112,9 +112,7 @@ public class VisitorServiceImpl implements VisitorService {
       Pageable pageable) {
 
     // 해당 마이맵의 공개 설정 유무로 1차 필터
-    boolean exists = myMapRepository.existsByIdAndAccess(myMapId,
-        Access.PUBLIC);
-    if (!exists) {
+    if (!myMapRepository.existsByIdAndAccess(myMapId, Access.PUBLIC)) {
       throw new MyMapSystemException(ACCESS_DENIED);
     }
 
@@ -135,7 +133,8 @@ public class VisitorServiceImpl implements VisitorService {
     }
   }
 
-  public void deleteUserBookMark(Member member, VisitLog visitLog, String userId) {
+  public void deleteUserBookMark(Member member, VisitLog visitLog,
+      String userId) {
 
     Optional<BookMarks> byMemberUserId =
         bookMarksRepository.findByMemberUserIdAndVisitLog(userId, visitLog);

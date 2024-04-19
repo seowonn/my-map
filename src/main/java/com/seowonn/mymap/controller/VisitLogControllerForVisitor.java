@@ -7,8 +7,6 @@ import com.seowonn.mymap.dto.ApiResponse;
 import com.seowonn.mymap.dto.BookMarkDto;
 import com.seowonn.mymap.dto.visitLog.VisitLogResponse;
 import com.seowonn.mymap.dto.visitLog.VisitLogUserInputForm;
-import com.seowonn.mymap.entity.VisitLog;
-import com.seowonn.mymap.service.Impl.VisitorServiceImpl;
 import com.seowonn.mymap.service.VisitorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +58,7 @@ public class VisitLogControllerForVisitor {
   }
 
   /**
-   * 마이맵 세부보기 방문일지들이 썸네일 형식으로 보여진다.
+   * 마이맵 세부보기 : 방문일지들이 썸네일 형식으로 보여진다.
    */
   @GetMapping("/maps/{mayMapId}")
   public ApiResponse<?> getAllVisitLogsFromMyMap(
