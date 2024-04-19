@@ -29,6 +29,7 @@ public enum ErrorCode {
   FILES_EXCEED("파일 업로드 개수를 초과하였습니다."),
   NO_IMAGE_RECEIVED("전달 받은 이미지가 없습니다."),
   NO_LIKES_CLICKED("해당 방문일지에 좋아요를 누른 적이 없습니다."),
+  CONNECTION_LOST("접속이 끊어졌습니다."),
   INVALID_SERVER_ERROR("내부 서버 오류가 발생하였습니다.");
 
   private final String description;

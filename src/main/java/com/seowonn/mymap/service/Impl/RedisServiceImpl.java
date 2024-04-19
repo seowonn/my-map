@@ -5,13 +5,12 @@ import static com.seowonn.mymap.type.Prefix.VIEW_COUNT_PREFIX;
 import static com.seowonn.mymap.type.TimeSettings.VIEWS_COUNT_EXPIRE_TIME;
 
 import com.seowonn.mymap.service.RedisService;
+import com.seowonn.mymap.type.Boolean;
 import java.time.Duration;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +28,10 @@ public class RedisServiceImpl implements RedisService {
   }
 
   @Override
-  public Set<String> getViewsData(Long key) {
-    SetOperations<String, String> setOperations = redisTemplate.opsForSet();
-    return setOperations.members(VIEW_COUNT_PREFIX.getPrefix() + key);
+  public String getViewsData(Long visitLogId, String userId) {
+    ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+    return valueOperations.get(
+        VIEW_COUNT_PREFIX.getPrefix() + visitLogId + userId);
   }
 
   @Override
@@ -53,17 +53,21 @@ public class RedisServiceImpl implements RedisService {
 
   @Override
   public void makeViewCountExpire(long visitLogId, String userId) {
-    SetOperations<String, String> setOperations = redisTemplate.opsForSet();
-    setOperations.add(VIEW_COUNT_PREFIX.getPrefix() + visitLogId, userId);
-    Duration expireDuration = Duration.ofSeconds(
-        VIEWS_COUNT_EXPIRE_TIME.getTime());
-    redisTemplate.expire(VIEW_COUNT_PREFIX.getPrefix() + visitLogId,
-        expireDuration);
-  }
+    ValueOperations<String, String> valueOperations =
+        redisTemplate.opsForValue();
 
-  public void addViewCount(long visitLogId, String userId) {
-    SetOperations<String, String> setOperations = redisTemplate.opsForSet();
-    setOperations.add(VIEW_COUNT_PREFIX.getPrefix() + visitLogId, userId);
+    valueOperations.set(
+        VIEW_COUNT_PREFIX.getPrefix() + visitLogId + userId,
+        Boolean.TRUE.getFlag()
+    );
+
+    Duration expireDuration = Duration.ofSeconds(
+        VIEWS_COUNT_EXPIRE_TIME.getTime()
+    );
+
+    redisTemplate.expire(
+        VIEW_COUNT_PREFIX.getPrefix() + visitLogId + userId, expireDuration
+    );
   }
 
   @Override

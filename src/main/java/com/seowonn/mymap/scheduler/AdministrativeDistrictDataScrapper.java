@@ -1,6 +1,6 @@
 package com.seowonn.mymap.scheduler;
 
-import com.seowonn.mymap.service.Impl.OpenApiServiceImpl;
+import com.seowonn.mymap.service.OpenApiService;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AdministrativeDistrictDataScrapper {
 
-  private final OpenApiServiceImpl openApiService;
+  private final OpenApiService openApiService;
 
   @Scheduled(fixedDelay = 60 * 1000L * 60 * 24 * 30) // 30일 주기
   public void loadAdministrativeDistrictData() {

@@ -1,9 +1,11 @@
 package com.seowonn.mymap.service.Impl;
 
 import static com.seowonn.mymap.type.ErrorCode.ACCESS_DENIED;
+import static com.seowonn.mymap.type.ErrorCode.CONNECTION_LOST;
 import static com.seowonn.mymap.type.ErrorCode.NO_LIKES_CLICKED;
 import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
 import static com.seowonn.mymap.type.ErrorCode.VISIT_LOG_NOT_FOUND;
+import static com.seowonn.mymap.type.Prefix.REDIS_LOCK_PREFIX;
 
 import com.seowonn.mymap.dto.BookMarkDto;
 import com.seowonn.mymap.dto.visitLog.VisitLogResponse;
@@ -18,6 +20,8 @@ import com.seowonn.mymap.repository.LikesRepository;
 import com.seowonn.mymap.repository.MemberRepository;
 import com.seowonn.mymap.repository.MyMapRepository;
 import com.seowonn.mymap.repository.VisitLogRepository;
+import com.seowonn.mymap.service.RedisLockService;
+import com.seowonn.mymap.service.RedisService;
 import com.seowonn.mymap.service.VisitorService;
 import com.seowonn.mymap.type.Access;
 import com.seowonn.mymap.type.Boolean;
@@ -25,7 +29,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +46,8 @@ public class VisitorServiceImpl implements VisitorService {
   private final MyMapRepository myMapRepository;
   private final BookMarksRepository bookMarksRepository;
 
-  private final RedisServiceImpl redisService;
+  private final RedisService redisService;
+  private final RedisLockService redisLockService;
 
   @PersistenceContext
   private EntityManager entityManager;
@@ -55,18 +59,23 @@ public class VisitorServiceImpl implements VisitorService {
     Authentication authentication = SecurityContextHolder.getContext()
         .getAuthentication();
     String userId = authentication.getName();
+    String viewCountKey = REDIS_LOCK_PREFIX.getPrefix() + visitLogId + userId;
 
-    // redis에 해당 방문일지(id값)으로 조회되는 set이 있는지 검사
-    Set<String> viewsData = redisService.getViewsData(visitLogId);
+    while (!redisLockService.lock(viewCountKey)){
+      try{
+        Thread.sleep(100);
+      }catch (InterruptedException ignored){
+        throw new MyMapSystemException(CONNECTION_LOST);
+      }
+    }
 
-    if (viewsData.isEmpty()) { // set 존재 X, redis 데이터 생성, view +1
-      redisService.makeViewCountExpire(visitLogId, userId);
-      visitLogRepository.updateViews(visitLogId);
-    } else { // set 존재
-      if (!viewsData.contains(userId)) {  // set.add가 true일 때만 view +1
-        redisService.addViewCount(visitLogId, userId);
+    try {
+      if (redisService.getViewsData(visitLogId, userId) == null) { // 처음 접속, redis 데이터 생성, view +1
+        redisService.makeViewCountExpire(visitLogId, userId);
         visitLogRepository.updateViews(visitLogId);
       }
+    } finally {
+      redisLockService.unlock(viewCountKey);
     }
 
     VisitLog visitLog = visitLogRepository.findById(visitLogId)

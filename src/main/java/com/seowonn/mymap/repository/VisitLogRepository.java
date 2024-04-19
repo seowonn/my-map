@@ -16,8 +16,6 @@ public interface VisitLogRepository extends JpaRepository<VisitLog, Long> {
   @Query("SELECT v FROM VisitLog v WHERE v.myMap.id = :id ORDER BY CASE WHEN v.recommendOrder IS NULL THEN 1 ELSE 0 END, v.recommendOrder ASC, v.createdAt DESC")
   Page<VisitLog> findAllByMyMapId(Long id, Pageable pageable);
 
-  Optional<VisitLog> findByMyMapIdAndId(Long myMapId, Long visitLogId);
-
   @Modifying
   @Query("update VisitLog v set v.views = v.views + 1 where v.id = :id")
   void updateViews(Long id);

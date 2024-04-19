@@ -1,12 +1,10 @@
 package com.seowonn.mymap.service;
 
-import java.util.Set;
-
 public interface RedisService {
 
   String getVerificationData(String key);
 
-  Set<String> getViewsData(Long key);
+  String getViewsData(Long key, String userId);
 
   void makeViewCountExpire(long visitLogId, String userId);
 

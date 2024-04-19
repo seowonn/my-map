@@ -19,6 +19,7 @@ import com.seowonn.mymap.exception.MyMapSystemException;
 import com.seowonn.mymap.repository.MemberRepository;
 import com.seowonn.mymap.service.MailService;
 import com.seowonn.mymap.service.MemberService;
+import com.seowonn.mymap.service.RedisService;
 import com.seowonn.mymap.type.Role;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class MemberServiceImpl implements MemberService {
 
   private final MemberRepository memberRepository;
   private final MailService mailService;
-  private final RedisServiceImpl redisServiceImpl;
+  private final RedisService redisService;
   private final JwtTokenProvider jwtTokenProvider;
 
   private final static int PASSWORD_LENGTH = 10;
@@ -56,7 +57,7 @@ public class MemberServiceImpl implements MemberService {
     String verificationNum = createNumber();
 
     // redis에 인증 번호 저장
-    redisServiceImpl.setEmailValidationExpire(
+    redisService.setEmailValidationExpire(
         emailDto.getEmailAddress(), verificationNum, VERIFICATION_EXPIRE_TIME.getTime());
 
     return mailService.sendAuthEmail(emailDto.getEmailAddress(),
@@ -115,7 +116,7 @@ public class MemberServiceImpl implements MemberService {
   }
 
   public void checkVerificationCode(String email, String verificationCode) {
-    String redisCode = redisServiceImpl.getVerificationData(email);
+    String redisCode = redisService.getVerificationData(email);
 
     // 다른 아이디(이메일) 값을 입력하여 redis code가 null일 경우 에러 처리
     if (redisCode == null) {
@@ -123,7 +124,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     // 만료된 인증 번호에 대한 에러 처리
-    long remainingTime = redisServiceImpl.getRemainingExpireTime(email);
+    long remainingTime = redisService.getRemainingExpireTime(email);
     if (remainingTime <= 0) {
       throw new MyMapSystemException(EXPIRED_VERIFICATION);
     }
@@ -133,7 +134,7 @@ public class MemberServiceImpl implements MemberService {
       throw new MyMapSystemException(INCORRECT_CODE);
     }
 
-    redisServiceImpl.deleteVerificationData(email);
+    redisService.deleteVerificationData(email);
   }
 
   @Override

@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum Prefix {
 
   VERIFICATION_PREFIX("VERIFY:"),
-  VIEW_COUNT_PREFIX("VISIT_LOG_VIEW:");
+  VIEW_COUNT_PREFIX("VISIT_LOG_VIEW:"),
+  REDIS_LOCK_PREFIX("LOCK:");
 
   private final String prefix;
 }

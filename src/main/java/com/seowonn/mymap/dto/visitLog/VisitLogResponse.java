@@ -21,6 +21,7 @@ public class VisitLogResponse {
   private Integer recommendOrder;
   private Integer likes;
   private String isMarked;
+  private Integer viewCount;
   private LocalDateTime createdAt;
 
   public static Page<VisitLogResponse> fromPage(Page<VisitLog> visitLogPage){
@@ -32,6 +33,7 @@ public class VisitLogResponse {
         .imageFileUrl(m.getImages().get(0).getImageUrl())
         .recommendOrder(m.getRecommendOrder())
         .likes(m.getLikes())
+        .viewCount(m.getViews())
         .createdAt(m.getCreatedAt())
         .build());
   }
@@ -44,6 +46,7 @@ public class VisitLogResponse {
         .imageFileUrl(visitLog.getImages().get(0).getImageUrl())
         .recommendOrder(visitLog.getRecommendOrder())
         .isMarked(isMarked)
+        .viewCount(visitLog.getViews())
         .createdAt(visitLog.getCreatedAt())
         .build();
   }
