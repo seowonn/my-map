@@ -16,10 +16,8 @@ import org.springframework.data.domain.Page;
 @AllArgsConstructor
 public class SiDoResponse {
 
-  @JsonProperty("districtCode")
   private String ctprvn_cd;
 
-  @JsonProperty("cityName")
   private String ctp_kor_nm;
 
   public static Page<SiDoResponse> fromPage(Page<SiDo> siDoPage){
