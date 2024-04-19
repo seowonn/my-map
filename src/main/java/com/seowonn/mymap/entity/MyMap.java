@@ -1,6 +1,7 @@
 package com.seowonn.mymap.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seowonn.mymap.dto.myMap.NewMyMapDto;
 import com.seowonn.mymap.type.Access;
@@ -40,30 +41,23 @@ public class MyMap extends BaseEntity{
   @Column(nullable = false)
   private String myMapTitle;
 
-  @Column
-  private long totalLikes;
-
-  @Column
-  private long totalViews;
-
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private Access access;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member")
-  @JsonBackReference
+  @JsonIgnore
   private Member member;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "siDo")
   private SiDo siDo;
 
-  @OneToMany(mappedBy = "myMap", fetch = FetchType.EAGER,
-      cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+  @OneToMany(mappedBy = "myMap", fetch = FetchType.LAZY,
+      cascade = CascadeType.ALL, orphanRemoval = true)
   @ToString.Exclude
   @Builder.Default
-  @JsonManagedReference
   private List<VisitLog> visitLogs = new ArrayList<>();
 
   public static MyMap from(NewMyMapDto newMyMapDto) {
@@ -72,8 +66,6 @@ public class MyMap extends BaseEntity{
 
     return MyMap.builder()
         .myMapTitle(newMyMapDto.getMyMapTitle())
-        .totalLikes(0)
-        .totalViews(0)
         .access(access)
         .build();
   }

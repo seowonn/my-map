@@ -1,7 +1,6 @@
 package com.seowonn.mymap.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -14,29 +13,31 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@NoArgsConstructor
-public class Image {
+@Entity
+public class BookMarks extends BaseEntity{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @Column(nullable = false)
-  private String imageUrl;
-
   @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "member")
+  private Member member;
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "visitLog")
   private VisitLog visitLog;
 
-  public static Image of(String imageUrl, VisitLog visitLog){
-    return Image.builder()
-        .imageUrl(imageUrl)
+  public static BookMarks from (Member member, VisitLog visitLog){
+    return BookMarks.builder()
+        .member(member)
         .visitLog(visitLog)
         .build();
   }
+
 
 }

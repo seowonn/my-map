@@ -7,7 +7,7 @@ import static com.seowonn.mymap.type.SuccessMessage.USER_PROFILE_VIEWED;
 import com.seowonn.mymap.dto.ApiResponse;
 import com.seowonn.mymap.dto.member.MemberInfoResponse;
 import com.seowonn.mymap.dto.member.UpdateUserInfoForm;
-import com.seowonn.mymap.service.Impl.UserServiceImpl;
+import com.seowonn.mymap.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user/profile")
 public class UserController {
 
-  private final UserServiceImpl userService;
+  private final UserService userService;
 
   @GetMapping("/{userId}")
   public ApiResponse<?> getUserProfile(@PathVariable String userId) {
@@ -39,9 +39,9 @@ public class UserController {
     return ApiResponse.createSuccessMessage(memberInfoResponse, PROFILE_UPDATE_SUCCESS);
   }
 
-  @DeleteMapping("/{userId}")
-  public ApiResponse<?> updateUserId(@PathVariable String userId) {
-    userService.signOutUser(userId);
+  @DeleteMapping
+  public ApiResponse<?> updateUserId() {
+    userService.signOutUser();
     return ApiResponse.createSuccessMessage(true, SIGN_OUT_SUCCESS);
   }
 

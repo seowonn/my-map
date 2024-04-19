@@ -1,6 +1,7 @@
 package com.seowonn.mymap.repository;
 
 import com.seowonn.mymap.entity.MyMap;
+import com.seowonn.mymap.type.Access;
 import java.util.Optional;
 import lombok.NonNull;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ public interface MyMapRepository extends JpaRepository<MyMap, Long> {
   @NonNull
   Optional<MyMap> findById(@NonNull Long id);
 
-  Page<MyMap> findAllByMemberUserId(String userId, Pageable pageable);
+  Page<MyMap> findAllByMemberUserIdOrderByCreatedAt(String userId, Pageable pageable);
 
+  boolean existsByIdAndAccess(Long id, Access access);
 }

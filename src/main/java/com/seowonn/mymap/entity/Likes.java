@@ -14,27 +14,27 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@NoArgsConstructor
-public class Image {
+@Entity
+public class Likes {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
   @Column(nullable = false)
-  private String imageUrl;
+  private long visitId;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "visitLog")
   private VisitLog visitLog;
 
-  public static Image of(String imageUrl, VisitLog visitLog){
-    return Image.builder()
-        .imageUrl(imageUrl)
+  public static Likes of(long visitId, VisitLog visitLog){
+    return Likes.builder()
+        .visitId(visitId)
         .visitLog(visitLog)
         .build();
   }

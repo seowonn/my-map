@@ -6,10 +6,12 @@ import static com.seowonn.mymap.type.ErrorCode.INCORRECT_EMAIL;
 import static com.seowonn.mymap.type.ErrorCode.INCORRECT_PASSWORD;
 import static com.seowonn.mymap.type.ErrorCode.USERID_EXISTS;
 import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
+import static com.seowonn.mymap.type.TimeSettings.VERIFICATION_EXPIRE_TIME;
 
 import com.seowonn.mymap.config.security.jwt.JwtTokenProvider;
 import com.seowonn.mymap.dto.EmailDto;
 import com.seowonn.mymap.dto.member.MemberFormDto;
+import com.seowonn.mymap.dto.member.MemberResponse;
 import com.seowonn.mymap.dto.member.SignInForm;
 import com.seowonn.mymap.dto.member.SignInResponse;
 import com.seowonn.mymap.entity.Member;
@@ -17,6 +19,7 @@ import com.seowonn.mymap.exception.MyMapSystemException;
 import com.seowonn.mymap.repository.MemberRepository;
 import com.seowonn.mymap.service.MailService;
 import com.seowonn.mymap.service.MemberService;
+import com.seowonn.mymap.service.RedisService;
 import com.seowonn.mymap.type.Role;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -35,10 +38,9 @@ public class MemberServiceImpl implements MemberService {
 
   private final MemberRepository memberRepository;
   private final MailService mailService;
-  private final RedisServiceImpl redisServiceImpl;
+  private final RedisService redisService;
   private final JwtTokenProvider jwtTokenProvider;
 
-  private final static long VERIFICATION_EXPIRE_TIME = 600 * 5;
   private final static int PASSWORD_LENGTH = 10;
   private static final char[] CHAR_SET =
       new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -55,8 +57,8 @@ public class MemberServiceImpl implements MemberService {
     String verificationNum = createNumber();
 
     // redis에 인증 번호 저장
-    redisServiceImpl.setDataExpire(
-        emailDto.getEmailAddress(), verificationNum, VERIFICATION_EXPIRE_TIME);
+    redisService.setEmailValidationExpire(
+        emailDto.getEmailAddress(), verificationNum, VERIFICATION_EXPIRE_TIME.getTime());
 
     return mailService.sendAuthEmail(emailDto.getEmailAddress(),
         verificationNum);
@@ -97,7 +99,7 @@ public class MemberServiceImpl implements MemberService {
     return String.valueOf(code);
   }
 
-  public Member createMember(MemberFormDto memberFormDto, Role role) {
+  public MemberResponse createMember(MemberFormDto memberFormDto, Role role) {
 
     // 이미 등록된 아이디(이메일)인지 확인
     if (memberRepository.existsByUserId(memberFormDto.getUserId())) {
@@ -109,11 +111,12 @@ public class MemberServiceImpl implements MemberService {
         memberFormDto.getVerificationNum());
 
     Member member = Member.ofMemberFormAndRole(memberFormDto, role);
-    return memberRepository.save(member);
+    memberRepository.save(member);
+    return MemberResponse.from(member);
   }
 
   public void checkVerificationCode(String email, String verificationCode) {
-    String redisCode = redisServiceImpl.getData(email);
+    String redisCode = redisService.getVerificationData(email);
 
     // 다른 아이디(이메일) 값을 입력하여 redis code가 null일 경우 에러 처리
     if (redisCode == null) {
@@ -121,7 +124,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     // 만료된 인증 번호에 대한 에러 처리
-    long remainingTime = redisServiceImpl.getRemainingExpireTime(email);
+    long remainingTime = redisService.getRemainingExpireTime(email);
     if (remainingTime <= 0) {
       throw new MyMapSystemException(EXPIRED_VERIFICATION);
     }
@@ -131,7 +134,7 @@ public class MemberServiceImpl implements MemberService {
       throw new MyMapSystemException(INCORRECT_CODE);
     }
 
-    redisServiceImpl.deleteData(email);
+    redisService.deleteVerificationData(email);
   }
 
   @Override

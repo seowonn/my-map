@@ -2,7 +2,7 @@ package com.seowonn.mymap.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.seowonn.mymap.dto.SiDoDto;
+import com.seowonn.mymap.dto.cityOpenApi.siDo.SiDoResponse;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -42,27 +42,16 @@ public class SiDo {
   @Column(nullable = false, unique = true)
   private String siDoCode;
 
-  @OneToMany(mappedBy = "siDo", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "siDo", fetch = FetchType.LAZY)
   @ToString.Exclude
   @Builder.Default
-  /**
-   * TODO : siGunGuList가 필요한 상황이 있는지 셍각해보기
-   */
   @JsonIgnore
-  @JsonManagedReference
   private List<SiGunGu> siGunGuList = new ArrayList<>();
 
-  @OneToMany(mappedBy = "siDo", fetch = FetchType.EAGER)
-  @ToString.Exclude
-  @Builder.Default
-  @JsonIgnore
-  @JsonManagedReference
-  private List<MyMap> myMapList = new ArrayList<>();
-
-  public static SiDo from(SiDoDto sidoDto) {
+  public static SiDo from(SiDoResponse sidoResponse) {
     return SiDo.builder()
-        .siDoName(sidoDto.getCtp_kor_nm())
-        .siDoCode(sidoDto.getCtprvn_cd())
+        .siDoName(sidoResponse.getCtp_kor_nm())
+        .siDoCode(sidoResponse.getCtprvn_cd())
         .build();
   }
 

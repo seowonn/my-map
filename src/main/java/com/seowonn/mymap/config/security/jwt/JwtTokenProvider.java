@@ -1,6 +1,9 @@
 package com.seowonn.mymap.config.security.jwt;
 
+import static com.seowonn.mymap.type.TimeSettings.ACCESS_TOKEN_EXPIRE_TIME;
+
 import com.seowonn.mymap.config.security.CustomUserDetailsService;
+import com.seowonn.mymap.type.TimeSettings;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -36,8 +39,6 @@ public class JwtTokenProvider {
   public static final String TOKEN_HEADER = "Authorization";
   public static final String TOKEN_PREFIX = "Bearer ";
 
-  private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
-
   @Value("${jwt.secret}")
   private String secretKeyConfig;
 
@@ -58,7 +59,7 @@ public class JwtTokenProvider {
     claims.put(KEY_ROLES, roles);
 
     Date now = new Date();
-    Date expireDate = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME);
+    Date expireDate = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME.getTime());
 
     String accessToken = Jwts.builder()
         .setClaims(claims)

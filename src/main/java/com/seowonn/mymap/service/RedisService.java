@@ -1,11 +1,16 @@
 package com.seowonn.mymap.service;
 
 public interface RedisService {
-  String getData(String key);
+
+  String getVerificationData(String key);
+
+  String getViewsData(Long key, String userId);
+
+  void makeViewCountExpire(long visitLogId, String userId);
 
   long getRemainingExpireTime(String key);
 
-  void setDataExpire(String key, String value, long duration);
+  void setEmailValidationExpire(String key, String value, long duration);
 
-  void deleteData(String key);
+  void deleteVerificationData(String key);
 }

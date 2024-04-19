@@ -55,11 +55,15 @@ public class Member extends BaseEntity{
   @Enumerated(EnumType.STRING)
   private Gender gender;
 
-  @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
   @ToString.Exclude
   @Builder.Default
-  @JsonManagedReference
   private List<MyMap> myMapList = new ArrayList<>();
+
+  @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+  @ToString.Exclude
+  @Builder.Default
+  private List<BookMarks> bookMarksList = new ArrayList<>();
 
   public static Member ofMemberFormAndRole(MemberFormDto memberFormDto, Role role) {
 
