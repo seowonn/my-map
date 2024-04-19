@@ -9,6 +9,7 @@ import com.seowonn.mymap.dto.visitLog.VisitLogResponse;
 import com.seowonn.mymap.dto.visitLog.VisitLogUserInputForm;
 import com.seowonn.mymap.entity.VisitLog;
 import com.seowonn.mymap.service.Impl.VisitorServiceImpl;
+import com.seowonn.mymap.service.VisitorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class VisitLogControllerForVisitor {
 
-  private final VisitorServiceImpl visitorService;
+  private final VisitorService visitorService;
 
   /**
    * 방문일지 상세보기

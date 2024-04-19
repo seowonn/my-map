@@ -9,8 +9,7 @@ import com.seowonn.mymap.dto.ApiResponse;
 import com.seowonn.mymap.dto.myMap.MyMapResponse;
 import com.seowonn.mymap.dto.myMap.NewMyMapDto;
 import com.seowonn.mymap.dto.myMap.UpdateMyMapDto;
-import com.seowonn.mymap.entity.MyMap;
-import com.seowonn.mymap.service.Impl.MyMapServiceImpl;
+import com.seowonn.mymap.service.MyMapService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/my-map/maps")
 public class MyMapController {
 
-  private final MyMapServiceImpl myMapService;
+  private final MyMapService myMapService;
 
   @PostMapping("/")
   public ApiResponse<?> createMyMap(@Valid @RequestBody NewMyMapDto newMyMapDto) {

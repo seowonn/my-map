@@ -5,7 +5,7 @@ import static com.seowonn.mymap.type.SuccessMessage.RETRIEVE_DATA_SUCCESS;
 import com.seowonn.mymap.dto.ApiResponse;
 import com.seowonn.mymap.dto.cityOpenApi.siDo.SiDoResponse;
 import com.seowonn.mymap.dto.cityOpenApi.siGunGu.SiGunGuResponse;
-import com.seowonn.mymap.service.Impl.SearchServiceImpl;
+import com.seowonn.mymap.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/search")
 public class SearchController {
 
-  private final SearchServiceImpl searchService;
+  private final SearchService searchService;
 
   @GetMapping("/city")
   public ApiResponse<?> getCities(

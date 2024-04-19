@@ -9,9 +9,8 @@ import com.seowonn.mymap.dto.ApiResponse;
 import com.seowonn.mymap.dto.visitLog.NewVisitLogDto;
 import com.seowonn.mymap.dto.visitLog.UpdateVisitLogDto;
 import com.seowonn.mymap.dto.visitLog.VisitLogResponse;
-import com.seowonn.mymap.entity.VisitLog;
-import com.seowonn.mymap.service.Impl.VisitLogServiceImpl;
 import com.seowonn.mymap.service.S3Service;
+import com.seowonn.mymap.service.VisitLogService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/logs") // 마이맵 선택 후 작성
 public class VisitLogControllerForWriter {
 
-  private final VisitLogServiceImpl visitLogService;
+  private final VisitLogService visitLogService;
   private final S3Service s3Service;
 
   /**
