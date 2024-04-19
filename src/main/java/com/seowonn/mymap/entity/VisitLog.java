@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -62,6 +63,9 @@ public class VisitLog extends BaseEntity {
   @JoinColumn(name = "siGunGu")
   private SiGunGu siGunGu;
 
+  @OneToOne
+  private Category category;
+
   @OneToMany(mappedBy = "visitLog", fetch = FetchType.LAZY,
       cascade = CascadeType.ALL, orphanRemoval = true)
   @ToString.Exclude
@@ -75,8 +79,9 @@ public class VisitLog extends BaseEntity {
   @JsonIgnore
   private List<Likes> likesList = new ArrayList<>();
 
-  public static VisitLog ofNewVisitLogAndMyMapAndSiGunGu(
-      NewVisitLogDto newVisitLogDto, MyMap myMap, SiGunGu siGunGu) {
+  public static VisitLog of(
+      NewVisitLogDto newVisitLogDto, MyMap myMap, SiGunGu siGunGu,
+      Category category) {
 
     Access access = Access.valueOf(
         newVisitLogDto.getAccess().toUpperCase());
@@ -84,6 +89,7 @@ public class VisitLog extends BaseEntity {
     return VisitLog.builder()
         .placeName(newVisitLogDto.getPlaceName())
         .content(newVisitLogDto.getContent())
+        .category(category)
         .views(0)
         .likes(0)
         .access(access)

@@ -19,6 +19,9 @@ public class NewVisitLogDto {
   @NotBlank(message = "방문한 곳의 장소를 알려주세요.")
   private String placeName;
 
+  @NotBlank(message = "카테고리를 입력해주세요.")
+  private String category;
+
   @Size(max = 1000)
   private String content;
 

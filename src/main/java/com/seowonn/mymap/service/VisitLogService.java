@@ -10,11 +10,13 @@ import static com.seowonn.mymap.type.ErrorCode.VISIT_LOG_NOT_FOUND;
 import com.seowonn.mymap.dto.visitLog.NewVisitLogDto;
 import com.seowonn.mymap.dto.visitLog.UpdateVisitLogDto;
 import com.seowonn.mymap.dto.visitLog.VisitLogResponse;
+import com.seowonn.mymap.entity.Category;
 import com.seowonn.mymap.entity.Image;
 import com.seowonn.mymap.entity.MyMap;
 import com.seowonn.mymap.entity.SiGunGu;
 import com.seowonn.mymap.entity.VisitLog;
 import com.seowonn.mymap.exception.MyMapSystemException;
+import com.seowonn.mymap.repository.CategoryRepository;
 import com.seowonn.mymap.repository.MyMapRepository;
 import com.seowonn.mymap.repository.SiGunGuRepository;
 import com.seowonn.mymap.repository.VisitLogRepository;
@@ -22,6 +24,7 @@ import com.seowonn.mymap.type.Boolean;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +37,7 @@ public class VisitLogService {
   private final VisitLogRepository visitLogRepository;
   private final MyMapRepository myMapRepository;
   private final SiGunGuRepository siGunGuRepository;
+  private final CategoryRepository categoryRepository;
 
   private final S3Service s3Service;
   private final CheckService checkService;
@@ -61,10 +65,17 @@ public class VisitLogService {
       throw new MyMapSystemException(INCORRECT_REGION);
     }
 
-    VisitLog visitLog = VisitLog.ofNewVisitLogAndMyMapAndSiGunGu(newVisitLogDto, myMap, siGunGu);
+    Optional<Category> optionalCategory = categoryRepository.findByCategoryName(
+        newVisitLogDto.getCategory());
+
+    Category category = optionalCategory.orElseGet(
+        () -> Category.of(newVisitLogDto.getCategory(),
+            myMap.getMember()));
+
+    VisitLog visitLog = VisitLog.of(newVisitLogDto, myMap, siGunGu, category);
 
     visitLogRepository.save(visitLog);
-
+    categoryRepository.save(category);
     // 파일 S3 업로드 수행
     s3Service.upload(newVisitLogDto.getFiles(), myMap, visitLog);
 
