@@ -48,12 +48,24 @@ public class VisitLogControllerForVisitor {
   }
 
   /**
-   * 북마크 목록 보기
+   * 북마크 목록 전체 보기
    */
   @GetMapping("/logs/marks")
   public ApiResponse<?> getMarkedLogs(
       @PageableDefault(page = 0, size = 20) Pageable pageable) {
     Page<BookMarkDto> bookMarkDtoPage = visitorService.getMarkedLogs(pageable);
+    return ApiResponse.createSuccessMessage(bookMarkDtoPage, RETRIEVE_DATA_SUCCESS);
+  }
+
+  /**
+   * 북마크 목록 카테고리별 보기
+   */
+  @GetMapping("/logs/marks/{categoryName}")
+  public ApiResponse<?> getCategoryMarkedLogs(
+      @PathVariable String categoryName,
+      @PageableDefault(page = 0, size = 20)Pageable pageable) {
+    Page<BookMarkDto> bookMarkDtoPage =
+        visitorService.getCategoryMarkedLogs(categoryName, pageable);
     return ApiResponse.createSuccessMessage(bookMarkDtoPage, RETRIEVE_DATA_SUCCESS);
   }
 

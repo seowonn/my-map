@@ -180,4 +180,23 @@ public class VisitorServiceImpl implements VisitorService {
 
     return BookMarkDto.fromPage(allByMember);
   }
+
+  @Override
+  public Page<BookMarkDto> getCategoryMarkedLogs(String categoryName,
+      Pageable pageable) {
+
+    Authentication authentication = SecurityContextHolder.getContext()
+        .getAuthentication();
+    String userId = authentication.getName();
+
+    Member member = memberRepository.findByUserId(userId)
+        .orElseThrow(() -> new MyMapSystemException(USER_NOT_FOUND));
+
+    Page<BookMarks> allByMemberAndVisitLogCategoryCategoryName =
+        bookMarksRepository.findAllByMemberAndVisitLogCategoryCategoryName(
+        member, categoryName, pageable
+    );
+
+    return BookMarkDto.fromPage(allByMemberAndVisitLogCategoryCategoryName);
+  }
 }

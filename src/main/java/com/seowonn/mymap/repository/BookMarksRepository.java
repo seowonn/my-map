@@ -17,4 +17,7 @@ public interface BookMarksRepository extends JpaRepository<BookMarks, Long> {
   boolean existsByVisitLogId(Long visitLogId);
 
   Optional<BookMarks> findByMemberUserIdAndVisitLog(String userId, VisitLog visitLog);
+
+  Page<BookMarks>findAllByMemberAndVisitLogCategoryCategoryName(
+      Member member, String categoryName, Pageable pageable);
 }
