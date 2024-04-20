@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -53,6 +54,14 @@ public class GlobalExceptionHandler {
     log.error("[LoadingDataException] : {}", e.getErrorMessage());
     return ResponseEntity.status(INTERNAL_SERVER_ERROR)
         .body(ApiResponse.createFail(e.getErrorCode()));
+  }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  public ResponseEntity<ApiResponse<?>> handleAccessDeniedException(
+      AccessDeniedException e
+  ) throws AccessDeniedException{
+    log.error("[AccessDeniedException] : {}", e.getMessage());
+    throw e;
   }
 
   @ExceptionHandler(Exception.class)

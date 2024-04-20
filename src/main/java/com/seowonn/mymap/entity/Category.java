@@ -24,4 +24,8 @@ public class Category {
   @Column(nullable = false)
   private String categoryName;
 
+  public static Category from(String categoryName){
+    return Category.builder().categoryName(categoryName).build();
+  }
+
 }
