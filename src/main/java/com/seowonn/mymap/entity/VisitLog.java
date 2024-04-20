@@ -99,7 +99,8 @@ public class VisitLog extends BaseEntity {
         .build();
   }
 
-  public void updateVisitLog(UpdateVisitLogDto updateVisitLogDto) {
+  public void updateVisitLog(UpdateVisitLogDto updateVisitLogDto,
+      Category category) {
 
     Access access = Access.valueOf(
         updateVisitLogDto.getAccess().toUpperCase());
@@ -108,6 +109,6 @@ public class VisitLog extends BaseEntity {
     this.content = updateVisitLogDto.getContent();
     this.access = access;
     this.recommendOrder = updateVisitLogDto.getRecommendOrder();
-    ;
+    this.category = category;
   }
 }

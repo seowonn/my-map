@@ -1,6 +1,7 @@
 package com.seowonn.mymap.service;
 
 import static com.seowonn.mymap.type.ErrorCode.ACCESS_DENIED;
+import static com.seowonn.mymap.type.ErrorCode.CATEGORY_NOT_FOUND;
 import static com.seowonn.mymap.type.ErrorCode.FILES_EXCEED;
 import static com.seowonn.mymap.type.ErrorCode.INCORRECT_REGION;
 import static com.seowonn.mymap.type.ErrorCode.MY_MAP_NOT_FOUND;
@@ -24,7 +25,6 @@ import com.seowonn.mymap.type.Boolean;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -65,12 +65,9 @@ public class VisitLogService {
       throw new MyMapSystemException(INCORRECT_REGION);
     }
 
-    Optional<Category> optionalCategory = categoryRepository.findByCategoryName(
-        newVisitLogDto.getCategory());
-
-    Category category = optionalCategory.orElseGet(
-        () -> Category.of(newVisitLogDto.getCategory(),
-            myMap.getMember()));
+    Category category =
+        categoryRepository.findByCategoryName(newVisitLogDto.getCategory())
+            .orElseThrow(() -> new MyMapSystemException(CATEGORY_NOT_FOUND));
 
     VisitLog visitLog = VisitLog.of(newVisitLogDto, myMap, siGunGu, category);
 
@@ -131,7 +128,11 @@ public class VisitLogService {
       throw new MyMapSystemException(ACCESS_DENIED);
     }
 
-    visitLog.updateVisitLog(updateVisitLogDto);
+    Category category = categoryRepository.findByCategoryName(
+            updateVisitLogDto.getCategory())
+        .orElseThrow(() -> new MyMapSystemException(CATEGORY_NOT_FOUND));
+
+    visitLog.updateVisitLog(updateVisitLogDto, category);
 
     if(updateVisitLogDto.getDeleteFileUrls() != null){
       for(String deleteUrl : updateVisitLogDto.getDeleteFileUrls()){
