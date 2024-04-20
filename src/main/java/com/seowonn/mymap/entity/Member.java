@@ -1,6 +1,5 @@
 package com.seowonn.mymap.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seowonn.mymap.dto.member.MemberFormDto;
 import com.seowonn.mymap.type.Gender;
 import com.seowonn.mymap.type.Role;

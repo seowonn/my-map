@@ -2,11 +2,9 @@ package com.seowonn.mymap.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,15 +23,5 @@ public class Category {
 
   @Column(nullable = false)
   private String categoryName;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  private Member member;
-
-  public static Category of(String categoryName, Member member){
-    return Category.builder()
-        .categoryName(categoryName)
-        .member(member)
-        .build();
-  }
 
 }

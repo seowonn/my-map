@@ -17,14 +17,11 @@ import org.springframework.data.domain.Page;
 @AllArgsConstructor
 public class SiGunGuResponse {
 
-  @JsonProperty("districtCode")
-  private String sig_cd;
+  private String sig_cd; // districtCode
 
-  @JsonIgnore
   private String full_nm;
 
-  @JsonProperty("smallCityName")
-  private String sig_kor_nm;
+  private String sig_kor_nm; // smallCityName
 
   public static Page<SiGunGuResponse> fromPage(Page<SiGunGu> siGunGuPage){
     return siGunGuPage.map(siGunGu -> SiGunGuResponse.builder()
