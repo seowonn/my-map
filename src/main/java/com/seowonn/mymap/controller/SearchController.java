@@ -5,6 +5,7 @@ import static com.seowonn.mymap.type.SuccessMessage.RETRIEVE_DATA_SUCCESS;
 import com.seowonn.mymap.dto.ApiResponse;
 import com.seowonn.mymap.dto.cityOpenApi.siDo.SiDoResponse;
 import com.seowonn.mymap.dto.cityOpenApi.siGunGu.SiGunGuResponse;
+import com.seowonn.mymap.entity.elasticDB.VisitLogDocument;
 import com.seowonn.mymap.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,5 +36,14 @@ public class SearchController {
       @PageableDefault(page = 0, size = 10) Pageable pageable) {
     Page<SiGunGuResponse> siGunGuDtoPage = searchService.getSiGunGuCites(siDoCode, pageable);
     return ApiResponse.createSuccessMessage(siGunGuDtoPage, RETRIEVE_DATA_SUCCESS);
+  }
+
+  @GetMapping("/logs/{keyword}")
+  public ApiResponse<?> searchLogs(
+      @PathVariable String keyword,
+      @PageableDefault(page = 0, size = 20) Pageable pageable){
+    Page<VisitLogDocument> visitLogDocumentPage =
+        searchService.searchVisitLogByKeyword(keyword, pageable);
+    return ApiResponse.createSuccessMessage(visitLogDocumentPage, RETRIEVE_DATA_SUCCESS);
   }
 }

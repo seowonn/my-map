@@ -63,7 +63,8 @@ public class VisitLog extends BaseEntity {
   @JoinColumn(name = "siGunGu")
   private SiGunGu siGunGu;
 
-  @OneToOne
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "category")
   private Category category;
 
   @OneToMany(mappedBy = "visitLog", fetch = FetchType.LAZY,
@@ -97,6 +98,11 @@ public class VisitLog extends BaseEntity {
         .myMap(myMap)
         .siGunGu(siGunGu)
         .build();
+  }
+
+  public static VisitLog setCategory(VisitLog visitLog, Category category){
+    visitLog.category = category;
+    return visitLog;
   }
 
   public void updateVisitLog(UpdateVisitLogDto updateVisitLogDto,

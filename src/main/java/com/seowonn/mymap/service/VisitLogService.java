@@ -42,6 +42,7 @@ public class VisitLogService {
   private final S3Service s3Service;
   private final CheckService checkService;
   private final MyMapService myMapService;
+  private final SearchService searchService;
 
   @Transactional
   public VisitLogResponse createVisitLog(Long myMapId, NewVisitLogDto newVisitLogDto){
@@ -70,11 +71,11 @@ public class VisitLogService {
             .orElseThrow(() -> new MyMapSystemException(CATEGORY_NOT_FOUND));
 
     VisitLog visitLog = VisitLog.of(newVisitLogDto, myMap, siGunGu, category);
-
-    visitLogRepository.save(visitLog);
-    categoryRepository.save(category);
+    visitLogRepository.save(VisitLog.setCategory(visitLog, category));
     // 파일 S3 업로드 수행
     s3Service.upload(newVisitLogDto.getFiles(), myMap, visitLog);
+
+    searchService.save(visitLog);
 
     return VisitLogResponse.from(visitLog, Boolean.FALSE.getFlag());
   }

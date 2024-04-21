@@ -26,7 +26,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-
+	implementation 'org.springframework.data:spring-data-elasticsearch:4.2.2'
 	implementation 'org.redisson:redisson-spring-boot-starter:3.18.0'
 
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
