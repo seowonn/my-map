@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,7 @@ public class UserService {
         member.getPassword())) {
       throw new MyMapSystemException(INCORRECT_PASSWORD);
     }
-    member.setPassword(userInfoForm.getNewPassword());
+    member.setPassword(BCrypt.hashpw(userInfoForm.getNewPassword(), BCrypt.gensalt()));
 
     Member saved = memberRepository.save(member);
     return MemberInfoResponse.from(saved);

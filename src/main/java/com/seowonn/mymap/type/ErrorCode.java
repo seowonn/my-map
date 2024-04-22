@@ -9,6 +9,7 @@ public enum ErrorCode {
 
   INVALID_PARAMETER("유효하지 않은 입력형식입니다."),
   USER_NOT_FOUND("해당 아이디의 사용자가 존재하지 않습니다."),
+  CATEGORY_NOT_FOUND("존재하지 않는 카테고리입니다."),
   INCORRECT_PASSWORD("올바르지 않은 비밀번호입니다."),
   USERID_EXISTS("중복되는 아이디가 존재합니다."),
   EMAIL_SEND_ERROR("이메일 전송 과정 중 에러가 발생하였습니다."),

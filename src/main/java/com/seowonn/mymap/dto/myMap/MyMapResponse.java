@@ -1,7 +1,5 @@
 package com.seowonn.mymap.dto.myMap;
 
-import com.seowonn.mymap.dto.BookMarkDto;
-import com.seowonn.mymap.entity.BookMarks;
 import com.seowonn.mymap.entity.MyMap;
 import com.seowonn.mymap.type.Access;
 import lombok.AllArgsConstructor;

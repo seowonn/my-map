@@ -10,6 +10,7 @@ import com.seowonn.mymap.dto.myMap.MyMapResponse;
 import com.seowonn.mymap.dto.myMap.NewMyMapDto;
 import com.seowonn.mymap.dto.myMap.UpdateMyMapDto;
 import com.seowonn.mymap.service.MyMapService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,7 @@ public class MyMapController {
 
   private final MyMapService myMapService;
 
+  @Operation(summary = "마이맵 생성", description = "광역시도를 설정해서 마이맵을 생성합니다.")
   @PostMapping("/")
   public ApiResponse<?> createMyMap(@Valid @RequestBody NewMyMapDto newMyMapDto) {
     MyMapResponse myMapResponse =
@@ -38,6 +40,7 @@ public class MyMapController {
     return ApiResponse.createSuccessMessage(myMapResponse, MY_MAP_CREATED);
   }
 
+  @Operation(summary = "나의 마이맵 목록보기", description = "생성순으로 보여집니다.")
   @GetMapping("/{userId}")
   public ApiResponse<?> getAllMyMaps(
       @PathVariable String userId,
@@ -47,6 +50,8 @@ public class MyMapController {
     return ApiResponse.createSuccessMessage(myMapResponsePage, RETRIEVE_DATA_SUCCESS);
   }
 
+  @Operation(summary = "마이맵 수정",
+      description = "마이맵 제목과 공개여부를 수정할 수 있습니다.")
   @PatchMapping("/{myMapId}")
   public ApiResponse<?> updateMyMap(
       @Valid @RequestBody UpdateMyMapDto updateMyMapDto,
@@ -57,6 +62,7 @@ public class MyMapController {
     return ApiResponse.createSuccessMessage(myMapResponse, MY_MAP_UPDATE_SUCCESS);
   }
 
+  @Operation(summary = "마이맵 삭제")
   @DeleteMapping("/{myMapId}")
   public ApiResponse<?> deleteMyMap(@PathVariable Long myMapId){
     myMapService.deleteMyMap(myMapId);

@@ -17,6 +17,7 @@ public class VisitLogResponse {
   private String siGunGu;
   private String placeName;
   private String content;
+  private String category;
   private String imageFileUrl;
   private Integer recommendOrder;
   private Integer likes;
@@ -30,6 +31,7 @@ public class VisitLogResponse {
         .placeName(m.getPlaceName())
         .content(m.getContent())
         .content(m.getContent())
+        .category(m.getCategory().getCategoryName())
         .imageFileUrl(m.getImages().get(0).getImageUrl())
         .recommendOrder(m.getRecommendOrder())
         .likes(m.getLikes())
@@ -43,7 +45,10 @@ public class VisitLogResponse {
         .siGunGu(visitLog.getSiGunGu().getSiGunGuName())
         .placeName(visitLog.getPlaceName())
         .content(visitLog.getContent())
-        .imageFileUrl(visitLog.getImages().get(0).getImageUrl())
+        .category(visitLog.getCategory().getCategoryName())
+        .imageFileUrl(
+            !visitLog.getImages().isEmpty() ?
+                visitLog.getImages().get(0).getImageUrl() : null)
         .recommendOrder(visitLog.getRecommendOrder())
         .isMarked(isMarked)
         .viewCount(visitLog.getViews())

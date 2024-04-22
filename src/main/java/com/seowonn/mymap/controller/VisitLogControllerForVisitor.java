@@ -8,6 +8,7 @@ import com.seowonn.mymap.dto.BookMarkDto;
 import com.seowonn.mymap.dto.visitLog.VisitLogResponse;
 import com.seowonn.mymap.dto.visitLog.VisitLogUserInputForm;
 import com.seowonn.mymap.service.VisitorService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,9 +26,8 @@ public class VisitLogControllerForVisitor {
 
   private final VisitorService visitorService;
 
-  /**
-   * 방문일지 상세보기
-   */
+  @Operation(summary = "방문일지 상세보기",
+      description = "로그인 아이디 당 조회수 1이 카운트됩니다.")
   @GetMapping("/logs/{myMapId}/{visitLogId}")
   public ApiResponse<?> getVisitLogDetails(@PathVariable Long visitLogId){
     VisitLogResponse visitLogResponse =
@@ -35,9 +35,7 @@ public class VisitLogControllerForVisitor {
     return ApiResponse.createSuccessMessage(visitLogResponse, RETRIEVE_DATA_SUCCESS);
   }
 
-  /**
-   * 방문일지 좋아요 & 북마크 마킹 기능
-   */
+  @Operation(summary = "방문일지 좋아요 & 북마크 설정")
   @PostMapping("/logs/{myMapId}/{visitLogId}")
   public ApiResponse<?> applyUserInput(
       @PathVariable Long myMapId, @PathVariable Long visitLogId,
@@ -47,9 +45,7 @@ public class VisitLogControllerForVisitor {
     return ApiResponse.createSuccessMessage(visitLogResponse, VISIT_LOG_UPDATE_SUCCESS);
   }
 
-  /**
-   * 북마크 목록 보기
-   */
+  @Operation(summary = "북마크로 선택한 방문일지 목록 전체 조회")
   @GetMapping("/logs/marks")
   public ApiResponse<?> getMarkedLogs(
       @PageableDefault(page = 0, size = 20) Pageable pageable) {
@@ -57,9 +53,17 @@ public class VisitLogControllerForVisitor {
     return ApiResponse.createSuccessMessage(bookMarkDtoPage, RETRIEVE_DATA_SUCCESS);
   }
 
-  /**
-   * 마이맵 세부보기 : 방문일지들이 썸네일 형식으로 보여진다.
-   */
+  @Operation(summary = "북마크로 선택한 방문일지 목록 카테고려별 조회")
+  @GetMapping("/logs/marks/{categoryName}")
+  public ApiResponse<?> getCategoryMarkedLogs(
+      @PathVariable String categoryName,
+      @PageableDefault(page = 0, size = 20)Pageable pageable) {
+    Page<BookMarkDto> bookMarkDtoPage =
+        visitorService.getCategoryMarkedLogs(categoryName, pageable);
+    return ApiResponse.createSuccessMessage(bookMarkDtoPage, RETRIEVE_DATA_SUCCESS);
+  }
+
+  @Operation(summary = "마이맵에 등록된 방문일지 목록 보기")
   @GetMapping("/maps/{mayMapId}")
   public ApiResponse<?> getAllVisitLogsFromMyMap(
       @PathVariable Long mayMapId,

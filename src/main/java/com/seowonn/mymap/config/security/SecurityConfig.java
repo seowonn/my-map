@@ -1,12 +1,13 @@
 package com.seowonn.mymap.config.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seowonn.mymap.config.security.jwt.JwtAccessDeniedHandler;
 import com.seowonn.mymap.config.security.jwt.JwtAuthenticationEntryPoint;
 import com.seowonn.mymap.config.security.jwt.JwtAuthenticationFilter;
 import com.seowonn.mymap.config.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,10 +19,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
   private final JwtTokenProvider jwtTokenProvider;
-  private final ObjectMapper objectMapper;
+  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+  private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
   @Bean
   public BCryptPasswordEncoder bCryptPasswordEncoder(){
@@ -43,21 +46,22 @@ public class SecurityConfig {
         )
         .authorizeHttpRequests(authorizeRequests -> {
           authorizeRequests
-              .requestMatchers("/member/**")
+              .requestMatchers("/member/**", "/swagger-ui/**",
+                  "/v3/**")
               .permitAll();
 
           authorizeRequests.
               requestMatchers("/user/**", "/my-map/**", "/search/**",
                   "/logs/**", "/maps/**").authenticated();
         })
-        .exceptionHandling(exceptionHandling ->
-            exceptionHandling
-                .authenticationEntryPoint(
-                    new JwtAuthenticationEntryPoint(objectMapper))
-        )
         .addFilterBefore(
             new JwtAuthenticationFilter(jwtTokenProvider),
             UsernamePasswordAuthenticationFilter.class
+        )
+        .exceptionHandling(exceptionHandling ->
+            exceptionHandling
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
         );
 
     return http.build();

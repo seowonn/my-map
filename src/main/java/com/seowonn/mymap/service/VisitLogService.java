@@ -1,6 +1,7 @@
 package com.seowonn.mymap.service;
 
 import static com.seowonn.mymap.type.ErrorCode.ACCESS_DENIED;
+import static com.seowonn.mymap.type.ErrorCode.CATEGORY_NOT_FOUND;
 import static com.seowonn.mymap.type.ErrorCode.FILES_EXCEED;
 import static com.seowonn.mymap.type.ErrorCode.INCORRECT_REGION;
 import static com.seowonn.mymap.type.ErrorCode.MY_MAP_NOT_FOUND;
@@ -10,11 +11,13 @@ import static com.seowonn.mymap.type.ErrorCode.VISIT_LOG_NOT_FOUND;
 import com.seowonn.mymap.dto.visitLog.NewVisitLogDto;
 import com.seowonn.mymap.dto.visitLog.UpdateVisitLogDto;
 import com.seowonn.mymap.dto.visitLog.VisitLogResponse;
+import com.seowonn.mymap.entity.Category;
 import com.seowonn.mymap.entity.Image;
 import com.seowonn.mymap.entity.MyMap;
 import com.seowonn.mymap.entity.SiGunGu;
 import com.seowonn.mymap.entity.VisitLog;
 import com.seowonn.mymap.exception.MyMapSystemException;
+import com.seowonn.mymap.repository.CategoryRepository;
 import com.seowonn.mymap.repository.MyMapRepository;
 import com.seowonn.mymap.repository.SiGunGuRepository;
 import com.seowonn.mymap.repository.VisitLogRepository;
@@ -34,10 +37,12 @@ public class VisitLogService {
   private final VisitLogRepository visitLogRepository;
   private final MyMapRepository myMapRepository;
   private final SiGunGuRepository siGunGuRepository;
+  private final CategoryRepository categoryRepository;
 
   private final S3Service s3Service;
   private final CheckService checkService;
   private final MyMapService myMapService;
+  private final SearchService searchService;
 
   @Transactional
   public VisitLogResponse createVisitLog(Long myMapId, NewVisitLogDto newVisitLogDto){
@@ -61,12 +66,16 @@ public class VisitLogService {
       throw new MyMapSystemException(INCORRECT_REGION);
     }
 
-    VisitLog visitLog = VisitLog.ofNewVisitLogAndMyMapAndSiGunGu(newVisitLogDto, myMap, siGunGu);
+    Category category =
+        categoryRepository.findByCategoryName(newVisitLogDto.getCategory())
+            .orElseThrow(() -> new MyMapSystemException(CATEGORY_NOT_FOUND));
 
-    visitLogRepository.save(visitLog);
-
+    VisitLog visitLog = VisitLog.of(newVisitLogDto, myMap, siGunGu, category);
+    visitLogRepository.save(VisitLog.setCategory(visitLog, category));
     // 파일 S3 업로드 수행
     s3Service.upload(newVisitLogDto.getFiles(), myMap, visitLog);
+
+    searchService.save(visitLog);
 
     return VisitLogResponse.from(visitLog, Boolean.FALSE.getFlag());
   }
@@ -120,7 +129,11 @@ public class VisitLogService {
       throw new MyMapSystemException(ACCESS_DENIED);
     }
 
-    visitLog.updateVisitLog(updateVisitLogDto);
+    Category category = categoryRepository.findByCategoryName(
+            updateVisitLogDto.getCategory())
+        .orElseThrow(() -> new MyMapSystemException(CATEGORY_NOT_FOUND));
+
+    visitLog.updateVisitLog(updateVisitLogDto, category);
 
     if(updateVisitLogDto.getDeleteFileUrls() != null){
       for(String deleteUrl : updateVisitLogDto.getDeleteFileUrls()){

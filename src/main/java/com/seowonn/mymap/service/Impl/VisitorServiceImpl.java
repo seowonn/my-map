@@ -1,11 +1,9 @@
 package com.seowonn.mymap.service.Impl;
 
 import static com.seowonn.mymap.type.ErrorCode.ACCESS_DENIED;
-import static com.seowonn.mymap.type.ErrorCode.CONNECTION_LOST;
 import static com.seowonn.mymap.type.ErrorCode.NO_LIKES_CLICKED;
 import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
 import static com.seowonn.mymap.type.ErrorCode.VISIT_LOG_NOT_FOUND;
-import static com.seowonn.mymap.type.Prefix.REDIS_LOCK_PREFIX;
 
 import com.seowonn.mymap.dto.BookMarkDto;
 import com.seowonn.mymap.dto.visitLog.VisitLogResponse;
@@ -21,7 +19,6 @@ import com.seowonn.mymap.repository.MemberRepository;
 import com.seowonn.mymap.repository.MyMapRepository;
 import com.seowonn.mymap.repository.VisitLogRepository;
 import com.seowonn.mymap.service.RedisLockService;
-import com.seowonn.mymap.service.RedisService;
 import com.seowonn.mymap.service.VisitorService;
 import com.seowonn.mymap.type.Access;
 import com.seowonn.mymap.type.Boolean;
@@ -46,7 +43,6 @@ public class VisitorServiceImpl implements VisitorService {
   private final MyMapRepository myMapRepository;
   private final BookMarksRepository bookMarksRepository;
 
-  private final RedisService redisService;
   private final RedisLockService redisLockService;
 
   @PersistenceContext
@@ -59,24 +55,8 @@ public class VisitorServiceImpl implements VisitorService {
     Authentication authentication = SecurityContextHolder.getContext()
         .getAuthentication();
     String userId = authentication.getName();
-    String viewCountKey = REDIS_LOCK_PREFIX.getPrefix() + visitLogId + userId;
 
-    while (!redisLockService.lock(viewCountKey)){
-      try{
-        Thread.sleep(100);
-      }catch (InterruptedException ignored){
-        throw new MyMapSystemException(CONNECTION_LOST);
-      }
-    }
-
-    try {
-      if (redisService.getViewsData(visitLogId, userId) == null) { // 처음 접속, redis 데이터 생성, view +1
-        redisService.makeViewCountExpire(visitLogId, userId);
-        visitLogRepository.updateViews(visitLogId);
-      }
-    } finally {
-      redisLockService.unlock(viewCountKey);
-    }
+    redisLockService.controlViewers(visitLogId, userId);
 
     VisitLog visitLog = visitLogRepository.findById(visitLogId)
         .orElseThrow(() -> new MyMapSystemException(VISIT_LOG_NOT_FOUND));
@@ -199,5 +179,24 @@ public class VisitorServiceImpl implements VisitorService {
         pageable);
 
     return BookMarkDto.fromPage(allByMember);
+  }
+
+  @Override
+  public Page<BookMarkDto> getCategoryMarkedLogs(String categoryName,
+      Pageable pageable) {
+
+    Authentication authentication = SecurityContextHolder.getContext()
+        .getAuthentication();
+    String userId = authentication.getName();
+
+    Member member = memberRepository.findByUserId(userId)
+        .orElseThrow(() -> new MyMapSystemException(USER_NOT_FOUND));
+
+    Page<BookMarks> allByMemberAndVisitLogCategoryCategoryName =
+        bookMarksRepository.findAllByMemberAndVisitLogCategoryCategoryName(
+        member, categoryName, pageable
+    );
+
+    return BookMarkDto.fromPage(allByMemberAndVisitLogCategoryCategoryName);
   }
 }
