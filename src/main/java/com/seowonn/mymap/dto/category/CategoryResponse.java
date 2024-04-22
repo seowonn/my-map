@@ -3,10 +3,12 @@ package com.seowonn.mymap.dto.category;
 import com.seowonn.mymap.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
