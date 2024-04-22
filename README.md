@@ -13,7 +13,7 @@
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"> <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white"> <img src="https://img.shields.io/badge/amazons3-569A31?style=for-the-badge&logo=amazons3&logoColor=white"> 
 #
 ## 구성 ERD
-![my-map-erd](https://github.com/seowonn/my-map/assets/144876148/ea281547-17a4-4c9a-a1fc-2b96755b32d4)
+![my-map-erd](https://github.com/seowonn/my-map/assets/144876148/70da2c49-c133-4d54-9b54-26d2ea01d0f5)
 
 
 
@@ -70,7 +70,7 @@
   - [x] 사진(이미지 파일)을  최소 1개 ~ 10개 등록할 수 있다.
    - [x] 이미지 저장은 s3를 사용한다. 
   - [x] 방문일지는 마이맵의 하위 내용으로 지역의 더 구체적인 위치 구, 동을 작성하여 데이터를 추가하게 된다.
-  - [ ] 방문일지 작성 시 사용자는 카테고리를 지정한다.
+  - [x] 방문일지 작성 시 사용자는 카테고리를 지정한다.
 
 #### ▶️ 방문일지 조회
   - [x] 방문일지의 공개 유무는 마이맵의 공개 유무를 우선적으로 따라간다.
@@ -89,24 +89,22 @@
 #
 ### 🏷️ 즐겨찾기
   - [x] 사용자는 저장하고 싶은 방문일지를 추가할 수 있다.
-  - [ ] 즐겨찾기 목록 조회는 전체 보기, 카테고리별 보기로 구성된다.
-  - [x] 즐겨찾기 조회 순서는 페이지 당 10개씩이며 즐겨찾기 등록순으로 나열된다.
+  - [x] 즐겨찾기 목록 조회는 전체 보기, 카테고리별 보기로 구성된다.
+  - [x] 즐겨찾기 조회 순서는 페이지 당 20개씩이며 즐겨찾기 등록순으로 나열된다.
 #
 ## 🔎 검색
-- [ ] 검색은 사용자가 기본적으로 선정한 검색어(지역)에 카테고리를 추가해서 검색할 수 있다.
-- [ ] 검색 결과의 단위는 기본적으로 방문일지 단위로 나온다.
-- [ ] map 단위 검색 시, 검색 결과는 마이맵 단위로 나온다.
-- [ ] 사용자가 임의 작성한 검색어는 Elastic Search를 통해 방문일지들의 제목, 글 내용에서 찾는다.
+- [x] 검색 결과의 단위는 기본적으로 방문일지 단위로 나온다.
+- [x] 사용자가 임의 작성한 검색어는 Elastic Search를 통해 방문일지들의 제목, 글 내용에서 찾는다.
 #
 ### 🗃️ 카테고리
-- [ ] 관리자는 카테고리를 추가, 삭제할 수 있다. (ex. 카페, 공원, 음식점)
-- [ ] 검색어는 지역과 카테고리로 설정되며, 방문일지들의 지역과 카테고리 항목만 검색 범위로 사용한다.
-- [ ] 검색 결과는 검색 조건의 교집합인 방문일지들을 조회순으로 페이지 당 10개씩 나열해서 보여준다.
-- [ ] map단위로 검색할 경우, 공개처리된 마이맵들의 목록이 총 조회수 순으로 페이지당 10개씩 나열해서 나온다.
+- [x] 관리자는 카테고리를 추가, 삭제할 수 있다. (ex. 카페, 공원, 음식점)
+- [x] 검색 결과는 검색어의 prefix가 같은 방문일지들을 페이지 당 20개씩 나열해서 보여준다.
 #
 ---
 ### 추가해 볼 기능
+- [ ] map 단위 검색 시, 검색 결과는 마이맵 단위로 나오며, 공개처리된 마이맵들의 목록이 총 조회수 순으로 페이지당 20개씩 나열해서 나온다.
 - [ ] 검색 기능 구체화 및 보완 - 필터링 항목 뿐만 아니라 다양한 검색어 및 검색 범위를 넓혀서 활용하기
 - [ ] OAuth 2.0 로그인 기능 적용
 - [ ] refreshToken 유효성 검사 
 - [ ] 활동명 미 설정 시, 랜덤명으로 설정해주기
+- [ ] 배포하고 운영해보기
