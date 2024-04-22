@@ -11,6 +11,7 @@ import com.seowonn.mymap.dto.visitLog.UpdateVisitLogDto;
 import com.seowonn.mymap.dto.visitLog.VisitLogResponse;
 import com.seowonn.mymap.service.S3Service;
 import com.seowonn.mymap.service.VisitLogService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -34,11 +35,9 @@ public class VisitLogControllerForWriter {
   private final VisitLogService visitLogService;
   private final S3Service s3Service;
 
-  /**
-   * 작성할 마이맵 창에 들어가서 방문일지를 작성하는 api
-   * siGunGuCode는 /search/{siDoCode} api에서 SiGunGu 정보로 확인
-   * @ModelAttribute form-data로 자동 NewVisitLogDto로 매핑
-   */
+  @Operation(summary = "방문일지 생성",
+      description = "마이맵을 선택하여 광역시도를 특정 짓고,"
+          + "search에서 시군구 코드를 찾아 작성하여 세부 지역을 특정 짓습니다.")
   @PostMapping("/{myMapId}")
   public ApiResponse<?> createLog(
       @PathVariable Long myMapId,
@@ -48,9 +47,8 @@ public class VisitLogControllerForWriter {
     return ApiResponse.createSuccessMessage(visitLogResponse, VISIT_LOG_CREATED);
   }
 
-  /**
-   * 해당 마이맵에 작성된 방문일지들을 보여준다. (작성자 전용)
-   */
+  @Operation(summary = "방문일지 목록 조회",
+      description = "작성자가 해당 마이맵에 작성해온 방문일지들을 조회할 수 있습니다.")
   @GetMapping("/{myMapId}")
   public ApiResponse<?> getUsersVisitLogs(
       @PathVariable Long myMapId,
@@ -59,6 +57,9 @@ public class VisitLogControllerForWriter {
     return ApiResponse.createSuccessMessage(visitLogPage, RETRIEVE_DATA_SUCCESS);
   }
 
+  @Operation(summary = "방문일지 수정",
+      description = "장소명, 내용, 카테고리, 공개 여부를 수정할 수 있으며"
+          + "사진은 삭제할 사진들의 url을 받아, 삭제만 가능합니다.")
   @PutMapping("/{myMapId}/{visitLogId}")
   public ApiResponse<?> updateVisitLog(
       @PathVariable Long myMapId,
@@ -70,6 +71,7 @@ public class VisitLogControllerForWriter {
     return ApiResponse.createSuccessMessage(visitLogResponse, VISIT_LOG_UPDATE_SUCCESS);
   }
 
+  @Operation(summary = "방문일지 삭제")
   @DeleteMapping("/{myMapId}/{visitLogId}")
   public ApiResponse<?> deleteVisitLog(
       @PathVariable Long myMapId,

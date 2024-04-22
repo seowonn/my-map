@@ -46,7 +46,8 @@ public class SecurityConfig {
         )
         .authorizeHttpRequests(authorizeRequests -> {
           authorizeRequests
-              .requestMatchers("/member/**")
+              .requestMatchers("/member/**", "/swagger-ui/**",
+                  "/v3/**")
               .permitAll();
 
           authorizeRequests.
