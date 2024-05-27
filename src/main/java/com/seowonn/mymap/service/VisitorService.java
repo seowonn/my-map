@@ -1,8 +1,8 @@
 package com.seowonn.mymap.service;
 
-import com.seowonn.mymap.dto.BookMarkDto;
-import com.seowonn.mymap.dto.visitLog.VisitLogResponse;
-import com.seowonn.mymap.dto.visitLog.VisitLogUserInputForm;
+import com.seowonn.mymap.domain.member.dto.bookMark.BookMarkDto;
+import com.seowonn.mymap.domain.visitLogForWriter.dto.visitLog.VisitLogResponse;
+import com.seowonn.mymap.domain.visitLogForWriter.dto.visitLog.VisitLogUserInputForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

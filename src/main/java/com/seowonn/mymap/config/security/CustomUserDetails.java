@@ -1,6 +1,6 @@
 package com.seowonn.mymap.config.security;
 
-import com.seowonn.mymap.entity.Member;
+import com.seowonn.mymap.domain.member.entity.Member;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;

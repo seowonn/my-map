@@ -1,12 +1,12 @@
 package com.seowonn.mymap.service;
 
-import static com.seowonn.mymap.type.ErrorCode.CATEGORY_NOT_FOUND;
+import static com.seowonn.mymap.global.type.ErrorCode.CATEGORY_NOT_FOUND;
 
-import com.seowonn.mymap.dto.category.CategoryForm;
-import com.seowonn.mymap.dto.category.CategoryResponse;
-import com.seowonn.mymap.entity.Category;
-import com.seowonn.mymap.exception.MyMapSystemException;
-import com.seowonn.mymap.repository.CategoryRepository;
+import com.seowonn.mymap.domain.visitLogForWriter.dto.category.CategoryForm;
+import com.seowonn.mymap.domain.visitLogForWriter.dto.category.CategoryResponse;
+import com.seowonn.mymap.domain.visitLogForWriter.entity.Category;
+import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
+import com.seowonn.mymap.domain.visitLogForWriter.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.seowonn.mymap;
 
-import com.seowonn.mymap.repository.elasticSearch.VisitLogSearchRepository;
+import com.seowonn.mymap.infra.elasticSearch.repository.VisitLogSearchRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;

@@ -1,13 +1,13 @@
 package com.seowonn.mymap.service;
 
-import static com.seowonn.mymap.type.ErrorCode.INCORRECT_PASSWORD;
-import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
+import static com.seowonn.mymap.global.type.ErrorCode.INCORRECT_PASSWORD;
+import static com.seowonn.mymap.global.type.ErrorCode.USER_NOT_FOUND;
 
-import com.seowonn.mymap.dto.member.MemberInfoResponse;
-import com.seowonn.mymap.dto.member.UpdateUserInfoForm;
-import com.seowonn.mymap.entity.Member;
-import com.seowonn.mymap.exception.MyMapSystemException;
-import com.seowonn.mymap.repository.MemberRepository;
+import com.seowonn.mymap.domain.member.dto.member.MemberInfoResponse;
+import com.seowonn.mymap.domain.member.dto.member.UpdateUserInfoForm;
+import com.seowonn.mymap.domain.member.entity.Member;
+import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
+import com.seowonn.mymap.domain.member.repository.MemberRepository;
 import com.seowonn.mymap.service.Impl.MemberServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

@@ -1,9 +1,9 @@
 package com.seowonn.mymap.service;
 
 import static com.seowonn.mymap.type.AuthenticationContents.EMAIL_AUTH_TITLE;
-import static com.seowonn.mymap.type.ErrorCode.EMAIL_SEND_ERROR;
+import static com.seowonn.mymap.global.type.ErrorCode.EMAIL_SEND_ERROR;
 
-import com.seowonn.mymap.exception.MyMapSystemException;
+import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

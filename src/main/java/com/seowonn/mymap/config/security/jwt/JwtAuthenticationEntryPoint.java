@@ -1,9 +1,9 @@
 package com.seowonn.mymap.config.security.jwt;
 
-import static com.seowonn.mymap.type.ErrorCode.UNAUTHORIZED;
+import static com.seowonn.mymap.global.type.ErrorCode.UNAUTHORIZED;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seowonn.mymap.dto.ApiResponse;
+import com.seowonn.mymap.global.dto.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;

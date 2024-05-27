@@ -1,18 +1,18 @@
 package com.seowonn.mymap.service;
 
-import static com.seowonn.mymap.type.ErrorCode.DATA_SCRAPPING_ERROR;
+import static com.seowonn.mymap.global.type.ErrorCode.DATA_SCRAPPING_ERROR;
 
-import com.seowonn.mymap.dto.cityOpenApi.siGunGu.SiGunGuResponse;
-import com.seowonn.mymap.dto.cityOpenApi.siDo.SiDoApiResponseDto;
-import com.seowonn.mymap.dto.cityOpenApi.siDo.SiDoFeature;
-import com.seowonn.mymap.dto.cityOpenApi.siGunGu.SiGunGuApiResponseDto;
-import com.seowonn.mymap.dto.cityOpenApi.siGunGu.SiGunGuFeature;
-import com.seowonn.mymap.entity.SiDo;
-import com.seowonn.mymap.entity.SiGunGu;
-import com.seowonn.mymap.exception.LoadingDataException;
-import com.seowonn.mymap.exception.MyMapSystemException;
-import com.seowonn.mymap.repository.SiDoRepository;
-import com.seowonn.mymap.repository.SiGunGuRepository;
+import com.seowonn.mymap.domain.openApi.dto.siGunGu.SiGunGuResponse;
+import com.seowonn.mymap.domain.openApi.dto.siDo.SiDoApiResponseDto;
+import com.seowonn.mymap.domain.openApi.dto.siDo.SiDoFeature;
+import com.seowonn.mymap.domain.openApi.dto.siGunGu.SiGunGuApiResponseDto;
+import com.seowonn.mymap.domain.openApi.dto.siGunGu.SiGunGuFeature;
+import com.seowonn.mymap.domain.openApi.entity.SiDo;
+import com.seowonn.mymap.domain.openApi.entity.SiGunGu;
+import com.seowonn.mymap.domain.openApi.exception.LoadingDataException;
+import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
+import com.seowonn.mymap.domain.openApi.repository.SiDoRepository;
+import com.seowonn.mymap.domain.openApi.repository.SiGunGuRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

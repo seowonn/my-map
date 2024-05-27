@@ -1,10 +1,10 @@
 package com.seowonn.mymap.service;
 
-import static com.seowonn.mymap.type.ErrorCode.CONNECTION_LOST;
+import static com.seowonn.mymap.global.type.ErrorCode.CONNECTION_LOST;
 import static com.seowonn.mymap.type.Prefix.REDIS_LOCK_PREFIX;
 
-import com.seowonn.mymap.exception.MyMapSystemException;
-import com.seowonn.mymap.repository.VisitLogRepository;
+import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
+import com.seowonn.mymap.domain.visitLogForWriter.repository.VisitLogRepository;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;

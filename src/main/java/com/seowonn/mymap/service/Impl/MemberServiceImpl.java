@@ -1,22 +1,22 @@
 package com.seowonn.mymap.service.Impl;
 
-import static com.seowonn.mymap.type.ErrorCode.EXPIRED_VERIFICATION;
-import static com.seowonn.mymap.type.ErrorCode.INCORRECT_CODE;
-import static com.seowonn.mymap.type.ErrorCode.INCORRECT_EMAIL;
-import static com.seowonn.mymap.type.ErrorCode.INCORRECT_PASSWORD;
-import static com.seowonn.mymap.type.ErrorCode.USERID_EXISTS;
-import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
+import static com.seowonn.mymap.global.type.ErrorCode.EXPIRED_VERIFICATION;
+import static com.seowonn.mymap.global.type.ErrorCode.INCORRECT_CODE;
+import static com.seowonn.mymap.global.type.ErrorCode.INCORRECT_EMAIL;
+import static com.seowonn.mymap.global.type.ErrorCode.INCORRECT_PASSWORD;
+import static com.seowonn.mymap.global.type.ErrorCode.USERID_EXISTS;
+import static com.seowonn.mymap.global.type.ErrorCode.USER_NOT_FOUND;
 import static com.seowonn.mymap.type.TimeSettings.VERIFICATION_EXPIRE_TIME;
 
 import com.seowonn.mymap.config.security.jwt.JwtTokenProvider;
-import com.seowonn.mymap.dto.EmailDto;
-import com.seowonn.mymap.dto.member.MemberFormDto;
-import com.seowonn.mymap.dto.member.MemberResponse;
-import com.seowonn.mymap.dto.member.SignInForm;
-import com.seowonn.mymap.dto.member.SignInResponse;
-import com.seowonn.mymap.entity.Member;
-import com.seowonn.mymap.exception.MyMapSystemException;
-import com.seowonn.mymap.repository.MemberRepository;
+import com.seowonn.mymap.global.dto.EmailDto;
+import com.seowonn.mymap.domain.member.dto.member.MemberFormDto;
+import com.seowonn.mymap.domain.member.dto.member.MemberResponse;
+import com.seowonn.mymap.domain.member.dto.member.SignInForm;
+import com.seowonn.mymap.domain.member.dto.member.SignInResponse;
+import com.seowonn.mymap.domain.member.entity.Member;
+import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
+import com.seowonn.mymap.domain.member.repository.MemberRepository;
 import com.seowonn.mymap.service.MailService;
 import com.seowonn.mymap.service.MemberService;
 import com.seowonn.mymap.service.RedisService;

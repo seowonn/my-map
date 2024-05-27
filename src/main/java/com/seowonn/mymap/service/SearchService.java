@@ -1,14 +1,14 @@
 package com.seowonn.mymap.service;
 
-import com.seowonn.mymap.dto.cityOpenApi.siDo.SiDoResponse;
-import com.seowonn.mymap.dto.cityOpenApi.siGunGu.SiGunGuResponse;
-import com.seowonn.mymap.entity.SiDo;
-import com.seowonn.mymap.entity.SiGunGu;
-import com.seowonn.mymap.entity.VisitLog;
-import com.seowonn.mymap.entity.elasticDB.VisitLogDocument;
-import com.seowonn.mymap.repository.SiDoRepository;
-import com.seowonn.mymap.repository.SiGunGuRepository;
-import com.seowonn.mymap.repository.elasticSearch.VisitLogSearchRepository;
+import com.seowonn.mymap.domain.openApi.dto.siDo.SiDoResponse;
+import com.seowonn.mymap.domain.openApi.dto.siGunGu.SiGunGuResponse;
+import com.seowonn.mymap.domain.openApi.entity.SiDo;
+import com.seowonn.mymap.domain.openApi.entity.SiGunGu;
+import com.seowonn.mymap.domain.visitLogForWriter.entity.VisitLog;
+import com.seowonn.mymap.infra.elasticSearch.document.VisitLogDocument;
+import com.seowonn.mymap.domain.openApi.repository.SiDoRepository;
+import com.seowonn.mymap.domain.openApi.repository.SiGunGuRepository;
+import com.seowonn.mymap.infra.elasticSearch.repository.VisitLogSearchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

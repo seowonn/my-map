@@ -1,20 +1,20 @@
 package com.seowonn.mymap.service;
 
-import static com.seowonn.mymap.type.ErrorCode.ACCESS_DENIED;
-import static com.seowonn.mymap.type.ErrorCode.REGION_NOT_FOUND;
-import static com.seowonn.mymap.type.ErrorCode.MY_MAP_NOT_FOUND;
-import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
+import static com.seowonn.mymap.global.type.ErrorCode.ACCESS_DENIED;
+import static com.seowonn.mymap.global.type.ErrorCode.REGION_NOT_FOUND;
+import static com.seowonn.mymap.global.type.ErrorCode.MY_MAP_NOT_FOUND;
+import static com.seowonn.mymap.global.type.ErrorCode.USER_NOT_FOUND;
 
-import com.seowonn.mymap.dto.myMap.MyMapResponse;
-import com.seowonn.mymap.dto.myMap.NewMyMapDto;
-import com.seowonn.mymap.dto.myMap.UpdateMyMapDto;
-import com.seowonn.mymap.entity.Member;
-import com.seowonn.mymap.entity.MyMap;
-import com.seowonn.mymap.entity.SiDo;
-import com.seowonn.mymap.exception.MyMapSystemException;
-import com.seowonn.mymap.repository.MemberRepository;
-import com.seowonn.mymap.repository.MyMapRepository;
-import com.seowonn.mymap.repository.SiDoRepository;
+import com.seowonn.mymap.domain.myMap.dto.MyMapResponse;
+import com.seowonn.mymap.domain.myMap.dto.NewMyMapDto;
+import com.seowonn.mymap.domain.myMap.dto.UpdateMyMapDto;
+import com.seowonn.mymap.domain.member.entity.Member;
+import com.seowonn.mymap.domain.myMap.entity.MyMap;
+import com.seowonn.mymap.domain.openApi.entity.SiDo;
+import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
+import com.seowonn.mymap.domain.member.repository.MemberRepository;
+import com.seowonn.mymap.domain.myMap.repository.MyMapRepository;
+import com.seowonn.mymap.domain.openApi.repository.SiDoRepository;
 import com.seowonn.mymap.type.Access;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

@@ -1,9 +1,9 @@
 package com.seowonn.mymap.config.security.jwt;
 
-import static com.seowonn.mymap.type.ErrorCode.ACCESS_DENIED;
+import static com.seowonn.mymap.global.type.ErrorCode.ACCESS_DENIED;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seowonn.mymap.dto.ApiResponse;
+import com.seowonn.mymap.global.dto.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;

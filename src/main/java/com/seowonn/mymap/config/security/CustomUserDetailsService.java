@@ -1,10 +1,10 @@
 package com.seowonn.mymap.config.security;
 
-import static com.seowonn.mymap.type.ErrorCode.USER_NOT_FOUND;
+import static com.seowonn.mymap.global.type.ErrorCode.USER_NOT_FOUND;
 
-import com.seowonn.mymap.entity.Member;
-import com.seowonn.mymap.exception.MyMapSystemException;
-import com.seowonn.mymap.repository.MemberRepository;
+import com.seowonn.mymap.domain.member.entity.Member;
+import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
+import com.seowonn.mymap.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

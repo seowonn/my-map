@@ -1,8 +1,8 @@
 package com.seowonn.mymap.service;
 
-import static com.seowonn.mymap.type.ErrorCode.ACCESS_DENIED;
+import static com.seowonn.mymap.global.type.ErrorCode.ACCESS_DENIED;
 
-import com.seowonn.mymap.exception.MyMapSystemException;
+import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;

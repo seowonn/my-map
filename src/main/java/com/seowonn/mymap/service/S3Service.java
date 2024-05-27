@@ -1,7 +1,7 @@
 package com.seowonn.mymap.service;
 
-import static com.seowonn.mymap.type.ErrorCode.IMAGE_NOT_FOUND;
-import static com.seowonn.mymap.type.ErrorCode.LOADING_FILE_ERROR;
+import static com.seowonn.mymap.global.type.ErrorCode.IMAGE_NOT_FOUND;
+import static com.seowonn.mymap.global.type.ErrorCode.LOADING_FILE_ERROR;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.regions.Regions;
@@ -10,12 +10,12 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.seowonn.mymap.entity.Image;
-import com.seowonn.mymap.entity.MyMap;
-import com.seowonn.mymap.entity.VisitLog;
-import com.seowonn.mymap.exception.AWSS3Exception;
-import com.seowonn.mymap.exception.MyMapSystemException;
-import com.seowonn.mymap.repository.ImageRepository;
+import com.seowonn.mymap.domain.visitLogForWriter.entity.Image;
+import com.seowonn.mymap.domain.myMap.entity.MyMap;
+import com.seowonn.mymap.domain.visitLogForWriter.entity.VisitLog;
+import com.seowonn.mymap.infra.elasticSearch.exception.AWSS3Exception;
+import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
+import com.seowonn.mymap.domain.visitLogForWriter.repository.ImageRepository;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
