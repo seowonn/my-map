@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberController {
 
+  // TODO : 리팩토링
+
   private final MemberService memberService;
 
   @Operation(summary = "이메일 인증 번호 전송",
