@@ -2,7 +2,7 @@ package com.seowonn.mymap.domain.member.repository;
 
 import com.seowonn.mymap.domain.member.entity.BookMarks;
 import com.seowonn.mymap.domain.member.entity.Member;
-import com.seowonn.mymap.domain.visitLogForWriter.entity.VisitLog;
+import com.seowonn.mymap.domain.visitLog.entity.VisitLog;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,15 +1,15 @@
 package com.seowonn.mymap.domain.myMap.controller;
 
-import static com.seowonn.mymap.type.SuccessMessage.DELETE_SUCCESS;
-import static com.seowonn.mymap.type.SuccessMessage.MY_MAP_CREATED;
-import static com.seowonn.mymap.type.SuccessMessage.MY_MAP_UPDATE_SUCCESS;
-import static com.seowonn.mymap.type.SuccessMessage.RETRIEVE_DATA_SUCCESS;
+import static com.seowonn.mymap.global.type.SuccessMessage.DELETE_SUCCESS;
+import static com.seowonn.mymap.global.type.SuccessMessage.MY_MAP_CREATED;
+import static com.seowonn.mymap.global.type.SuccessMessage.MY_MAP_UPDATE_SUCCESS;
+import static com.seowonn.mymap.global.type.SuccessMessage.RETRIEVE_DATA_SUCCESS;
 
 import com.seowonn.mymap.global.dto.ApiResponse;
 import com.seowonn.mymap.domain.myMap.dto.MyMapResponse;
 import com.seowonn.mymap.domain.myMap.dto.NewMyMapDto;
 import com.seowonn.mymap.domain.myMap.dto.UpdateMyMapDto;
-import com.seowonn.mymap.service.MyMapService;
+import com.seowonn.mymap.domain.myMap.service.MyMapService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

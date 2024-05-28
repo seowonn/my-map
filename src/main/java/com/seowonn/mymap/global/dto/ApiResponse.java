@@ -4,7 +4,7 @@ import static com.seowonn.mymap.global.type.ApiStatus.FAIL_STATUS;
 import static com.seowonn.mymap.global.type.ApiStatus.SUCCESS_STATUS;
 
 import com.seowonn.mymap.global.type.ErrorCode;
-import com.seowonn.mymap.type.SuccessMessage;
+import com.seowonn.mymap.global.type.SuccessMessage;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

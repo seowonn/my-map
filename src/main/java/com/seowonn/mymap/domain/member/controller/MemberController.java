@@ -1,17 +1,17 @@
 package com.seowonn.mymap.domain.member.controller;
 
-import static com.seowonn.mymap.type.SuccessMessage.SEND_EMAIL;
-import static com.seowonn.mymap.type.SuccessMessage.SIGNUP_SUCCESS;
-import static com.seowonn.mymap.type.SuccessMessage.SIGN_IN_SUCCESS;
+import static com.seowonn.mymap.global.type.SuccessMessage.SEND_EMAIL;
+import static com.seowonn.mymap.global.type.SuccessMessage.SIGNUP_SUCCESS;
+import static com.seowonn.mymap.global.type.SuccessMessage.SIGN_IN_SUCCESS;
 
+import com.seowonn.mymap.domain.member.dto.MemberFormDto;
+import com.seowonn.mymap.domain.member.dto.MemberResponse;
+import com.seowonn.mymap.domain.member.dto.SignInForm;
+import com.seowonn.mymap.domain.member.dto.SignInResponse;
+import com.seowonn.mymap.domain.member.service.MemberService;
 import com.seowonn.mymap.global.dto.ApiResponse;
-import com.seowonn.mymap.global.dto.EmailDto;
-import com.seowonn.mymap.domain.member.dto.member.MemberFormDto;
-import com.seowonn.mymap.domain.member.dto.member.MemberResponse;
-import com.seowonn.mymap.domain.member.dto.member.SignInForm;
-import com.seowonn.mymap.domain.member.dto.member.SignInResponse;
-import com.seowonn.mymap.service.MemberService;
-import com.seowonn.mymap.type.Role;
+import com.seowonn.mymap.infra.email.dto.EmailDto;
+import com.seowonn.mymap.domain.member.type.Role;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

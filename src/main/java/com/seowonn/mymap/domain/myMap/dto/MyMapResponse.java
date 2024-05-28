@@ -1,7 +1,7 @@
 package com.seowonn.mymap.domain.myMap.dto;
 
 import com.seowonn.mymap.domain.myMap.entity.MyMap;
-import com.seowonn.mymap.type.Access;
+import com.seowonn.mymap.domain.member.type.Access;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

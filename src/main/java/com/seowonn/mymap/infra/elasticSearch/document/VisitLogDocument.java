@@ -1,6 +1,6 @@
 package com.seowonn.mymap.infra.elasticSearch.document;
 
-import com.seowonn.mymap.domain.visitLogForWriter.entity.VisitLog;
+import com.seowonn.mymap.domain.visitLog.entity.VisitLog;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,10 +1,10 @@
 package com.seowonn.mymap.domain.member.entity;
 
-import com.seowonn.mymap.domain.member.dto.member.MemberFormDto;
+import com.seowonn.mymap.domain.member.dto.MemberFormDto;
 import com.seowonn.mymap.global.entity.BaseEntity;
 import com.seowonn.mymap.domain.myMap.entity.MyMap;
 import com.seowonn.mymap.domain.member.type.Gender;
-import com.seowonn.mymap.type.Role;
+import com.seowonn.mymap.domain.member.type.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

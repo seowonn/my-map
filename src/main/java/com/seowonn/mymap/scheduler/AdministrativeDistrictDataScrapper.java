@@ -1,6 +1,6 @@
 package com.seowonn.mymap.scheduler;
 
-import com.seowonn.mymap.service.OpenApiService;
+import com.seowonn.mymap.domain.openApi.service.OpenApiService;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

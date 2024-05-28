@@ -1,7 +1,7 @@
 package com.seowonn.mymap.domain.myMap.repository;
 
 import com.seowonn.mymap.domain.myMap.entity.MyMap;
-import com.seowonn.mymap.type.Access;
+import com.seowonn.mymap.domain.member.type.Access;
 import java.util.Optional;
 import lombok.NonNull;
 import org.springframework.data.domain.Page;

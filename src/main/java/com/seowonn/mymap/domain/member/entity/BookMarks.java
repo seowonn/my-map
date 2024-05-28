@@ -1,6 +1,6 @@
 package com.seowonn.mymap.domain.member.entity;
 
-import com.seowonn.mymap.domain.visitLogForWriter.entity.VisitLog;
+import com.seowonn.mymap.domain.visitLog.entity.VisitLog;
 import com.seowonn.mymap.global.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

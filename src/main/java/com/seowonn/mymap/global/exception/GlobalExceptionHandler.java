@@ -8,7 +8,7 @@ import com.seowonn.mymap.domain.openApi.exception.LoadingDataException;
 import com.seowonn.mymap.global.dto.ApiResponse;
 import java.util.List;
 
-import com.seowonn.mymap.infra.elasticSearch.exception.AWSS3Exception;
+import com.seowonn.mymap.infra.awsS3.exception.AWSS3Exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
