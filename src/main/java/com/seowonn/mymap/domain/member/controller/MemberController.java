@@ -30,14 +30,6 @@ public class MemberController {
 
   private final MemberService memberService;
 
-  @Operation(summary = "이메일 인증 번호 전송",
-   description = "회원가입 시 사용자 인증을 위해 이메일로 인증버호를 전송합니다.")
-  @PostMapping("/verification/email")
-  public ApiResponse<?> sendEmail(@Valid @RequestBody EmailDto emailDto){
-    SimpleMailMessage message = memberService.sendVerificationCode(emailDto);
-    return ApiResponse.createSuccessMessage(message, SEND_EMAIL);
-  }
-
   @Operation(summary = "일반 사용자 회원가입",
     description = "이메일로 전송받은 인증번호와 함께 role.USER로 회원가입합니다.")
   @PostMapping("/standard/signup")

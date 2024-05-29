@@ -52,7 +52,7 @@ public class SecurityConfig {
 
           authorizeRequests.
               requestMatchers("/user/**", "/my-map/**", "/search/**",
-                  "/logs/**", "/maps/**").authenticated();
+                  "/logs/**", "/maps/**", "/api/email/**").authenticated();
         })
         .addFilterBefore(
             new JwtAuthenticationFilter(jwtTokenProvider),

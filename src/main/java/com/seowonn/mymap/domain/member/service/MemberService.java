@@ -18,7 +18,7 @@ import com.seowonn.mymap.domain.member.repository.MemberRepository;
 import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
 import com.seowonn.mymap.infra.email.dto.EmailDto;
 import com.seowonn.mymap.infra.redis.service.RedisService;
-import com.seowonn.mymap.infra.email.service.MailService;
+import com.seowonn.mymap.infra.email.service.EmailService;
 import com.seowonn.mymap.domain.member.type.Role;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
   private final MemberRepository memberRepository;
-  private final MailService mailService;
+  private final EmailService emailService;
   private final RedisService redisService;
   private final JwtTokenProvider jwtTokenProvider;
 
@@ -48,19 +48,6 @@ public class MemberService {
           'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
           'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
           'w', 'x', 'y', 'z', '!', '@', '#', '$', '%', '^', '&'};
-
-  public SimpleMailMessage sendVerificationCode(EmailDto emailDto) {
-
-    // 인증 번호 생성
-    String verificationNum = createNumber();
-
-    // redis에 인증 번호 저장
-    redisService.setEmailValidationExpire(
-        emailDto.getEmailAddress(), verificationNum, VERIFICATION_EXPIRE_TIME.getTime());
-
-    return mailService.sendAuthEmail(emailDto.getEmailAddress(),
-        verificationNum);
-  }
 
   public SignInResponse signInMember(SignInForm signInForm) {
 
@@ -85,15 +72,6 @@ public class MemberService {
     return SignInResponse.builder()
         .accessToken(accessToken)
         .build();
-  }
-
-  private String createNumber() {
-
-    SecureRandom random = new SecureRandom();
-    int code = random.nextInt(900000) + 100000;
-    log.info("[createNumber] : 인증 번호 생성 완료");
-
-    return String.valueOf(code);
   }
 
   public MemberResponse createMember(MemberFormDto memberFormDto, Role role) {
@@ -142,7 +120,7 @@ public class MemberService {
 
     // 임시 비밀번호 생성 및 이메일 전송
     String randomPassword = createRandomPassword();
-    SimpleMailMessage message = mailService.sendAuthEmail(
+    SimpleMailMessage message = emailService.sendAuthEmail(
         emailDto.getEmailAddress(), randomPassword);
 
     // DB 저장
