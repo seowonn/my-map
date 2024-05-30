@@ -6,16 +6,14 @@ import static com.seowonn.mymap.global.type.SuccessMessage.PROFILE_UPDATE_SUCCES
 import static com.seowonn.mymap.global.type.SuccessMessage.SIGN_OUT_SUCCESS;
 import static com.seowonn.mymap.global.type.SuccessMessage.USER_PROFILE_VIEWED;
 
+import com.seowonn.mymap.domain.visitLog.dto.CategoryDto;
 import com.seowonn.mymap.global.dto.ApiResponse;
-import com.seowonn.mymap.domain.visitLog.dto.category.CategoryForm;
-import com.seowonn.mymap.domain.visitLog.dto.category.CategoryResponse;
 import com.seowonn.mymap.domain.member.dto.MemberInfoResponse;
 import com.seowonn.mymap.domain.member.dto.UpdateUserInfoForm;
 import com.seowonn.mymap.domain.member.service.AdminService;
 import com.seowonn.mymap.domain.member.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +24,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -62,16 +62,16 @@ public class UserController {
   @Operation(summary = "관리자 카테고리 항목 추가")
   @PreAuthorize("hasAuthority('ADMIN')")
   @PostMapping("/category")
-  public ApiResponse<?> createCategory(@RequestBody CategoryForm categoryForm){
-    List<CategoryResponse> categoryResponse = adminService.addCategory(categoryForm);
+  public ApiResponse<?> createCategory(@RequestBody CategoryDto.CategoryRequest categoryRequest){
+    List<CategoryDto.CategoryResponse> categoryResponse = adminService.addCategory(categoryRequest);
     return ApiResponse.createSuccessMessage(categoryResponse, DATA_LOAD_COMPLETE);
   }
 
   @Operation(summary = "관리자 카테고리 항목 삭제")
   @PreAuthorize("hasAuthority('ADMIN')")
   @DeleteMapping("/category")
-  public ApiResponse<?> deleteCategory(@RequestBody CategoryForm categoryForm){
-    adminService.deleteCategory(categoryForm);
+  public ApiResponse<?> deleteCategory(@RequestBody CategoryDto.CategoryRequest categoryRequest){
+    adminService.deleteCategory(categoryRequest);
     return ApiResponse.createSuccessMessage(true, DELETE_SUCCESS);
   }
 

@@ -1,9 +1,6 @@
 package com.seowonn.mymap.domain.member.service;
 
-import com.seowonn.mymap.domain.member.dto.MemberFormDto;
-import com.seowonn.mymap.domain.member.dto.MemberResponse;
-import com.seowonn.mymap.domain.member.dto.SignInForm;
-import com.seowonn.mymap.domain.member.dto.SignInResponse;
+import com.seowonn.mymap.domain.member.dto.*;
 import com.seowonn.mymap.domain.member.entity.Member;
 import com.seowonn.mymap.domain.member.repository.MemberRepository;
 import com.seowonn.mymap.domain.member.type.Role;
@@ -44,15 +41,15 @@ public class MemberService {
           'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
           'w', 'x', 'y', 'z', '!', '@', '#', '$', '%', '^', '&'};
 
-  public SignInResponse signInMember(SignInForm signInForm) {
+  public LoginDto.LoginResponse signInMember(LoginDto.LoginRequest loginRequest) {
 
     // 아이디 조회
-    Member member = memberRepository.findByUserId(signInForm.getUserId())
+    Member member = memberRepository.findByUserId(loginRequest.getUserId())
         .orElseThrow(() -> new MyMapSystemException(USER_NOT_FOUND));
 
     // 비밀번호 조회 & 입력 pw 암호화 후 비교
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    if (!passwordEncoder.matches(signInForm.getPassword(),
+    if (!passwordEncoder.matches(loginRequest.getPassword(),
         member.getPassword())) {
       throw new MyMapSystemException(INCORRECT_PASSWORD);
     }
@@ -62,27 +59,27 @@ public class MemberService {
     roleList.add(member.getRole().name());
 
     String accessToken =
-        jwtTokenProvider.createAccessToken(signInForm.getUserId(), roleList);
+        jwtTokenProvider.createAccessToken(loginRequest.getUserId(), roleList);
 
-    return SignInResponse.builder()
+    return LoginDto.LoginResponse.builder()
         .accessToken(accessToken)
         .build();
   }
 
-  public MemberResponse createMember(MemberFormDto memberFormDto, Role role) {
+  public SignUpDto.SignUpResponse createMember(SignUpDto.SignUpRequest signUpRequest, Role role) {
 
     // 이미 등록된 아이디(이메일)인지 확인
-    if (memberRepository.existsByUserId(memberFormDto.getUserId())) {
+    if (memberRepository.existsByUserId(signUpRequest.getUserId())) {
       throw new MyMapSystemException(USERID_EXISTS);
     }
 
     // redis code & 인증 번호 검증
-    checkVerificationCode(memberFormDto.getUserId(),
-        memberFormDto.getVerificationNum());
+    checkVerificationCode(signUpRequest.getUserId(),
+            signUpRequest.getVerificationNum());
 
-    Member member = Member.ofMemberFormAndRole(memberFormDto, role);
+    Member member = Member.ofMemberFormAndRole(signUpRequest, role);
     memberRepository.save(member);
-    return MemberResponse.from(member);
+    return SignUpDto.SignUpResponse.from(member);
   }
 
   public void checkVerificationCode(String email, String verificationCode) {

@@ -1,6 +1,6 @@
 package com.seowonn.mymap.domain.member.entity;
 
-import com.seowonn.mymap.domain.member.dto.MemberFormDto;
+import com.seowonn.mymap.domain.member.dto.SignUpDto;
 import com.seowonn.mymap.global.entity.BaseEntity;
 import com.seowonn.mymap.domain.myMap.entity.MyMap;
 import com.seowonn.mymap.domain.member.type.Gender;
@@ -66,19 +66,19 @@ public class Member extends BaseEntity {
   @Builder.Default
   private List<BookMarks> bookMarksList = new ArrayList<>();
 
-  public static Member ofMemberFormAndRole(MemberFormDto memberFormDto, Role role) {
+  public static Member ofMemberFormAndRole(SignUpDto.SignUpRequest signUpRequest, Role role) {
 
-    Gender gender = Gender.valueOf(memberFormDto.getGender().toUpperCase());
+    Gender gender = Gender.valueOf(signUpRequest.getGender().toUpperCase());
 
     String encPassword =
-        BCrypt.hashpw(memberFormDto.getPassword(), BCrypt.gensalt());
+        BCrypt.hashpw(signUpRequest.getPassword(), BCrypt.gensalt());
 
     return Member.builder()
         .role(role)
-        .userId(memberFormDto.getUserId())
+        .userId(signUpRequest.getUserId())
         .password(encPassword)
-        .phone(memberFormDto.getPhone())
-        .userName(memberFormDto.getUsername())
+        .phone(signUpRequest.getPhone())
+        .userName(signUpRequest.getUsername())
         .gender(gender)
         .build();
   }
