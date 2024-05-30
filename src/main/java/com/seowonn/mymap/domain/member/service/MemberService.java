@@ -1,34 +1,29 @@
 package com.seowonn.mymap.domain.member.service;
 
-import static com.seowonn.mymap.global.type.ErrorCode.EXPIRED_VERIFICATION;
-import static com.seowonn.mymap.global.type.ErrorCode.INCORRECT_CODE;
-import static com.seowonn.mymap.global.type.ErrorCode.INCORRECT_EMAIL;
-import static com.seowonn.mymap.global.type.ErrorCode.INCORRECT_PASSWORD;
-import static com.seowonn.mymap.global.type.ErrorCode.USERID_EXISTS;
-import static com.seowonn.mymap.global.type.ErrorCode.USER_NOT_FOUND;
-import static com.seowonn.mymap.global.type.TimeSettings.VERIFICATION_EXPIRE_TIME;
-
-import com.seowonn.mymap.security.jwt.JwtTokenProvider;
 import com.seowonn.mymap.domain.member.dto.MemberFormDto;
 import com.seowonn.mymap.domain.member.dto.MemberResponse;
 import com.seowonn.mymap.domain.member.dto.SignInForm;
 import com.seowonn.mymap.domain.member.dto.SignInResponse;
 import com.seowonn.mymap.domain.member.entity.Member;
 import com.seowonn.mymap.domain.member.repository.MemberRepository;
+import com.seowonn.mymap.domain.member.type.Role;
 import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
 import com.seowonn.mymap.infra.email.dto.EmailDto;
-import com.seowonn.mymap.infra.redis.service.RedisService;
 import com.seowonn.mymap.infra.email.service.EmailService;
-import com.seowonn.mymap.domain.member.type.Role;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
+import com.seowonn.mymap.infra.redis.service.RedisService;
+import com.seowonn.mymap.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.seowonn.mymap.global.type.ErrorCode.*;
 
 @Service
 @Slf4j
