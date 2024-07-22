@@ -7,7 +7,7 @@ import static com.seowonn.mymap.global.type.SuccessMessage.SIGN_IN_SUCCESS;
 import com.seowonn.mymap.domain.member.dto.*;
 import com.seowonn.mymap.domain.member.service.MemberService;
 import com.seowonn.mymap.global.dto.ApiResponse;
-import com.seowonn.mymap.infra.email.dto.EmailDto;
+import com.seowonn.mymap.domain.email.dto.EmailDto;
 import com.seowonn.mymap.domain.member.type.Role;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;

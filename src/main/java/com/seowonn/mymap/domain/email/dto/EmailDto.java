@@ -1,4 +1,4 @@
-package com.seowonn.mymap.infra.email.dto;
+package com.seowonn.mymap.domain.email.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

@@ -1,11 +1,11 @@
-package com.seowonn.mymap.infra.email.service;
+package com.seowonn.mymap.domain.email.service;
 
 import static com.seowonn.mymap.global.type.TimeSettings.VERIFICATION_EXPIRE_TIME;
-import static com.seowonn.mymap.infra.email.type.AuthenticationContents.EMAIL_AUTH_TITLE;
 import static com.seowonn.mymap.global.type.ErrorCode.EMAIL_SEND_ERROR;
 
+import com.seowonn.mymap.domain.email.type.AuthenticationContents;
 import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
-import com.seowonn.mymap.infra.email.dto.EmailDto;
+import com.seowonn.mymap.domain.email.dto.EmailDto;
 import com.seowonn.mymap.infra.redis.service.RedisService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +67,7 @@ public class EmailService {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(emailAddress);
-        message.setSubject(EMAIL_AUTH_TITLE.getMessage());
+        message.setSubject(AuthenticationContents.EMAIL_AUTH_TITLE.getMessage());
         message.setText(text);
 
         return message;

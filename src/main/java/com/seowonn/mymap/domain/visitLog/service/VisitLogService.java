@@ -24,7 +24,7 @@ import com.seowonn.mymap.domain.openApi.repository.SiGunGuRepository;
 import com.seowonn.mymap.domain.visitLog.repository.VisitLogRepository;
 import com.seowonn.mymap.infra.awsS3.service.S3Service;
 import com.seowonn.mymap.infra.elasticSearch.service.SearchService;
-import com.seowonn.mymap.infra.email.service.CheckService;
+import com.seowonn.mymap.domain.email.service.CheckService;
 import com.seowonn.mymap.global.type.Boolean;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
@@ -77,11 +77,12 @@ public class VisitLogService {
     VisitLog visitLog = VisitLog.of(newVisitLogDto, myMap, siGunGu, category);
     visitLogRepository.save(VisitLog.setCategory(visitLog, category));
     // 파일 S3 업로드 수행
-    s3Service.upload(newVisitLogDto.getFiles(), myMap, visitLog);
+    List<String> uploadUrls = s3Service.upload(newVisitLogDto.getFiles(), myMap, visitLog);
 
     searchService.save(visitLog);
 
-    return VisitLogResponse.from(visitLog, Boolean.FALSE.getFlag());
+    return VisitLogResponse.fromImageUrlAndIsMarked(visitLog, uploadUrls.get(0),
+        Boolean.FALSE.getFlag());
   }
 
   public Page<VisitLogResponse> getUsersVisitLogs(Long myMapId, Pageable pageable) {
@@ -105,13 +106,13 @@ public class VisitLogService {
         .orElseThrow(() -> new MyMapSystemException(VISIT_LOG_NOT_FOUND));
 
     // 해당 마이맵의 방문일지인지 확인
-    if (visitLog.getMyMap().getId() != myMapId){
+    if (visitLog.getMyMap().getId() != myMapId) {
       throw new MyMapSystemException(ACCESS_DENIED);
     }
 
     List<String> imageUrlsToDelete = new ArrayList<>();
     List<Image> images = visitLog.getImages();
-    for(Image image : images){
+    for (Image image : images) {
       imageUrlsToDelete.add(image.getImageUrl());
     }
 
@@ -129,7 +130,7 @@ public class VisitLogService {
         .orElseThrow(() -> new MyMapSystemException(VISIT_LOG_NOT_FOUND));
 
     // 해당 마이맵의 방문일지인지 확인
-    if (visitLog.getMyMap() != myMap){
+    if (visitLog.getMyMap() != myMap) {
       throw new MyMapSystemException(ACCESS_DENIED);
     }
 
@@ -139,8 +140,8 @@ public class VisitLogService {
 
     visitLog.updateVisitLog(updateVisitLogDto, category);
 
-    if(updateVisitLogDto.getDeleteFileUrls() != null){
-      for(String deleteUrl : updateVisitLogDto.getDeleteFileUrls()){
+    if (updateVisitLogDto.getDeleteFileUrls() != null) {
+      for (String deleteUrl : updateVisitLogDto.getDeleteFileUrls()) {
         s3Service.deleteVisitLogFile(deleteUrl, visitLog);
       }
     }

@@ -1,4 +1,4 @@
-package com.seowonn.mymap.infra.email.service;
+package com.seowonn.mymap.domain.email.service;
 
 import static com.seowonn.mymap.global.type.ErrorCode.ACCESS_DENIED;
 

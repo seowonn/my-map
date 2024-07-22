@@ -1,8 +1,8 @@
-package com.seowonn.mymap.infra.email.controller;
+package com.seowonn.mymap.domain.email.controller;
 
 import com.seowonn.mymap.global.dto.ApiResponse;
-import com.seowonn.mymap.infra.email.dto.EmailDto;
-import com.seowonn.mymap.infra.email.service.EmailService;
+import com.seowonn.mymap.domain.email.dto.EmailDto;
+import com.seowonn.mymap.domain.email.service.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

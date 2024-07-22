@@ -8,7 +8,7 @@ import com.seowonn.mymap.domain.member.dto.UpdateUserInfoForm;
 import com.seowonn.mymap.domain.member.entity.Member;
 import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
 import com.seowonn.mymap.domain.member.repository.MemberRepository;
-import com.seowonn.mymap.infra.email.service.CheckService;
+import com.seowonn.mymap.domain.email.service.CheckService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

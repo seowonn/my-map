@@ -15,7 +15,7 @@ import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
 import com.seowonn.mymap.domain.member.repository.MemberRepository;
 import com.seowonn.mymap.domain.myMap.repository.MyMapRepository;
 import com.seowonn.mymap.domain.openApi.repository.SiDoRepository;
-import com.seowonn.mymap.infra.email.service.CheckService;
+import com.seowonn.mymap.domain.email.service.CheckService;
 import com.seowonn.mymap.domain.member.type.Access;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

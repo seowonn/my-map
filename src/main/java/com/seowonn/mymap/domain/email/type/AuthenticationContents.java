@@ -1,4 +1,4 @@
-package com.seowonn.mymap.infra.email.type;
+package com.seowonn.mymap.domain.email.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
