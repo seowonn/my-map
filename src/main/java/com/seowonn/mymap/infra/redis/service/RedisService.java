@@ -34,16 +34,14 @@ public class RedisService {
   public long getRemainingExpireTime(String key) {
     Long expireTime = redisTemplate.getExpire(VERIFICATION_PREFIX.getPrefix() + key,
         TimeUnit.SECONDS);
-    log.info("[getRemainingExpireTime] : redis 남은 유효시간 확인");
     return expireTime != null ? expireTime : -1;
   }
 
-  public void setEmailValidationExpire(String key, String value,
+  public void setValidationExpireTime(String key, String value,
       long duration) {
     ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
     Duration expireDuration = Duration.ofSeconds(duration);
     valueOperations.set(VERIFICATION_PREFIX.getPrefix() + key, value, expireDuration);
-    log.info("[setEmailValidationExpire] : redis 키 값 저장. 유효시간 설정");
   }
 
   public void makeViewCountExpire(long visitLogId, String userId) {

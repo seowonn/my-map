@@ -30,7 +30,7 @@ public class EmailService {
 
         String verificationNum = createNumber();
 
-        redisService.setEmailValidationExpire(
+        redisService.setValidationExpireTime(
                 emailDto.getEmailAddress(), verificationNum, VERIFICATION_EXPIRE_TIME.getTime());
 
         return sendAuthEmail(emailDto.getEmailAddress(), verificationNum);
