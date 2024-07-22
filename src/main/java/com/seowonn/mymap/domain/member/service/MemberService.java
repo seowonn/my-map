@@ -5,8 +5,8 @@ import com.seowonn.mymap.domain.member.entity.Member;
 import com.seowonn.mymap.domain.member.repository.MemberRepository;
 import com.seowonn.mymap.domain.member.type.Role;
 import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
-import com.seowonn.mymap.infra.email.dto.EmailDto;
-import com.seowonn.mymap.infra.email.service.EmailService;
+import com.seowonn.mymap.domain.email.dto.EmailDto;
+import com.seowonn.mymap.domain.email.service.EmailService;
 import com.seowonn.mymap.infra.redis.service.RedisService;
 import com.seowonn.mymap.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -85,23 +85,16 @@ public class MemberService {
   public void checkVerificationCode(String email, String verificationCode) {
     String redisCode = redisService.getVerificationData(email);
 
-    // 다른 아이디(이메일) 값을 입력하여 redis code가 null일 경우 에러 처리
+    // 다른 아이디(이메일) 값 입력 / 인증 번호 유효 시간 만료
     if (redisCode == null) {
-      throw new MyMapSystemException(INCORRECT_EMAIL);
-    }
-
-    // 만료된 인증 번호에 대한 에러 처리
-    long remainingTime = redisService.getRemainingExpireTime(email);
-    if (remainingTime <= 0) {
-      throw new MyMapSystemException(EXPIRED_VERIFICATION);
+      throw new MyMapSystemException(INCORRECT_REDIS_CODE);
     }
 
     // 인증 번호가 다른 사용자에 대한 에러 처리
     if (!redisCode.equals(verificationCode)) {
-      throw new MyMapSystemException(INCORRECT_CODE);
+      throw new MyMapSystemException(INCORRECT_REDIS_CODE);
     }
 
-    redisService.deleteVerificationData(email);
   }
 
   public SimpleMailMessage sendNewPassword(EmailDto emailDto) {

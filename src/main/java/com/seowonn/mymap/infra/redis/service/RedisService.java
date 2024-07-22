@@ -31,12 +31,6 @@ public class RedisService {
         VIEW_COUNT_PREFIX.getPrefix() + visitLogId + userId);
   }
 
-  public long getRemainingExpireTime(String key) {
-    Long expireTime = redisTemplate.getExpire(VERIFICATION_PREFIX.getPrefix() + key,
-        TimeUnit.SECONDS);
-    return expireTime != null ? expireTime : -1;
-  }
-
   public void setValidationExpireTime(String key, String value,
       long duration) {
     ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
@@ -60,11 +54,6 @@ public class RedisService {
     redisTemplate.expire(
         VIEW_COUNT_PREFIX.getPrefix() + visitLogId + userId, expireDuration
     );
-  }
-
-  public void deleteVerificationData(String key) {
-    redisTemplate.delete(VERIFICATION_PREFIX + key);
-    log.info("[deleteData] : redis 키 값 삭제");
   }
 
 }
