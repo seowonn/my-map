@@ -17,6 +17,7 @@ import com.seowonn.mymap.infra.awsS3.exception.AWSS3Exception;
 import com.seowonn.mymap.domain.myMap.exception.MyMapSystemException;
 import com.seowonn.mymap.domain.visitLog.repository.ImageRepository;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -42,9 +43,10 @@ public class S3Service {
   @Value("${cloud.aws.s3.baseUrl}")
   private String BASE_URL;
 
-  public void upload(List<MultipartFile> multipartFiles,
+  public List<String> upload(List<MultipartFile> multipartFiles,
       MyMap myMap, VisitLog visitLog) {
 
+    List<String> imageUrls = new ArrayList<>();
     for(MultipartFile multipartFile : multipartFiles) {
 
       // 파일 업로드 하지 않은 경우 처리
@@ -55,12 +57,15 @@ public class S3Service {
                 + visitLog.getId() + "/" + multipartFile.getOriginalFilename();
 
         String uploadedImageUrl = putS3(multipartFile, fileName);
+        imageUrls.add(uploadedImageUrl);
 
         Image image = Image.of(uploadedImageUrl, visitLog);
         imageRepository.save(image);
         log.info("[upload] : 이미지 url 저장 완료");
       }
     }
+
+    return imageUrls;
   }
 
   public void deleteVisitLogFile(String fileName, VisitLog visitLog) {
