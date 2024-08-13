@@ -28,6 +28,13 @@ public class ApiResponse<T> {
         .build();
   }
 
+  public static <T> ApiResponse<?> createSuccess(T data){
+    return ApiResponse.builder()
+        .status(SUCCESS_STATUS.getStatus())
+        .data(data)
+        .build();
+  }
+
   public static ApiResponse<?> createFail(ErrorCode errorCode){
     return ApiResponse.builder()
         .status(FAIL_STATUS.getStatus())
