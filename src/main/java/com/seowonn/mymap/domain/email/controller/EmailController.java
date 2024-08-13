@@ -25,7 +25,7 @@ public class EmailController {
             description = "회원가입 시 사용자 인증을 위해 이메일로 인증번호를 전송합니다.")
     @PostMapping("/verification")
     public ApiResponse<?> sendEmail(@Valid @RequestBody EmailDto emailDto){
-        SimpleMailMessage message = emailService.sendVerificationCode(emailDto);
-        return ApiResponse.createSuccessMessage(message, SEND_EMAIL);
+        emailService.sendVerificationCode(emailDto);
+        return ApiResponse.createSuccess(SEND_EMAIL);
     }
 }

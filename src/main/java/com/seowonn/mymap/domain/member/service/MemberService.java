@@ -68,12 +68,10 @@ public class MemberService {
 
   public SignUpDto.SignUpResponse createMember(SignUpDto.SignUpRequest signUpRequest, Role role) {
 
-    // 이미 등록된 아이디(이메일)인지 확인
     if (memberRepository.existsByUserId(signUpRequest.getUserId())) {
       throw new MyMapSystemException(USERID_EXISTS);
     }
 
-    // redis code & 인증 번호 검증
     checkVerificationCode(signUpRequest.getUserId(),
             signUpRequest.getVerificationNum());
 
@@ -87,10 +85,9 @@ public class MemberService {
 
     // 다른 아이디(이메일) 값 입력 / 인증 번호 유효 시간 만료
     if (redisCode == null) {
-      throw new MyMapSystemException(INCORRECT_REDIS_CODE);
+      throw new MyMapSystemException(EXPIRED_VERIFICATION);
     }
 
-    // 인증 번호가 다른 사용자에 대한 에러 처리
     if (!redisCode.equals(verificationCode)) {
       throw new MyMapSystemException(INCORRECT_REDIS_CODE);
     }

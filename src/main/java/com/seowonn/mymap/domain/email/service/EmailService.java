@@ -26,22 +26,20 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
     private final RedisService redisService;
 
-    public SimpleMailMessage sendVerificationCode(EmailDto emailDto) {
+    public void sendVerificationCode(EmailDto emailDto) {
 
         String verificationNum = createNumber();
 
         redisService.setValidationExpireTime(
                 emailDto.getEmailAddress(), verificationNum, VERIFICATION_EXPIRE_TIME.getTime());
 
-        return sendAuthEmail(emailDto.getEmailAddress(), verificationNum);
+        sendAuthEmail(emailDto.getEmailAddress(), verificationNum);
     }
 
     private String createNumber() {
 
         SecureRandom random = new SecureRandom();
         int code = random.nextInt(900000) + 100000;
-        log.info("[createNumber] : {}, 인증 번호 생성 완료", LocalDateTime.now());
-
         return String.valueOf(code);
     }
 
@@ -55,7 +53,7 @@ public class EmailService {
 
         } catch (RuntimeException e) {
 
-            log.debug("[sendAuthEmail] : 이메일 전송 과정 에러 발생");
+            log.debug("[sendAuthEmail] : 이메일 전송 과정 에러 발생 {}", e.getMessage());
             throw new MyMapSystemException(EMAIL_SEND_ERROR);
         }
 
