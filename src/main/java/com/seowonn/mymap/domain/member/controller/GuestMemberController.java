@@ -19,16 +19,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/api/guest")
 @RequiredArgsConstructor
-public class MemberController {
+public class GuestMemberController {
 
   // TODO : 리팩토링
 
   private final MemberService memberService;
 
   @Operation(summary = "일반 사용자 회원가입",
-    description = "이메일로 전송받은 인증번호와 함께 role.USER로 회원가입합니다.")
+    description = "이메일로 인증해서 role.USER로 회원가입합니다.")
   @PostMapping("/standard/signup")
   public ApiResponse<?> signUpStandardUser(
       @Valid @RequestBody SignUpDto.SignUpRequest signUpRequest){
@@ -38,7 +38,7 @@ public class MemberController {
   }
 
   @Operation(summary = "관리자 사용자 회원가입",
-      description = "이메일로 전송받은 인증번호와 함께 role.ADMIN으로 회원가입합니다.")
+      description = "이메일로 인증해서 role.ADMIN으로 회원가입합니다.")
   @PostMapping("/admin/signup")
   public ApiResponse<?> signUpAdmin (
       @Valid @RequestBody SignUpDto.SignUpRequest signUpRequest){

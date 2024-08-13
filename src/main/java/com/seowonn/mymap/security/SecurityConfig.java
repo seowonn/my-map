@@ -47,12 +47,12 @@ public class SecurityConfig {
         .authorizeHttpRequests(authorizeRequests -> {
           authorizeRequests
               .requestMatchers("/member/**", "/swagger-ui/**",
-                  "/v3/**")
+                  "/v3/**", "/api/email/**", "/api/guest/**")
               .permitAll();
 
           authorizeRequests.
               requestMatchers("/user/**", "/my-map/**", "/search/**",
-                  "/logs/**", "/maps/**", "/api/email/**").authenticated();
+                  "/logs/**", "/maps/**", "/api/user/**").authenticated();
         })
         .addFilterBefore(
             new JwtAuthenticationFilter(jwtTokenProvider),
