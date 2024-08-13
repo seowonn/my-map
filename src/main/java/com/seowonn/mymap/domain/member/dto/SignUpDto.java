@@ -15,9 +15,9 @@ public class SignUpDto {
     @AllArgsConstructor
     public static class SignUpRequest {
 
-        @Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])+[.][a-zA-Z]{2,3}$",
-                message = "이메일 주소 양식을 확인해주세요")
-        @NotBlank(message = "반드시 내용을 입력해야 합니다.")
+        @NotBlank(message = "사용자 아이디를 입력해주세요.")
+        @Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])+[.][a-zA-Z]{2,6}$",
+            message = "이메일 주소 양식을 확인해주세요")
         private String userId;
 
         @NotBlank(message = "비밀번호는 필수입니다.")

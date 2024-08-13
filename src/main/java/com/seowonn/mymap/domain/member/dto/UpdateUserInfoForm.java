@@ -10,9 +10,9 @@ import lombok.Setter;
 @Getter
 public class UpdateUserInfoForm {
 
-  @Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])+[.][a-zA-Z]{2,3}$",
+  @NotBlank(message = "사용자 아이디를 입력해주세요.")
+  @Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])+[.][a-zA-Z]{2,6}$",
       message = "이메일 주소 양식을 확인해주세요")
-  @NotBlank(message = "반드시 내용을 입력해야 합니다.")
   private String newId;
 
   @NotNull(message = "현재 비밀번호를 입력해주세요.")

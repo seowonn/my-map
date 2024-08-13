@@ -11,7 +11,7 @@ import lombok.Setter;
 public class UpdateMyMapDto {
 
   @NotBlank(message = "사용자 아이디를 입력해주세요.")
-  @Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])+[.][a-zA-Z]{2,3}$",
+  @Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])+[.][a-zA-Z]{2,6}$",
       message = "이메일 주소 양식을 확인해주세요")
   private String userId;
 
