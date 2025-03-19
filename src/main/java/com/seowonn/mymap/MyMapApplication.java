@@ -10,13 +10,14 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 @EnableJpaRepositories(excludeFilters = @ComponentScan.Filter(
-		type = FilterType.ASSIGNABLE_TYPE,
-		classes = VisitLogSearchRepository.class))
+        type = FilterType.ASSIGNABLE_TYPE,
+        classes = VisitLogSearchRepository.class))
 @SpringBootApplication
 public class MyMapApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MyMapApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MyMapApplication.class, args);
+        print("Hi!")
+    }
 
 }
