@@ -8,6 +8,9 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import static java.sql.DriverManager.println;
+
+
 @EnableScheduling
 @EnableJpaRepositories(excludeFilters = @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE,
@@ -17,7 +20,7 @@ public class MyMapApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MyMapApplication.class, args);
-        print("Hi!")
+        println("나는 다른 사람입니다.");
     }
 
 }
